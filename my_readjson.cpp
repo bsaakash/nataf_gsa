@@ -18,6 +18,8 @@ void readjson(int &nmc, int& nrv, int &rseed, std::string& UQ_method, std::vecto
 	// === IMPORTANT* need to additionally import correlation matrix & "input option" to GUI
 	get_corr = { 1.0, 0.2, 0.2, 1.0 }; // {{row1}, {row2},...}
 	get_opts = { "MOM","MOM" }; // either "MOM" or "PAR" (later, extend to "DATA")
+	//get_corr = { 1.0, 0.2, 0.0, 0.2, 1.0, 0.2, 0.0, 0.2, 1.0}; 
+	//get_opts = { "MOM","MOM","MOM" }; 
 
 	// === read json
 	std::ifstream myfile("dakota.json");

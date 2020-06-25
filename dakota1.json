@@ -44,6 +44,15 @@
             "value": "RV.E",
             "variableClass": "Uncertain"
         },
+		{
+            "distribution": "Gumbel",
+            "mean": 205,
+            "name": "E",
+            "refCount": 1,
+            "stdDev": 15,
+            "value": "RV.E",
+            "variableClass": "Uncertain"
+        },
         {
             "distribution": "Lognormal",
             "mean": 25,
