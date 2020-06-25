@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{ED786760-A145-43AE-B4C6-26F07D994DC0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="lib_mat\gsa_bsxfun.cpp" />
+    <ClCompile Include="lib_mat\gsa_combineVectorElements.cpp" />
+    <ClCompile Include="lib_mat\gsa_eml_rand_mt19937ar_stateful.cpp" />
+    <ClCompile Include="lib_mat\gsa_heapsort.cpp" />
+    <ClCompile Include="lib_mat\gsa_insertionsort.cpp" />
+    <ClCompile Include="lib_mat\gsa_introsort.cpp" />
+    <ClCompile Include="lib_mat\gsa_mixGaussEm.cpp" />
+    <ClCompile Include="lib_mat\gsa_mrdivide_helper.cpp" />
+    <ClCompile Include="lib_mat\gsa_mycholcov.cpp" />
+    <ClCompile Include="lib_mat\gsa_mymvnpdf.cpp" />
+    <ClCompile Include="lib_mat\gsa_qrsolve.cpp" />
+    <ClCompile Include="lib_mat\gsa_rand.cpp" />
+    <ClCompile Include="lib_mat\gsa_runGSA.cpp" />
+    <ClCompile Include="lib_mat\gsa_runGSA_data.cpp" />
+    <ClCompile Include="lib_mat\gsa_runGSA_initialize.cpp" />
+    <ClCompile Include="lib_mat\gsa_sparse.cpp" />
+    <ClCompile Include="lib_mat\gsa_stack1.cpp" />
+    <ClCompile Include="lib_mat\gsa_sum.cpp" />
+    <ClCompile Include="lib_mat\gsa_unique.cpp" />
+    <ClCompile Include="lib_mat\gsa_vvarstd.cpp" />
+    <ClCompile Include="lib_mat\gsa_xgeqp3.cpp" />
+    <ClCompile Include="lib_mat\gsa_xgetrf.cpp" />
+    <ClCompile Include="lib_mat\gsa_xnrm2.cpp" />
+    <ClCompile Include="lib_mat\gsa_xzgeqp3.cpp" />
+    <ClCompile Include="lib_mat\ntf_betaincinv.cpp" />
+    <ClCompile Include="lib_mat\ntf_binodeviance.cpp" />
+    <ClCompile Include="lib_mat\ntf_binopdf.cpp" />
+    <ClCompile Include="lib_mat\ntf_cdf.cpp" />
+    <ClCompile Include="lib_mat\ntf_chol.cpp" />
+    <ClCompile Include="lib_mat\ntf_cospiAndSinpi.cpp" />
+    <ClCompile Include="lib_mat\ntf_ERADist.cpp" />
+    <ClCompile Include="lib_mat\ntf_ERANataf.cpp" />
+    <ClCompile Include="lib_mat\ntf_erfcinv.cpp" />
+    <ClCompile Include="lib_mat\ntf_expm1.cpp" />
+    <ClCompile Include="lib_mat\ntf_fzero.cpp" />
+    <ClCompile Include="lib_mat\ntf_gamma.cpp" />
+    <ClCompile Include="lib_mat\ntf_gammainc.cpp" />
+    <ClCompile Include="lib_mat\ntf_gammaincinv.cpp" />
+    <ClCompile Include="lib_mat\ntf_gammaln.cpp" />
+    <ClCompile Include="lib_mat\ntf_gamstat.cpp" />
+    <ClCompile Include="lib_mat\ntf_gevstat.cpp" />
+    <ClCompile Include="lib_mat\ntf_gpstat.cpp" />
+    <ClCompile Include="lib_mat\ntf_icdf.cpp" />
+    <ClCompile Include="lib_mat\ntf_inataf.cpp" />
+    <ClCompile Include="lib_mat\ntf_inataf_data.cpp" />
+    <ClCompile Include="lib_mat\ntf_inataf_initialize.cpp" />
+    <ClCompile Include="lib_mat\ntf_inataf_rtwutil.cpp" />
+    <ClCompile Include="lib_mat\ntf_mod.cpp" />
+    <ClCompile Include="lib_mat\ntf_mrdivide_helper.cpp" />
+    <ClCompile Include="lib_mat\ntf_mycholcov.cpp" />
+    <ClCompile Include="lib_mat\ntf_nbinpdf.cpp" />
+    <ClCompile Include="lib_mat\ntf_pdf.cpp" />
+    <ClCompile Include="lib_mat\ntf_repmat.cpp" />
+    <ClCompile Include="lib_mat\ntf_sqrt.cpp" />
+    <ClCompile Include="lib_mat\ntf_stirlerr.cpp" />
+    <ClCompile Include="lib_mat\ntf_strcmp.cpp" />
+    <ClCompile Include="lib_mat\ntf_svd.cpp" />
+    <ClCompile Include="lib_mat\ntf_wblstat.cpp" />
+    <ClCompile Include="lib_mat\ntf_xaxpy.cpp" />
+    <ClCompile Include="lib_mat\ntf_xnrm2.cpp" />
+    <ClCompile Include="lib_mat\ntf_xrotg.cpp" />
+    <ClCompile Include="lib_mat\ntf_xzgeqp3.cpp" />
+    <ClCompile Include="lib_mat\rtGetInf.cpp" />
+    <ClCompile Include="lib_mat\rtGetNaN.cpp" />
+    <ClCompile Include="lib_mat\rt_nonfinite.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="my_gsa.cpp" />
+    <ClCompile Include="my_nataf.cpp" />
+    <ClCompile Include="my_readjson.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib_json\json.hpp" />
+    <ClInclude Include="lib_json\tmwtypes.h" />
+    <ClInclude Include="lib_mat\coder_array.h" />
+    <ClInclude Include="lib_mat\gsa_bsxfun.h" />
+    <ClInclude Include="lib_mat\gsa_combineVectorElements.h" />
+    <ClInclude Include="lib_mat\gsa_eml_rand_mt19937ar_stateful.h" />
+    <ClInclude Include="lib_mat\gsa_heapsort.h" />
+    <ClInclude Include="lib_mat\gsa_insertionsort.h" />
+    <ClInclude Include="lib_mat\gsa_introsort.h" />
+    <ClInclude Include="lib_mat\gsa_mixGaussEm.h" />
+    <ClInclude Include="lib_mat\gsa_mrdivide_helper.h" />
+    <ClInclude Include="lib_mat\gsa_mycholcov.h" />
+    <ClInclude Include="lib_mat\gsa_mymvnpdf.h" />
+    <ClInclude Include="lib_mat\gsa_qrsolve.h" />
+    <ClInclude Include="lib_mat\gsa_rand.h" />
+    <ClInclude Include="lib_mat\gsa_runGSA.h" />
+    <ClInclude Include="lib_mat\gsa_runGSA_data.h" />
+    <ClInclude Include="lib_mat\gsa_runGSA_initialize.h" />
+    <ClInclude Include="lib_mat\gsa_runGSA_types.h" />
+    <ClInclude Include="lib_mat\gsa_sparse.h" />
+    <ClInclude Include="lib_mat\gsa_stack1.h" />
+    <ClInclude Include="lib_mat\gsa_sum.h" />
+    <ClInclude Include="lib_mat\gsa_unique.h" />
+    <ClInclude Include="lib_mat\gsa_vvarstd.h" />
+    <ClInclude Include="lib_mat\gsa_xgeqp3.h" />
+    <ClInclude Include="lib_mat\gsa_xgetrf.h" />
+    <ClInclude Include="lib_mat\gsa_xnrm2.h" />
+    <ClInclude Include="lib_mat\gsa_xzgeqp3.h" />
+    <ClInclude Include="lib_mat\ntf_betaincinv.h" />
+    <ClInclude Include="lib_mat\ntf_binodeviance.h" />
+    <ClInclude Include="lib_mat\ntf_binopdf.h" />
+    <ClInclude Include="lib_mat\ntf_cdf.h" />
+    <ClInclude Include="lib_mat\ntf_chol.h" />
+    <ClInclude Include="lib_mat\ntf_cospiAndSinpi.h" />
+    <ClInclude Include="lib_mat\ntf_ERADist.h" />
+    <ClInclude Include="lib_mat\ntf_ERANataf.h" />
+    <ClInclude Include="lib_mat\ntf_erfcinv.h" />
+    <ClInclude Include="lib_mat\ntf_expm1.h" />
+    <ClInclude Include="lib_mat\ntf_fzero.h" />
+    <ClInclude Include="lib_mat\ntf_gamma.h" />
+    <ClInclude Include="lib_mat\ntf_gammainc.h" />
+    <ClInclude Include="lib_mat\ntf_gammaincinv.h" />
+    <ClInclude Include="lib_mat\ntf_gammaln.h" />
+    <ClInclude Include="lib_mat\ntf_gamstat.h" />
+    <ClInclude Include="lib_mat\ntf_gevstat.h" />
+    <ClInclude Include="lib_mat\ntf_gpstat.h" />
+    <ClInclude Include="lib_mat\ntf_icdf.h" />
+    <ClInclude Include="lib_mat\ntf_inataf.h" />
+    <ClInclude Include="lib_mat\ntf_inataf_data.h" />
+    <ClInclude Include="lib_mat\ntf_inataf_initialize.h" />
+    <ClInclude Include="lib_mat\ntf_inataf_rtwutil.h" />
+    <ClInclude Include="lib_mat\ntf_inataf_types.h" />
+    <ClInclude Include="lib_mat\ntf_mod.h" />
+    <ClInclude Include="lib_mat\ntf_mrdivide_helper.h" />
+    <ClInclude Include="lib_mat\ntf_mycholcov.h" />
+    <ClInclude Include="lib_mat\ntf_nbinpdf.h" />
+    <ClInclude Include="lib_mat\ntf_pdf.h" />
+    <ClInclude Include="lib_mat\ntf_repmat.h" />
+    <ClInclude Include="lib_mat\ntf_sqrt.h" />
+    <ClInclude Include="lib_mat\ntf_stirlerr.h" />
+    <ClInclude Include="lib_mat\ntf_strcmp.h" />
+    <ClInclude Include="lib_mat\ntf_svd.h" />
+    <ClInclude Include="lib_mat\ntf_wblstat.h" />
+    <ClInclude Include="lib_mat\ntf_xaxpy.h" />
+    <ClInclude Include="lib_mat\ntf_xnrm2.h" />
+    <ClInclude Include="lib_mat\ntf_xrotg.h" />
+    <ClInclude Include="lib_mat\ntf_xzgeqp3.h" />
+    <ClInclude Include="lib_mat\rtGetInf.h" />
+    <ClInclude Include="lib_mat\rtGetNaN.h" />
+    <ClInclude Include="lib_mat\rtwtypes.h" />
+    <ClInclude Include="lib_mat\rt_nonfinite.h" />
+    <ClInclude Include="lib_mat\tmwtypes.h" />
+    <ClInclude Include="my_functions.h" />
+    <ClInclude Include="my_nataf.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
