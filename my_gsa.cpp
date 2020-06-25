@@ -37,7 +37,6 @@ void gsa_analysis(int &nrv, int& nmc, int& ncombs, std::vector<std::vector<doubl
 	runGSA_initialize();
 	runGSA(x, g, combs, Kos, Si); // 1st order sobol indecies
 
-	// runGSA(x, g, combs, (double)Kos, Si);
 
 	for (int i = 0; i < ncombs; i++)
 	{

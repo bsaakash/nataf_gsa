@@ -69,7 +69,7 @@ void nataf_transf(int nrv, int nmc, std::vector<std::string> &get_distnames, std
 	for (int i = 0; i < nmc; i++)
 	{
 		FEM_val = FEM_analysis(nrv, x_val[i]);
-		g_val.push_back(FEM_val); // Later Replaced by OPENSEES
+		g_val.push_back(FEM_val); // Later Replaced by OPENSEES, function will be modified to handle multiple (multi dimension) outputs
 	}
 }
 
