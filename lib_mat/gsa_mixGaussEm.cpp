@@ -5,7 +5,7 @@
 // File: gsa_mixGaussEm.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:12:52
+// C/C++ source code generated on  : 06-Jul-2020 21:48:16
 //
 
 // Include Files
@@ -17,9 +17,7 @@
 #include "gsa_rand.h"
 #include "gsa_runGSA.h"
 #include "gsa_sparse.h"
-#include "gsa_sum.h"
 #include "gsa_unique.h"
-#include "gsa_vvarstd.h"
 #include "gsa_xgeqp3.h"
 #include "gsa_xgetrf.h"
 #include "rt_nonfinite.h"
@@ -56,18 +54,19 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
   coder::array<double, 2U> w;
   int nx;
   int i;
-  int acoef;
+  int bcoef;
   int k;
   coder::array<double, 1U> y;
   int i1;
   coder::array<double, 2U> b_model_Sigma;
   int csz_idx_0;
-  int b_acoef;
+  int acoef;
   coder::array<double, 2U> b_X;
   coder::array<double, 2U> r;
-  coder::array<double, 1U> T;
+  int b_acoef;
   double b;
   boolean_T p;
+  coder::array<double, 1U> T;
   coder::array<boolean_T, 1U> b_i;
   boolean_T exitg1;
 
@@ -91,21 +90,21 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
   }
 
   i = model_mu.size(1);
-  for (acoef = 0; acoef < i; acoef++) {
+  for (bcoef = 0; bcoef < i; bcoef++) {
     nx = model_mu.size(0);
     y.set_size(model_mu.size(0));
     for (i1 = 0; i1 < nx; i1++) {
-      y[i1] = model_mu[i1 + model_mu.size(0) * acoef];
+      y[i1] = model_mu[i1 + model_mu.size(0) * bcoef];
     }
 
     nx = model_Sigma.size(0);
     csz_idx_0 = model_Sigma.size(1);
     b_model_Sigma.set_size(model_Sigma.size(0), model_Sigma.size(1));
     for (i1 = 0; i1 < csz_idx_0; i1++) {
-      for (b_acoef = 0; b_acoef < nx; b_acoef++) {
-        b_model_Sigma[b_acoef + b_model_Sigma.size(0) * i1] = model_Sigma
-          [(b_acoef + model_Sigma.size(0) * i1) + model_Sigma.size(0) *
-          model_Sigma.size(1) * acoef];
+      for (acoef = 0; acoef < nx; acoef++) {
+        b_model_Sigma[acoef + b_model_Sigma.size(0) * i1] = model_Sigma[(acoef +
+          model_Sigma.size(0) * i1) + model_Sigma.size(0) * model_Sigma.size(1) *
+          bcoef];
       }
     }
 
@@ -118,7 +117,7 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
     gsa_loggausspdf(b_X, y, b_model_Sigma, r);
     nx = R.size(0);
     for (i1 = 0; i1 < nx; i1++) {
-      R[i1 + R.size(0) * acoef] = r[i1];
+      R[i1 + R.size(0) * bcoef] = r[i1];
     }
   }
 
@@ -135,9 +134,9 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
 
   csz_idx_0 = R.size(0);
   nx = w.size(1);
-  b_acoef = R.size(1);
-  if (nx < b_acoef) {
-    b_acoef = nx;
+  acoef = R.size(1);
+  if (nx < acoef) {
+    acoef = nx;
   }
 
   if (w.size(1) == 1) {
@@ -147,23 +146,22 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
   } else if (R.size(1) == w.size(1)) {
     nx = R.size(1);
   } else {
-    nx = b_acoef;
+    nx = acoef;
   }
 
   R.set_size(csz_idx_0, nx);
   if ((csz_idx_0 != 0) && (nx != 0)) {
-    int bcoef;
-    acoef = (b_model_Sigma.size(1) != 1);
+    b_acoef = (b_model_Sigma.size(1) != 1);
     bcoef = (w.size(1) != 1);
     i = nx - 1;
     for (k = 0; k <= i; k++) {
-      nx = acoef * k;
+      nx = b_acoef * k;
       csz_idx_0 = bcoef * k;
-      b_acoef = (b_model_Sigma.size(0) != 1);
+      acoef = (b_model_Sigma.size(0) != 1);
       i1 = R.size(0) - 1;
       for (int b_k = 0; b_k <= i1; b_k++) {
-        R[b_k + R.size(0) * k] = b_model_Sigma[b_acoef * b_k +
-          b_model_Sigma.size(0) * nx] + w[csz_idx_0];
+        R[b_k + R.size(0) * k] = b_model_Sigma[acoef * b_k + b_model_Sigma.size
+          (0) * nx] + w[csz_idx_0];
       }
     }
   }
@@ -178,19 +176,19 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
   //  end
   //  subtract the largest in each dim
   nx = R.size(0) - 1;
-  b_acoef = R.size(1);
+  acoef = R.size(1);
   y.set_size(R.size(0));
   if (R.size(0) >= 1) {
-    for (acoef = 0; acoef <= nx; acoef++) {
-      y[acoef] = R[acoef];
+    for (bcoef = 0; bcoef <= nx; bcoef++) {
+      y[bcoef] = R[bcoef];
     }
 
-    for (csz_idx_0 = 2; csz_idx_0 <= b_acoef; csz_idx_0++) {
-      for (acoef = 0; acoef <= nx; acoef++) {
-        b = R[acoef + R.size(0) * (csz_idx_0 - 1)];
-        p = ((!rtIsNaN(b)) && (rtIsNaN(y[acoef]) || (y[acoef] < b)));
+    for (b_acoef = 2; b_acoef <= acoef; b_acoef++) {
+      for (bcoef = 0; bcoef <= nx; bcoef++) {
+        b = R[bcoef + R.size(0) * (b_acoef - 1)];
+        p = ((!rtIsNaN(b)) && (rtIsNaN(y[bcoef]) || (y[bcoef] < b)));
         if (p) {
-          y[acoef] = b;
+          y[bcoef] = b;
         }
       }
     }
@@ -202,7 +200,30 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
     b_model_Sigma[k] = std::exp(b_model_Sigma[k]);
   }
 
-  gsa_sum(b_model_Sigma, T);
+  nx = b_model_Sigma.size(1);
+  if ((b_model_Sigma.size(0) == 0) || (b_model_Sigma.size(1) == 0)) {
+    unsigned int sz_idx_0;
+    sz_idx_0 = static_cast<unsigned int>(b_model_Sigma.size(0));
+    T.set_size((static_cast<int>(sz_idx_0)));
+    nx = static_cast<int>(sz_idx_0);
+    for (i = 0; i < nx; i++) {
+      T[i] = 0.0;
+    }
+  } else {
+    csz_idx_0 = b_model_Sigma.size(0);
+    T.set_size(b_model_Sigma.size(0));
+    for (b_acoef = 0; b_acoef < csz_idx_0; b_acoef++) {
+      T[b_acoef] = b_model_Sigma[b_acoef];
+    }
+
+    for (k = 2; k <= nx; k++) {
+      acoef = (k - 1) * csz_idx_0;
+      for (b_acoef = 0; b_acoef < csz_idx_0; b_acoef++) {
+        T[b_acoef] = T[b_acoef] + b_model_Sigma[acoef + b_acoef];
+      }
+    }
+  }
+
   nx = T.size(0);
   for (k = 0; k < nx; k++) {
     T[k] = std::log(T[k]);
@@ -235,9 +256,9 @@ static void gsa_expectation(const coder::array<double, 2U> &X, const coder::
 
   if (p) {
     nx = b_i.size(0);
-    for (acoef = 0; acoef < nx; acoef++) {
-      if (b_i[acoef]) {
-        T[acoef] = y[acoef];
+    for (bcoef = 0; bcoef < nx; bcoef++) {
+      if (b_i[bcoef]) {
+        T[bcoef] = y[bcoef];
       }
     }
   }

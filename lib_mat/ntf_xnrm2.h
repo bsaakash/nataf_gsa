@@ -5,7 +5,7 @@
 // File: ntf_xnrm2.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 #ifndef NTF_XNRM2_H
 #define NTF_XNRM2_H
@@ -18,8 +18,7 @@
 
 // Function Declarations
 extern double ntf_b_xnrm2(int n, const coder::array<double, 1U> &x, int ix0);
-extern double ntf_c_xnrm2(int n, const double x_data[]);
-extern double ntf_d_xnrm2(int n, const coder::array<double, 2U> &x, int ix0);
+extern double ntf_c_xnrm2(int n, const coder::array<double, 2U> &x, int ix0);
 extern double ntf_xnrm2(int n, const coder::array<double, 2U> &x, int ix0);
 
 #endif

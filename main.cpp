@@ -39,16 +39,16 @@ int main()
 	coder::array<gsa_cell_wrap_0, 2U> combs;
 	int Kos = 50; // number of GM compontents - fixed
 	int ncomb = nrv;
-	std::vector<double> Si_first;
+	std::vector<double> Si, St;
 	combs.set_size(1, ncomb);
 	for (int i = 0; i < ncomb; i++) {
 		combs[i].f1 = { (double)i + 1.0 }; // Fixed to be 1st order only. Later we could get this as user input.
 	}			
-	gsa_analysis(nrv, nmc, ncomb, x, g, combs, Kos, Si_first); // NEED ERROR CHECK, will be modified for multiple outputs
+	gsa_analysis(nrv, nmc, ncomb, x, g, combs, Kos, Si, St); // NEED ERROR CHECK, will be modified for multiple outputs
 
 	// WRITE
 	for (int i = 0; i < nrv; i++) {
-		std::cout << "S" << i << ": " << Si_first[i] << "   " << std::endl;
+		std::cout << "S" << i << ": " << Si[i] << ",   " << St[i] << "   " << std::endl;
 	}
 	std::cout << "#MCS=" << nmc << std::endl;
 

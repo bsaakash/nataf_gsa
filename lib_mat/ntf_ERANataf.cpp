@@ -5,7 +5,7 @@
 // File: ntf_ERANataf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -20,10 +20,10 @@
 #include "ntf_inataf_rtwutil.h"
 #include "ntf_mrdivide_helper.h"
 #include "ntf_mycholcov.h"
+#include "ntf_norm.h"
 #include "ntf_pdf.h"
-#include "ntf_repmat.h"
+#include "ntf_rand.h"
 #include "ntf_strcmp.h"
-#include "ntf_svd.h"
 #include "rt_nonfinite.h"
 #include <cmath>
 #include <cstring>
@@ -609,27 +609,43 @@ double ntf_ERANataf::ntf___anon_fcn(const double coef[1048576], const double xi
   [1048576], const double eta[1048576], const ntf_ERANataf *Obj, double i,
   double j, double rho0)
 {
+  double u0;
+  double x;
   double a;
-  double a_tmp;
   double b_a;
   int k;
   static double y[1048576];
-  a = 2.0 * rho0;
-  a_tmp = 1.0 - rho0 * rho0;
-  b_a = -1.0 / (2.0 * a_tmp);
-  a_tmp = 6.2831853071795862 * std::sqrt(a_tmp);
+  u0 = std::abs(rho0);
+  if (!(u0 < 0.99999)) {
+    u0 = 0.99999;
+  }
+
+  x = rho0;
+  if (rho0 < 0.0) {
+    x = -1.0;
+  } else if (rho0 > 0.0) {
+    x = 1.0;
+  } else {
+    if (rho0 == 0.0) {
+      x = 0.0;
+    }
+  }
+
+  a = 2.0 * x * u0;
+  b_a = -1.0 / (2.0 * (1.0 - u0 * u0));
+  x = 6.2831853071795862 * std::sqrt(1.0 - u0 * u0);
   for (k = 0; k < 1048576; k++) {
-    y[k] = coef[k] / a_tmp * std::exp(b_a * ((ntf_rt_powd_snf(xi[k], 2.0) - a *
-      xi[k] * eta[k]) + ntf_rt_powd_snf(eta[k], 2.0)));
+    y[k] = coef[k] / x * std::exp(b_a * ((ntf_rt_powd_snf(xi[k], 2.0) - a * xi[k]
+      * eta[k]) + ntf_rt_powd_snf(eta[k], 2.0)));
   }
 
-  a_tmp = y[0];
+  x = y[0];
   for (k = 0; k < 1048575; k++) {
-    a_tmp += y[k + 1];
+    x += y[k + 1];
   }
 
-  return a_tmp - Obj->Rho_X[(static_cast<int>(i) + 2 * (static_cast<int>(j) - 1))
-    - 1];
+  return x - Obj->Rho_X[(static_cast<int>(i) + 2 * (static_cast<int>(j) - 1)) -
+    1];
 }
 
 //
@@ -646,27 +662,27 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
   double w_1D[1024];
   int m;
   static double b[1048576];
-  static double eta[1048576];
-  int k;
-  int i1;
+  static double xi[1048576];
   static double b_b[1048576];
-  static double b_dv[1048576];
-  static double w_2D[1048576];
+  int i1;
+  static double eta[1048576];
   static double c_b[1048576];
+  static double w_2D[1048576];
+  static double etal[1048576];
+  int k;
+  static double b_dv[1048576];
+  static double w_2Dl[1048576];
   coder::array<signed char, 2U> Obj_tmp;
-  coder::array<double, 2U> x;
-  double y;
-  double absx;
-  double absxk;
-  int j;
-  double t;
-  double tmp_data[2];
-  int tmp_size[1];
-  static const char b_cv[6] = { 'n', 'o', 'r', 'm', 'a', 'l' };
+  coder::array<double, 2U> b_Correlation;
+  static const char b_cv[8] = { 'b', 'i', 'n', 'o', 'm', 'i', 'a', 'l' };
 
-  coder::array<double, 2U> r;
-  coder::array<double, 2U> r1;
+  double b_init;
+  static const char b_cv1[6] = { 'n', 'o', 'r', 'm', 'a', 'l' };
+
+  double Vj;
+  double Vi;
   static ntf_b_coder_internal_anonymous_ fun;
+  double exitflag;
   this->A.set_size(0, 0);
   this->Marginals.set_size(M.size(0));
   ibtile = M.size(0);
@@ -686,9 +702,39 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
     std::memcpy(&b[ibtile], &points[0], 1024U * sizeof(double));
   }
 
+  for (i = 0; i < 1024; i++) {
+    for (i1 = 0; i1 < 1024; i1++) {
+      b_b[i1 + (i << 10)] = b[i + (i1 << 10)];
+    }
+  }
+
+  std::memcpy(&xi[0], &b_b[0], 1048576U * sizeof(double));
   for (m = 0; m < 1024; m++) {
     ibtile = m << 10;
     std::memcpy(&eta[ibtile], &points[0], 1024U * sizeof(double));
+    std::memcpy(&b[ibtile], &w_1D[0], 1024U * sizeof(double));
+    std::memcpy(&c_b[ibtile], &w_1D[0], 1024U * sizeof(double));
+  }
+
+  for (i = 0; i < 1024; i++) {
+    for (i1 = 0; i1 < 1024; i1++) {
+      b_b[i1 + (i << 10)] = b[i + (i1 << 10)];
+    }
+  }
+
+  for (i = 0; i < 1048576; i++) {
+    w_2D[i] = b_b[i] * c_b[i];
+  }
+
+  ntf_ERANataf::ntf_quad_GL((points), (w_1D));
+  for (m = 0; m < 1024; m++) {
+    ibtile = m << 10;
+    std::memcpy(&b[ibtile], &points[0], 1024U * sizeof(double));
+  }
+
+  for (m = 0; m < 1024; m++) {
+    ibtile = m << 10;
+    std::memcpy(&etal[ibtile], &points[0], 1024U * sizeof(double));
     for (k = 0; k < 1024; k++) {
       i = k + ibtile;
       b_dv[i] = b[m + (k << 10)];
@@ -698,17 +744,17 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
   for (m = 0; m < 1024; m++) {
     ibtile = m << 10;
     std::memcpy(&b[ibtile], &w_1D[0], 1024U * sizeof(double));
-    std::memcpy(&b_b[ibtile], &w_1D[0], 1024U * sizeof(double));
+    std::memcpy(&c_b[ibtile], &w_1D[0], 1024U * sizeof(double));
   }
 
   for (i = 0; i < 1024; i++) {
     for (i1 = 0; i1 < 1024; i1++) {
-      c_b[i1 + (i << 10)] = b[i + (i1 << 10)];
+      b_b[i1 + (i << 10)] = b[i + (i1 << 10)];
     }
   }
 
   for (i = 0; i < 1048576; i++) {
-    w_2D[i] = c_b[i] * b_b[i];
+    w_2Dl[i] = b_b[i] * c_b[i];
   }
 
   m = M.size(0);
@@ -730,71 +776,77 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
     this->Rho_Z[i] = Obj_tmp[i];
   }
 
-  x.set_size(2, Correlation.size(1));
+  b_Correlation.set_size(2, Correlation.size(1));
   ibtile = Correlation.size(0) * Correlation.size(1);
   for (i = 0; i < ibtile; i++) {
-    x[i] = Correlation[i] - static_cast<double>(Obj_tmp[i]);
+    b_Correlation[i] = Correlation[i] - static_cast<double>(Obj_tmp[i]);
   }
 
-  if (x.size(1) == 0) {
-    y = 0.0;
-  } else if (x.size(1) == 1) {
-    absx = 3.3121686421112381E-170;
-    absxk = std::abs(x[0]);
-    if (absxk > 3.3121686421112381E-170) {
-      y = 1.0;
-      absx = absxk;
-    } else {
-      t = absxk / 3.3121686421112381E-170;
-      y = t * t;
-    }
-
-    absxk = std::abs(x[1]);
-    if (absxk > absx) {
-      t = absx / absxk;
-      y = y * t * t + 1.0;
-      absx = absxk;
-    } else {
-      t = absxk / absx;
-      y += t * t;
-    }
-
-    y = absx * std::sqrt(y);
-  } else {
-    ibtile = x.size(1);
-    y = 0.0;
-    for (j = 0; j < ibtile; j++) {
-      absx = std::abs(x[2 * j]);
-      if (rtIsNaN(absx) || (absx > y)) {
-        y = absx;
-      }
-
-      absx = std::abs(x[2 * j + 1]);
-      if (rtIsNaN(absx) || (absx > y)) {
-        y = absx;
-      }
-    }
-
-    if ((!rtIsInf(y)) && (!rtIsNaN(y))) {
-      ntf_svd(x, tmp_data, tmp_size);
-      y = tmp_data[0];
-    }
-  }
-
-  if (y >= 1.0E-5) {
+  if (ntf_norm(b_Correlation) >= 1.0E-5) {
     i = M.size(0);
     for (int b_i = 0; b_i < i; b_i++) {
+      boolean_T b_bool;
+      boolean_T guard1 = false;
+      int exitg1;
+      b_bool = false;
+      if (M[b_i].Name.size(1) == 8) {
+        ibtile = 0;
+        do {
+          exitg1 = 0;
+          if (ibtile < 8) {
+            if (M[b_i].Name[ibtile] != b_cv[ibtile]) {
+              exitg1 = 1;
+            } else {
+              ibtile++;
+            }
+          } else {
+            b_bool = true;
+            exitg1 = 1;
+          }
+        } while (exitg1 == 0);
+      }
+
+      guard1 = false;
+      if (b_bool) {
+        guard1 = true;
+      } else {
+        b_bool = false;
+        if (M[b_i].Name.size(1) == 16) {
+          ibtile = 0;
+          do {
+            exitg1 = 0;
+            if (ibtile < 16) {
+              if (M[b_i].Name[ibtile] != ntf_cv4[ibtile]) {
+                exitg1 = 1;
+              } else {
+                ibtile++;
+              }
+            } else {
+              b_bool = true;
+              exitg1 = 1;
+            }
+          } while (exitg1 == 0);
+        }
+
+        if (b_bool) {
+          guard1 = true;
+        }
+      }
+
+      if (guard1) {
+        std::memcpy(&xi[0], &b_dv[0], 1048576U * sizeof(double));
+        std::memcpy(&eta[0], &etal[0], 1048576U * sizeof(double));
+        std::memcpy(&w_2D[0], &w_2Dl[0], 1048576U * sizeof(double));
+      }
+
       i1 = M.size(0) - b_i;
-      for (j = 0; j <= i1 - 2; j++) {
+      for (int j = 0; j <= i1 - 2; j++) {
         unsigned int b_j;
         b_j = (static_cast<unsigned int>(b_i) + j) + 2U;
         m = static_cast<int>(b_j) - 1;
-        absx = Correlation[b_i + 2 * m];
-        if (!(absx == 0.0)) {
-          boolean_T b_bool;
-          boolean_T guard1 = false;
+        b_init = Correlation[b_i + 2 * m];
+        if (!(b_init == 0.0)) {
           boolean_T guard2 = false;
-          int exitg1;
           boolean_T guard3 = false;
           boolean_T guard4 = false;
           boolean_T guard5 = false;
@@ -841,7 +893,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
             }
 
             if (b_bool) {
-              this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = absx;
+              this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = b_init;
               this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                 this->Rho_Z.size(0) * m];
             } else {
@@ -858,7 +910,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               do {
                 exitg1 = 0;
                 if (ibtile < 6) {
-                  if (M[b_i].Name[ibtile] != b_cv[ibtile]) {
+                  if (M[b_i].Name[ibtile] != b_cv1[ibtile]) {
                     exitg1 = 1;
                   } else {
                     ibtile++;
@@ -877,7 +929,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
                 do {
                   exitg1 = 0;
                   if (ibtile < 6) {
-                    if (M[m].Name[ibtile] != b_cv[ibtile]) {
+                    if (M[m].Name[ibtile] != b_cv1[ibtile]) {
                       exitg1 = 1;
                     } else {
                       ibtile++;
@@ -890,7 +942,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               }
 
               if (b_bool) {
-                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = absx;
+                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = b_init;
                 this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                   this->Rho_Z.size(0) * m];
               } else {
@@ -908,7 +960,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               do {
                 exitg1 = 0;
                 if (ibtile < 6) {
-                  if (M[b_i].Name[ibtile] != b_cv[ibtile]) {
+                  if (M[b_i].Name[ibtile] != b_cv1[ibtile]) {
                     exitg1 = 1;
                   } else {
                     ibtile++;
@@ -940,10 +992,9 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               }
 
               if (b_bool) {
-                t = ntf_mrdiv(M[m].std.data, M[m].std.size, M[m].mean.data, M[m]
-                              .mean.size);
-                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = absx * t / std::
-                  sqrt(std::log(t * t + 1.0));
+                Vj = M[m].std / M[m].mean;
+                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = b_init * Vj / std::
+                  sqrt(std::log(Vj * Vj + 1.0));
                 this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                   this->Rho_Z.size(0) * m];
               } else {
@@ -980,7 +1031,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
                 do {
                   exitg1 = 0;
                   if (ibtile < 6) {
-                    if (M[m].Name[ibtile] != b_cv[ibtile]) {
+                    if (M[m].Name[ibtile] != b_cv1[ibtile]) {
                       exitg1 = 1;
                     } else {
                       ibtile++;
@@ -993,10 +1044,9 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               }
 
               if (b_bool) {
-                absxk = ntf_mrdiv(M[b_i].std.data, M[b_i].std.size, M[b_i].
-                                  mean.data, M[b_i].mean.size);
-                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = absx * absxk / std::
-                  sqrt(std::log(absxk * absxk + 1.0));
+                Vi = M[b_i].std / M[b_i].mean;
+                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = b_init * Vi / std::
+                  sqrt(std::log(Vi * Vi + 1.0));
                 this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                   this->Rho_Z.size(0) * m];
               } else {
@@ -1046,13 +1096,11 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               }
 
               if (b_bool) {
-                absxk = ntf_mrdiv(M[b_i].std.data, M[b_i].std.size, M[b_i].
-                                  mean.data, M[b_i].mean.size);
-                t = ntf_mrdiv(M[m].std.data, M[m].std.size, M[m].mean.data, M[m]
-                              .mean.size);
-                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = std::log(absx *
-                  absxk * t + 1.0) / std::sqrt(std::log(absxk * absxk + 1.0) *
-                  std::log(t * t + 1.0));
+                Vi = M[b_i].std / M[b_i].mean;
+                Vj = M[m].std / M[m].mean;
+                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = std::log(b_init *
+                  Vi * Vj + 1.0) / std::sqrt(std::log(Vi * Vi + 1.0) * std::log
+                  (Vj * Vj + 1.0));
                 this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                   this->Rho_Z.size(0) * m];
               } else {
@@ -1065,55 +1113,67 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
 
           if (guard1) {
             for (k = 0; k < 1048576; k++) {
-              y = ntf_eml_erfcore(-eta[k] / 1.4142135623730951);
-              b[k] = 0.5 * y;
+              b_init = ntf_eml_erfcore(-eta[k] / 1.4142135623730951);
+              b[k] = 0.5 * b_init;
             }
 
-            M[static_cast<int>(b_j) - 1].ntf_eb_icdf(b, b_b);
-            ntf_repmat(M[m].mean.data, M[m].mean.size, r);
+            M[static_cast<int>(b_j) - 1].ntf_eb_icdf(b, c_b);
             for (ibtile = 0; ibtile < 1048576; ibtile++) {
-              b_b[ibtile] -= r[ibtile];
+              c_b[ibtile] -= M[m].mean;
             }
 
             for (k = 0; k < 1048576; k++) {
-              y = ntf_eml_erfcore(-b_dv[k] / 1.4142135623730951);
-              b[k] = 0.5 * y;
+              b_init = ntf_eml_erfcore(-xi[k] / 1.4142135623730951);
+              b[k] = 0.5 * b_init;
             }
 
-            M[b_i].ntf_eb_icdf(b, c_b);
-            ntf_repmat(M[b_i].mean.data, M[b_i].mean.size, r);
+            M[b_i].ntf_eb_icdf(b, b_b);
             for (ibtile = 0; ibtile < 1048576; ibtile++) {
-              c_b[ibtile] -= r[ibtile];
-            }
-
-            ntf_repmat(M[m].std.data, M[m].std.size, r);
-            ntf_repmat(M[m].std.data, M[m].std.size, r1);
-            for (ibtile = 0; ibtile < 1048576; ibtile++) {
-              absx = b_b[ibtile] / r[ibtile] * (c_b[ibtile] / r1[ibtile]) *
+              b_init = b_b[ibtile] - M[b_i].mean;
+              b_b[ibtile] = b_init;
+              b_init = c_b[ibtile] / M[m].std * (b_init / M[b_i].std) *
                 w_2D[ibtile];
-              b_b[ibtile] = absx;
-              c_b[ibtile] = b_dv[ibtile];
-              fun.tunableEnvironment.f1[ibtile] = absx;
-              fun.tunableEnvironment.f2[ibtile] = b_dv[ibtile];
+              c_b[ibtile] = b_init;
+              fun.tunableEnvironment.f1[ibtile] = b_init;
+              fun.tunableEnvironment.f2[ibtile] = xi[ibtile];
               fun.tunableEnvironment.f3[ibtile] = eta[ibtile];
             }
 
             fun.tunableEnvironment.f4 = *this;
             fun.tunableEnvironment.f5 = b_i + 1;
             fun.tunableEnvironment.f6 = b_j;
-            ntf_d_fzero(&fun, Correlation[b_i + 2 * (static_cast<int>(b_j) - 1)],
-                        &absxk, &absx, &t);
-            if (t > 0.0) {
-              this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = absxk;
+            ntf_e_fzero(&fun, Correlation[b_i + 2 * (static_cast<int>(b_j) - 1)],
+                        &Vj, &b_init, &exitflag);
+            if (exitflag > 0.0) {
+              this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = Vj;
               this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                 this->Rho_Z.size(0) * m];
             } else {
-              ntf_d_fzero(&fun, -Correlation[b_i + 2 * (static_cast<int>(b_j) -
-                1)], &absxk, &absx, &t);
-              if (t > 0.0) {
-                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = absxk;
+              ntf_e_fzero(&fun, -Correlation[b_i + 2 * (static_cast<int>(b_j) -
+                1)], &Vj, &b_init, &exitflag);
+              if (exitflag > 0.0) {
+                this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = Vj;
                 this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                   this->Rho_Z.size(0) * m];
+              } else {
+                boolean_T exitg2;
+                k = 0;
+                exitg2 = false;
+                while ((!exitg2) && (k < 10)) {
+                  b_init = 2.0 * ntf_rand() - 1.0;
+                  ntf_e_fzero(&fun, b_init, &Vj, &Vi, &exitflag);
+                  if (exitflag > 0.0) {
+                    exitg2 = true;
+                  } else {
+                    k++;
+                  }
+                }
+
+                if (exitflag > 0.0) {
+                  this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = Vj;
+                  this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
+                    this->Rho_Z.size(0) * m];
+                }
               }
             }
           }
@@ -1189,7 +1249,7 @@ void ntf_ERANataf::ntf_q_pdf(const coder::array<double, 2U> &X, coder::array<
       b_X[i] = X[i + X.size(0) * nx];
     }
 
-    this->Marginals[nx].ntf_o_cdf(b_X, quadform);
+    this->Marginals[nx].ntf_p_cdf(b_X, quadform);
     i = quadform.size(0);
     r.set_size(quadform.size(0));
     for (k = 0; k < i; k++) {
@@ -1296,7 +1356,7 @@ void ntf_ERANataf::ntf_q_pdf(const coder::array<double, 2U> &X, coder::array<
   ntf_mycholcov(this->Rho_Z, R, &logSqrtDetSigma);
 
   //  Create array of standardized data, and compute log(sqrt(det(Sigma)))
-  ntf_b_mrdiv(U, R);
+  ntf_mrdiv(U, R);
   if ((R.size(0) == 1) && (R.size(1) == 1)) {
     quadform.set_size(1);
     quadform[0] = R[0];

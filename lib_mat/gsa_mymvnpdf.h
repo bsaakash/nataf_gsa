@@ -5,7 +5,7 @@
 // File: gsa_mymvnpdf.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:12:52
+// C/C++ source code generated on  : 06-Jul-2020 21:48:16
 //
 #ifndef GSA_MYMVNPDF_H
 #define GSA_MYMVNPDF_H
@@ -17,9 +17,8 @@
 #include "gsa_runGSA_types.h"
 
 // Function Declarations
-extern void gsa_mymvnpdf(const coder::array<double, 1U> &X, const coder::array<
-  double, 1U> &Mu, const coder::array<double, 2U> &Sigma, coder::array<double,
-  1U> &y);
+extern double gsa_mymvnpdf(const coder::array<double, 2U> &X, const coder::array<
+  double, 2U> &Mu, const coder::array<double, 2U> &Sigma);
 
 #endif
 

@@ -5,7 +5,7 @@
 // File: ntf_gammainc.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -396,6 +396,8 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
     } else {
       asq = rtNaN;
     }
+  } else if (!(x > 0.0)) {
+    asq = 1.0;
   } else if (rtIsInf(a)) {
     if (rtIsInf(x)) {
       asq = rtNaN;
@@ -406,7 +408,7 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
     asq = 0.0;
   } else {
     double b_stirlerr;
-    double d;
+    double gold;
     double a1;
     double t;
     double vsq;
@@ -427,9 +429,9 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
                      -0.0027777777777777779) / asq + 0.083333333333333329) / a;
     }
 
-    d = a - x;
+    gold = a - x;
     a1 = a + x;
-    if (std::abs(d) > 0.1 * a1) {
+    if (std::abs(gold) > 0.1 * a1) {
       if (a < 2.2250738585072014E-308 * x) {
         xD0 = x;
       } else if ((x < 1.0) && (a > 1.7976931348623157E+308 * x)) {
@@ -441,7 +443,7 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
       t = x / a;
       asq = (1.0 - t) / (t + 1.0);
       vsq = asq * asq;
-      xD0 = d * asq;
+      xD0 = gold * asq;
       old = xD0;
       asq = 2.0 * (a * asq);
       dj = 3.0;
@@ -461,27 +463,27 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
     logpax = (-0.5 * (la + 1.8378770664093453) - b_stirlerr) - xD0;
     if (x > 1.0E+6) {
       old = std::sqrt(x);
-      t = std::abs(d - 1.0) / old;
+      t = std::abs(gold - 1.0) / old;
       xD0 = t * t;
       if (t < 15.0) {
-        dj = 0.70710678118654746 * t;
-        asq = 3.97886080735226 / (dj + 3.97886080735226);
-        a1 = 0.5 * ((((((((((((((((((((((0.0012710976495261409 * (asq - 0.5) +
-          0.00011931402283834095) * (asq - 0.5) + -0.0039638509736051354) * (asq
-          - 0.5) + -0.00087077963531729586) * (asq - 0.5) +
-          0.0077367252831352668) * (asq - 0.5) + 0.0038333512626488732) * (asq -
-          0.5) + -0.012722381378212275) * (asq - 0.5) + -0.013382364453346007) *
-          (asq - 0.5) + 0.016131532973325226) * (asq - 0.5) +
-          0.039097684558848406) * (asq - 0.5) + 0.0024936720005350331) * (asq -
-          0.5) + -0.0838864557023002) * (asq - 0.5) + -0.11946395996432542) *
-                             (asq - 0.5) + 0.016620792496936737) * (asq - 0.5) +
-                            0.35752427444953105) * (asq - 0.5) +
-                           0.80527640875291062) * (asq - 0.5) +
-                          1.1890298290927332) * (asq - 0.5) + 1.3704021768233816)
-                        * (asq - 0.5) + 1.313146538310231) * (asq - 0.5) +
-                       1.0792551515585667) * (asq - 0.5) + 0.77436819911953858) *
-                     (asq - 0.5) + 0.49016508058531844) * (asq - 0.5) +
-                    0.27537474159737679) * asq * std::exp(-dj * dj) *
+        asq = 0.70710678118654746 * t;
+        dj = 3.97886080735226 / (asq + 3.97886080735226);
+        a1 = 0.5 * ((((((((((((((((((((((0.0012710976495261409 * (dj - 0.5) +
+          0.00011931402283834095) * (dj - 0.5) + -0.0039638509736051354) * (dj -
+          0.5) + -0.00087077963531729586) * (dj - 0.5) + 0.0077367252831352668) *
+          (dj - 0.5) + 0.0038333512626488732) * (dj - 0.5) +
+          -0.012722381378212275) * (dj - 0.5) + -0.013382364453346007) * (dj -
+          0.5) + 0.016131532973325226) * (dj - 0.5) + 0.039097684558848406) *
+          (dj - 0.5) + 0.0024936720005350331) * (dj - 0.5) + -0.0838864557023002)
+                              * (dj - 0.5) + -0.11946395996432542) * (dj - 0.5)
+                             + 0.016620792496936737) * (dj - 0.5) +
+                            0.35752427444953105) * (dj - 0.5) +
+                           0.80527640875291062) * (dj - 0.5) +
+                          1.1890298290927332) * (dj - 0.5) + 1.3704021768233816)
+                        * (dj - 0.5) + 1.313146538310231) * (dj - 0.5) +
+                       1.0792551515585667) * (dj - 0.5) + 0.77436819911953858) *
+                     (dj - 0.5) + 0.49016508058531844) * (dj - 0.5) +
+                    0.27537474159737679) * dj * std::exp(-asq * asq) *
           2.5066282746310002 * std::exp(0.5 * xD0);
         dj = (a1 * ((xD0 - 3.0) * t) - (xD0 - 4.0)) / 6.0;
         vsq = (a1 * ((xD0 * xD0 - 9.0) * xD0 + 6.0) - ((xD0 - 1.0) * xD0 - 6.0) *
@@ -514,27 +516,27 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
         }
       }
     } else if (x < a) {
-      double n;
       int i;
-      n = 1.0;
+      t = 1.0;
       if (x > 2.2204460492503131E-16 * a) {
-        t = x / a;
-        n = 2.0;
+        dj = x / a;
+        t = 2.0;
         do {
           exitg1 = 0;
-          t = x * t / (a + (n - 1.0));
-          if (t < 2.2204460492503131E-16) {
+          dj = x * dj / (a + (t - 1.0));
+          if (dj < 2.2204460492503131E-16) {
             exitg1 = 1;
           } else {
-            n++;
+            t++;
           }
         } while (exitg1 == 0);
       }
 
       asq = 0.0;
-      i = static_cast<int>(((-1.0 - (n - 1.0)) + 1.0) / -1.0);
-      for (int b_i = 0; b_i < i; b_i++) {
-        asq = x * (asq + 1.0) / (a + ((n - 1.0) + -static_cast<double>(b_i)));
+      i = static_cast<int>(((-1.0 - (t - 1.0)) + 1.0) / -1.0);
+      for (int afrac_tmp_tmp = 0; afrac_tmp_tmp < i; afrac_tmp_tmp++) {
+        asq = x * (asq + 1.0) / (a + ((t - 1.0) + -static_cast<double>
+          (afrac_tmp_tmp)));
       }
 
       asq++;
@@ -550,35 +552,37 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
 
       asq = 1.0 - asq;
     } else {
-      double n;
       int i;
+      int afrac_tmp_tmp;
+      dj = 1.0;
       t = 1.0;
-      n = 1.0;
       do {
         exitg1 = 0;
-        d = std::floor(a1);
-        if (n <= d) {
-          t = (a - n) * t / x;
-          if (std::abs(t) < 2.2204460492503131E-16) {
+        i = static_cast<int>(std::floor(a1));
+        afrac_tmp_tmp = static_cast<int>(t);
+        if (afrac_tmp_tmp <= i) {
+          dj = (a - t) * dj / x;
+          if (std::abs(dj) < 2.2204460492503131E-16) {
             exitg1 = 1;
           } else {
-            n++;
+            t++;
           }
         } else {
           exitg1 = 1;
         }
       } while (exitg1 == 0);
 
-      if (n <= d) {
+      if (afrac_tmp_tmp <= i) {
         asq = 1.0;
       } else {
-        n = std::floor(a);
-        dj = a - n;
-        if (dj == 0.0) {
+        afrac_tmp_tmp = static_cast<int>(std::floor(a));
+        vsq = a - static_cast<double>(afrac_tmp_tmp);
+        if (vsq == 0.0) {
           asq = 1.0;
-        } else if (dj == 0.5) {
-          dj = 0.70710678118654746 * std::sqrt(2.0 * x);
-          t = 3.97886080735226 / (dj + 3.97886080735226);
+          t = afrac_tmp_tmp;
+        } else if (vsq == 0.5) {
+          asq = 0.70710678118654746 * std::sqrt(2.0 * x);
+          t = 3.97886080735226 / (asq + 3.97886080735226);
           asq = std::sqrt(3.1415926535897931 * x) * std::exp(x) * (2.0 * (0.5 *
             ((((((((((((((((((((((0.0012710976495261409 * (t - 0.5) +
             0.00011931402283834095) * (t - 0.5) + -0.0039638509736051354) * (t -
@@ -596,38 +600,39 @@ creal_T ntf_scalar_gammainc(double x, double a, double la, double lgap1)
                   1.3704021768233816) * (t - 0.5) + 1.313146538310231) * (t -
             0.5) + 1.0792551515585667) * (t - 0.5) + 0.77436819911953858) * (t -
             0.5) + 0.49016508058531844) * (t - 0.5) + 0.27537474159737679) * t *
-            std::exp(-dj * dj)));
-          n++;
+            std::exp(-asq * asq)));
+          t = static_cast<double>(afrac_tmp_tmp) + 1.0;
         } else {
-          vsq = 1.0;
+          xD0 = 1.0;
           a1 = x;
-          xD0 = 0.0;
-          old = 1.0;
-          t = 1.0 / x;
-          n = 1.0;
-          asq = t;
-          b_stirlerr = 0.0;
-          while (std::abs(asq - b_stirlerr) > 2.2204460492503131E-16 * asq) {
-            b_stirlerr = asq;
-            asq = n - dj;
-            vsq = (a1 + vsq * asq) * t;
-            xD0 = (old + xD0 * asq) * t;
-            asq = n * t;
-            a1 = x * vsq + asq * a1;
-            old = x * xD0 + asq * old;
-            t = 1.0 / a1;
-            asq = old * t;
-            n++;
+          old = 0.0;
+          b_stirlerr = 1.0;
+          dj = 1.0 / x;
+          t = 1.0;
+          asq = dj;
+          gold = 0.0;
+          while (std::abs(asq - gold) > 2.2204460492503131E-16 * asq) {
+            gold = asq;
+            asq = t - vsq;
+            xD0 = (a1 + xD0 * asq) * dj;
+            old = (b_stirlerr + old * asq) * dj;
+            asq = t * dj;
+            a1 = x * xD0 + asq * a1;
+            b_stirlerr = x * old + asq * b_stirlerr;
+            dj = 1.0 / a1;
+            asq = b_stirlerr * dj;
+            t++;
           }
 
           asq *= x;
-          n = std::floor(a) + 1.0;
+          t = static_cast<double>(afrac_tmp_tmp) + 1.0;
         }
       }
 
-      i = static_cast<int>(((-1.0 - (n - 1.0)) + 1.0) / -1.0);
-      for (int b_i = 0; b_i < i; b_i++) {
-        asq = (a - ((n - 1.0) + -static_cast<double>(b_i))) * asq / x + 1.0;
+      i = static_cast<int>(((-1.0 - (t - 1.0)) + 1.0) / -1.0);
+      for (afrac_tmp_tmp = 0; afrac_tmp_tmp < i; afrac_tmp_tmp++) {
+        asq = (a - ((t - 1.0) + -static_cast<double>(afrac_tmp_tmp))) * asq / x
+          + 1.0;
       }
 
       asq = asq * a / x;

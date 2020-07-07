@@ -5,7 +5,7 @@
 // File: ntf_inataf_types.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 #ifndef NTF_INATAF_TYPES_H
 #define NTF_INATAF_TYPES_H
@@ -26,12 +26,6 @@ struct ntf_cell_wrap_3
   double f1[4];
 };
 
-struct ntf_emxArray_real_T_1x4
-{
-  double data[4];
-  int size[2];
-};
-
 class ntf_ERADist
 {
  public:
@@ -40,14 +34,14 @@ class ntf_ERADist
   void ntf_eb_icdf(const double p[1048576], double InverseCDF[1048576]) const;
   void ntf_eb_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U>
                    &InverseCDF) const;
-  void ntf_o_cdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
+  void ntf_p_cdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
                  &CDF) const;
   void ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
                  &PDF) const;
   coder::array<char, 2U> Name;
   double Par[4];
-  ntf_emxArray_real_T_1x4 mean;
-  ntf_emxArray_real_T_1x4 std;
+  double mean;
+  double std;
 };
 
 class ntf_ERANataf

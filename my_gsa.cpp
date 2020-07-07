@@ -4,14 +4,14 @@
 #include "lib_mat\gsa_combineVectorElements.h"
 #include "lib_mat\gsa_runGSA.h"
 #include "lib_mat\gsa_runGSA_initialize.h"
-#include "lib_mat\gsa_sum.h"
+//#include "lib_mat\gsa_sum.h"
 #include "lib_mat\gsa_vvarstd.h"
 #include "lib_mat\rt_nonfinite.h"
 #include <iostream>
 #include <random>
 
 void gsa_analysis(int &nrv, int& nmc, int& ncombs, std::vector<std::vector<double>>& x_val, std::vector<double>& g_val,
-	coder::array<gsa_cell_wrap_0, 2U>& combs_temp, int & Kos, std::vector<double>& Si_val)
+	coder::array<gsa_cell_wrap_0, 2U>& combs_temp, int & Kos, std::vector<double>& Si_val, std::vector<double>& St_val)
 {
 	
 	
@@ -32,15 +32,17 @@ void gsa_analysis(int &nrv, int& nmc, int& ncombs, std::vector<std::vector<doubl
 	const coder::array<double, 1U> g = g_temp;
 	const coder::array<gsa_cell_wrap_0, 2U> combs = combs_temp;
 
-	coder::array<double, 1U> Si;
+	coder::array<double, 1U> Si, St;
 
 	runGSA_initialize();
-	runGSA(x, g, combs, Kos, Si); // 1st order sobol indecies
-
+	char anaOpy = 'M';
+	runGSA(x, g, combs, Kos, anaOpy, Si); // 1st order sobol indecies
+	runGSA(x, g, combs, Kos, 'T', St); // 1st order sobol indecies
 
 	for (int i = 0; i < ncombs; i++)
 	{
 		Si_val.push_back(Si[i]);
+		St_val.push_back(St[i]);
 	}
 	
 }

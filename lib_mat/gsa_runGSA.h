@@ -5,7 +5,7 @@
 // File: gsa_runGSA.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:12:52
+// C/C++ source code generated on  : 06-Jul-2020 21:48:16
 //
 #ifndef GSA_RUNGSA_H
 #define GSA_RUNGSA_H
@@ -18,8 +18,9 @@
 
 // Function Declarations
 extern void runGSA(const coder::array<double, 2U> &x, const coder::array<double,
-                   1U> &gval, const coder::array<gsa_cell_wrap_0, 2U> &combs,
-                   double Kos, coder::array<double, 1U> &Si_first);
+                   1U> &gval, const coder::array<gsa_cell_wrap_0, 2U>
+                   &combs_temp, double Kos, char opts, coder::array<double, 1U>
+                   &Si);
 
 #endif
 

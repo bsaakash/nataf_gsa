@@ -5,7 +5,7 @@
 // File: ntf_mrdivide_helper.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 #ifndef NTF_MRDIVIDE_HELPER_H
 #define NTF_MRDIVIDE_HELPER_H
@@ -17,10 +17,8 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
-extern void ntf_b_mrdiv(coder::array<double, 2U> &A, const coder::array<double,
-  2U> &B);
-extern double ntf_mrdiv(const double A_data[], const int A_size[2], const double
-  B_data[], const int B_size[2]);
+extern void ntf_mrdiv(coder::array<double, 2U> &A, const coder::array<double, 2U>
+                      &B);
 
 #endif
 

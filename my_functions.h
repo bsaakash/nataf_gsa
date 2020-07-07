@@ -12,7 +12,7 @@
 // Function Declarations
 
 extern void gsa_analysis(int& nrv, int& nmc, int& ncombs, std::vector<std::vector<double>>& x, std::vector<double>& g_val,
-	coder::array<gsa_cell_wrap_0, 2U>& combs_temp, int& Kos, std::vector<double>& Si_first);
+	coder::array<gsa_cell_wrap_0, 2U>& combs_temp, int& Kos, std::vector<double>& Si, std::vector<double>& St);
 	
 extern void nataf_transf(int nrv, int nmc, std::vector<std::string>& get_distnames, std::vector<std::string>& get_opts,
 	std::vector<std::vector<double>>& get_pars, std::vector<double>& get_corr, coder::array<double, 2U>& u_temp,

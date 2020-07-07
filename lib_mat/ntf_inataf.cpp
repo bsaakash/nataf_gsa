@@ -5,7 +5,7 @@
 // File: ntf_inataf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -48,6 +48,8 @@ void inataf(const coder::array<double, 2U> &u, const coder::array<
     M[b_i].ntf_init(distnames[b_i].f1, opts[b_i].f1, vals[b_i].f1);
   }
 
+  //      disp(num2str([M{1}.mean, M{1}.std M{1}.Par;
+  //                    M{2}.mean, M{2}.std M{2}.Par]));
   // == Change into Physical domain
   Distobj.ntf_init(M, corrs);
   b_u.set_size(u.size(1), u.size(0));

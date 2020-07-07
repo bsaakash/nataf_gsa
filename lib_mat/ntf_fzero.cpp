@@ -5,7 +5,7 @@
 // File: ntf_fzero.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -359,6 +359,205 @@ void ntf_c_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x, double 
 }
 
 //
+// Arguments    : const ntf_coder_internal_anonymous_fu FunFcn
+//                double x
+//                double *b
+//                double *fval
+//                double *exitflag
+// Return Type  : void
+//
+void ntf_d_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x, double *
+                 b, double *fval, double *exitflag)
+{
+  double q;
+  double dx;
+  double r;
+  double fx_tmp;
+  double fx;
+  *exitflag = 1.0;
+  q = 1.0 - x;
+  ntf_gamma(&q);
+  dx = FunFcn.tunableEnvironment[0].f1[1] / (-FunFcn.tunableEnvironment[0].f1[0]
+    + FunFcn.tunableEnvironment[0].f1[2]);
+  r = 1.0 - 2.0 * x;
+  ntf_gamma(&r);
+  fx_tmp = dx * dx;
+  fx = (r - q * q) / ((q - 1.0) * (q - 1.0)) - fx_tmp;
+  if (fx == 0.0) {
+    *b = x;
+    *fval = fx;
+  } else {
+    double a;
+    boolean_T guard1 = false;
+    if (x != 0.0) {
+      dx = x / 50.0;
+    } else {
+      dx = 0.02;
+    }
+
+    a = x;
+    *b = x;
+    *fval = fx;
+    guard1 = false;
+    int exitg1;
+    do {
+      exitg1 = 0;
+      if ((fx > 0.0) == (*fval > 0.0)) {
+        dx *= 1.4142135623730951;
+        a = x - dx;
+        q = 1.0 - a;
+        ntf_gamma(&q);
+        r = 1.0 - 2.0 * a;
+        ntf_gamma(&r);
+        fx = (r - q * q) / ((q - 1.0) * (q - 1.0)) - fx_tmp;
+        if (rtIsInf(fx) || rtIsNaN(fx)) {
+          *exitflag = -3.0;
+          *b = rtNaN;
+          *fval = rtNaN;
+          exitg1 = 1;
+        } else if (rtIsInf(a) || rtIsNaN(a)) {
+          *exitflag = -6.0;
+          *b = rtNaN;
+          *fval = rtNaN;
+          exitg1 = 1;
+        } else if ((fx > 0.0) != (*fval > 0.0)) {
+          guard1 = true;
+          exitg1 = 1;
+        } else {
+          *b = x + dx;
+          q = 1.0 - *b;
+          ntf_gamma(&q);
+          r = 1.0 - 2.0 * *b;
+          ntf_gamma(&r);
+          *fval = (r - q * q) / ((q - 1.0) * (q - 1.0)) - fx_tmp;
+          if (rtIsInf(*fval) || rtIsNaN(*fval)) {
+            *exitflag = -3.0;
+            *b = rtNaN;
+            *fval = rtNaN;
+            exitg1 = 1;
+          } else if (rtIsInf(*b) || rtIsNaN(*b)) {
+            *exitflag = -6.0;
+            *b = rtNaN;
+            *fval = rtNaN;
+            exitg1 = 1;
+          } else {
+            guard1 = false;
+          }
+        }
+      } else {
+        guard1 = true;
+        exitg1 = 1;
+      }
+    } while (exitg1 == 0);
+
+    if (guard1) {
+      double b_x;
+      double c_x;
+      double fc;
+      double c;
+      double e;
+      double d;
+      boolean_T exitg2;
+      b_x = fx;
+      c_x = *fval;
+      fc = *fval;
+      c = *b;
+      e = 0.0;
+      d = 0.0;
+      exitg2 = false;
+      while ((!exitg2) && ((*fval != 0.0) && (a != *b))) {
+        double m;
+        double toler;
+        if ((*fval > 0.0) == (fc > 0.0)) {
+          c = a;
+          fc = fx;
+          d = *b - a;
+          e = d;
+        }
+
+        if (std::abs(fc) < std::abs(*fval)) {
+          a = *b;
+          *b = c;
+          c = a;
+          fx = *fval;
+          *fval = fc;
+          fc = fx;
+        }
+
+        m = 0.5 * (c - *b);
+        q = std::abs(*b);
+        if (!(q > 1.0)) {
+          q = 1.0;
+        }
+
+        toler = 4.4408920985006262E-16 * q;
+        if ((std::abs(m) <= toler) || (*fval == 0.0)) {
+          exitg2 = true;
+        } else {
+          if ((std::abs(e) < toler) || (std::abs(fx) <= std::abs(*fval))) {
+            d = m;
+            e = m;
+          } else {
+            double s;
+            s = *fval / fx;
+            if (a == c) {
+              dx = 2.0 * m * s;
+              q = 1.0 - s;
+            } else {
+              q = fx / fc;
+              r = *fval / fc;
+              dx = s * (2.0 * m * q * (q - r) - (*b - a) * (r - 1.0));
+              q = (q - 1.0) * (r - 1.0) * (s - 1.0);
+            }
+
+            if (dx > 0.0) {
+              q = -q;
+            } else {
+              dx = -dx;
+            }
+
+            if ((2.0 * dx < 3.0 * m * q - std::abs(toler * q)) && (dx < std::abs
+                 (0.5 * e * q))) {
+              e = d;
+              d = dx / q;
+            } else {
+              d = m;
+              e = m;
+            }
+          }
+
+          a = *b;
+          fx = *fval;
+          if (std::abs(d) > toler) {
+            *b += d;
+          } else if (*b > c) {
+            *b -= toler;
+          } else {
+            *b += toler;
+          }
+
+          q = 1.0 - *b;
+          ntf_gamma(&q);
+          r = 1.0 - 2.0 * *b;
+          ntf_gamma(&r);
+          *fval = (r - q * q) / ((q - 1.0) * (q - 1.0)) - fx_tmp;
+        }
+      }
+
+      q = std::abs(b_x);
+      dx = std::abs(c_x);
+      if ((q > dx) || rtIsNaN(dx)) {
+        dx = q;
+      }
+
+      if (!(std::abs(*fval) <= dx)) {
+        *exitflag = -5.0;
+      }
+    }
+  }
+}
+
+//
 // Arguments    : const ntf_b_coder_internal_anonymous_ *FunFcn
 //                double x
 //                double *b
@@ -366,7 +565,7 @@ void ntf_c_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x, double 
 //                double *exitflag
 // Return Type  : void
 //
-void ntf_d_fzero(const ntf_b_coder_internal_anonymous_ *FunFcn, double x, double
+void ntf_e_fzero(const ntf_b_coder_internal_anonymous_ *FunFcn, double x, double
                  *b, double *fval, double *exitflag)
 {
   double fx;

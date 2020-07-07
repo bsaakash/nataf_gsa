@@ -5,7 +5,7 @@
 // File: ntf_inataf_rtwutil.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 #ifndef NTF_INATAF_RTWUTIL_H
 #define NTF_INATAF_RTWUTIL_H
@@ -17,7 +17,6 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
-extern double ntf_rt_hypotd_snf(double u0, double u1);
 extern double ntf_rt_powd_snf(double u0, double u1);
 
 #endif

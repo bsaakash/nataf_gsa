@@ -5,7 +5,7 @@
 // File: ntf_cdf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -592,6 +592,41 @@ void ntf_d_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                coder::array<double, 1U> &p)
 {
   int i;
+  double d;
+  p.set_size(varargin_1.size(0));
+  i = varargin_1.size(0);
+  for (int k = 0; k < i; k++) {
+    if ((varargin_2 >= 0.0) && (!rtIsInf(varargin_2)) && ((!rtIsInf(varargin_1[k]))
+         && (!rtIsNaN(varargin_1[k])))) {
+      double xkf;
+      xkf = std::floor(varargin_1[k]);
+      if (xkf < 0.0) {
+        p[k] = 0.0;
+      } else {
+        d = (xkf + 1.0) + 1.0;
+        ntf_gammaln(&d);
+        p[k] = (ntf_scalar_gammainc(varargin_2, xkf + 1.0, std::log(xkf + 1.0),
+                 d)).re;
+      }
+    } else if ((varargin_1[k] > 0.0) && rtIsInf(varargin_1[k]) && (varargin_2 >
+                0.0) && (!rtIsInf(varargin_2))) {
+      p[k] = 1.0;
+    } else {
+      p[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const coder::array<double, 1U> *varargin_1
+//                double varargin_2
+//                coder::array<double, 1U> *p
+// Return Type  : void
+//
+void ntf_e_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+               coder::array<double, 1U> &p)
+{
+  int i;
   double xk;
   p.set_size(varargin_1.size(0));
   i = varargin_1.size(0);
@@ -605,35 +640,6 @@ void ntf_d_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
       xk = -(xk / varargin_2);
       ntf_expm1(&xk);
       p[k] = -xk;
-    } else {
-      p[k] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const coder::array<double, 1U> *varargin_1
-//                double varargin_2
-//                double varargin_3
-//                coder::array<double, 1U> *p
-// Return Type  : void
-//
-void ntf_e_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
-               double varargin_3, coder::array<double, 1U> &p)
-{
-  int i;
-  p.set_size(varargin_1.size(0));
-  i = varargin_1.size(0);
-  for (int k = 0; k < i; k++) {
-    double xk;
-    xk = varargin_1[k];
-    if ((varargin_2 >= 0.0) && (varargin_3 > 0.0) && (!rtIsNaN(varargin_1[k])))
-    {
-      if (varargin_1[k] < 0.0) {
-        xk = 0.0;
-      }
-
-      p[k] = (ntf_gammainc(xk / varargin_3, varargin_2)).re;
     } else {
       p[k] = rtNaN;
     }
@@ -759,6 +765,35 @@ double ntf_eml_erfcore(double x)
 // Return Type  : void
 //
 void ntf_f_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+               double varargin_3, coder::array<double, 1U> &p)
+{
+  int i;
+  p.set_size(varargin_1.size(0));
+  i = varargin_1.size(0);
+  for (int k = 0; k < i; k++) {
+    double xk;
+    xk = varargin_1[k];
+    if ((varargin_2 >= 0.0) && (varargin_3 > 0.0) && (!rtIsNaN(varargin_1[k])))
+    {
+      if (varargin_1[k] < 0.0) {
+        xk = 0.0;
+      }
+
+      p[k] = (ntf_gammainc(xk / varargin_3, varargin_2)).re;
+    } else {
+      p[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const coder::array<double, 1U> *varargin_1
+//                double varargin_2
+//                double varargin_3
+//                coder::array<double, 1U> *p
+// Return Type  : void
+//
+void ntf_g_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, coder::array<double, 1U> &p)
 {
   int i;
@@ -891,7 +926,7 @@ void ntf_f_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_g_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_h_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, double varargin_4, coder::array<double, 1U> &p)
 {
   int i;
@@ -934,7 +969,7 @@ void ntf_g_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_h_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_i_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, coder::array<double, 1U> &p)
 {
   int i;
@@ -964,7 +999,7 @@ void ntf_h_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_i_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_j_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, double varargin_4, coder::array<double, 1U> &p)
 {
   int i;
@@ -1012,7 +1047,7 @@ void ntf_i_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_j_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_k_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                coder::array<double, 1U> &p)
 {
   int i;
@@ -1040,7 +1075,7 @@ void ntf_j_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_k_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_l_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                coder::array<double, 1U> &p)
 {
   int i;
@@ -1068,7 +1103,7 @@ void ntf_k_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_l_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_m_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, coder::array<double, 1U> &p)
 {
   int i;
@@ -1096,7 +1131,7 @@ void ntf_l_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_m_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_n_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, coder::array<double, 1U> &p)
 {
   int i;
@@ -1123,7 +1158,7 @@ void ntf_m_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
 //                coder::array<double, 1U> *p
 // Return Type  : void
 //
-void ntf_n_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
+void ntf_o_cdf(const coder::array<double, 1U> &varargin_1, double varargin_2,
                double varargin_3, coder::array<double, 1U> &p)
 {
   int i;

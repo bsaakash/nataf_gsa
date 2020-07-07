@@ -5,7 +5,7 @@
 // File: ntf_inataf_data.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -14,6 +14,7 @@
 #include "rt_nonfinite.h"
 
 // Variable Definitions
+unsigned int ntf_state[625];
 const char ntf_cv1[14] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 'n', 'o', 'r',
   'm', 'a', 'l' };
 

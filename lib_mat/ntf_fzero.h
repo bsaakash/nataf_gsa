@@ -5,7 +5,7 @@
 // File: ntf_fzero.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 #ifndef NTF_FZERO_H
 #define NTF_FZERO_H
@@ -21,7 +21,9 @@ extern void ntf_b_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double *b,
   double *fval, double *exitflag);
 extern void ntf_c_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x,
   double *b, double *fval, double *exitflag);
-extern void ntf_d_fzero(const ntf_b_coder_internal_anonymous_ *FunFcn, double x,
+extern void ntf_d_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x,
+  double *b, double *fval, double *exitflag);
+extern void ntf_e_fzero(const ntf_b_coder_internal_anonymous_ *FunFcn, double x,
   double *b, double *fval, double *exitflag);
 extern void ntf_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double *b,
                       double *fval, double *exitflag);

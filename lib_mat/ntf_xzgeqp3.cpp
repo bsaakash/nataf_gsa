@@ -5,21 +5,49 @@
 // File: ntf_xzgeqp3.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
 #include "ntf_xzgeqp3.h"
 #include "ntf_ERANataf.h"
 #include "ntf_inataf.h"
-#include "ntf_inataf_rtwutil.h"
 #include "ntf_mrdivide_helper.h"
 #include "ntf_pdf.h"
 #include "ntf_xnrm2.h"
 #include "rt_nonfinite.h"
 #include <cmath>
 
+// Function Declarations
+static double ntf_rt_hypotd_snf(double u0, double u1);
+
 // Function Definitions
+
+//
+// Arguments    : double u0
+//                double u1
+// Return Type  : double
+//
+static double ntf_rt_hypotd_snf(double u0, double u1)
+{
+  double y;
+  double a;
+  a = std::abs(u0);
+  y = std::abs(u1);
+  if (a < y) {
+    a /= y;
+    y *= std::sqrt(a * a + 1.0);
+  } else if (a > y) {
+    y /= a;
+    y = a * std::sqrt(y * y + 1.0);
+  } else {
+    if (!rtIsNaN(y)) {
+      y = a * 1.4142135623730951;
+    }
+  }
+
+  return y;
+}
 
 //
 // Arguments    : coder::array<double, 2U> *A
@@ -72,7 +100,7 @@ void ntf_qrpf(coder::array<double, 2U> &A, int m, int n, coder::array<double, 1U
   }
 
   for (j = 0; j < n; j++) {
-    smax = ntf_d_xnrm2(m, A, j * ma + 1);
+    smax = ntf_c_xnrm2(m, A, j * ma + 1);
     vn1[j] = smax;
     vn2[j] = smax;
   }
@@ -129,7 +157,7 @@ void ntf_qrpf(coder::array<double, 2U> &A, int m, int n, coder::array<double, 1U
       itemp = ii + 2;
       tau[b_i] = 0.0;
       if (mmi > 0) {
-        smax = ntf_d_xnrm2(mmi - 1, A, ii + 2);
+        smax = ntf_c_xnrm2(mmi - 1, A, ii + 2);
         if (smax != 0.0) {
           s = ntf_rt_hypotd_snf(A[ii], smax);
           if (A[ii] >= 0.0) {
@@ -149,7 +177,7 @@ void ntf_qrpf(coder::array<double, 2U> &A, int m, int n, coder::array<double, 1U
               temp2 *= 9.9792015476736E+291;
             } while (!(std::abs(s) >= 1.0020841800044864E-292));
 
-            s = ntf_rt_hypotd_snf(temp2, ntf_d_xnrm2(mmi - 1, A, ii + 2));
+            s = ntf_rt_hypotd_snf(temp2, ntf_c_xnrm2(mmi - 1, A, ii + 2));
             if (temp2 >= 0.0) {
               s = -s;
             }
@@ -284,7 +312,7 @@ void ntf_qrpf(coder::array<double, 2U> &A, int m, int n, coder::array<double, 1U
         temp2 = s * (temp2 * temp2);
         if (temp2 <= 1.4901161193847656E-8) {
           if (b_i + 1 < m) {
-            smax = ntf_d_xnrm2(mmi - 1, A, itemp + 2);
+            smax = ntf_c_xnrm2(mmi - 1, A, itemp + 2);
             vn1[j - 1] = smax;
             vn2[j - 1] = smax;
           } else {

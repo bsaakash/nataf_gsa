@@ -5,7 +5,7 @@
 // File: ntf_xnrm2.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 24-Jun-2020 22:09:55
+// C/C++ source code generated on  : 06-Jul-2020 21:30:41
 //
 
 // Include Files
@@ -60,50 +60,11 @@ double ntf_b_xnrm2(int n, const coder::array<double, 1U> &x, int ix0)
 
 //
 // Arguments    : int n
-//                const double x_data[]
-// Return Type  : double
-//
-double ntf_c_xnrm2(int n, const double x_data[])
-{
-  double y;
-  y = 0.0;
-  if (n >= 1) {
-    if (n == 1) {
-      y = std::abs(x_data[1]);
-    } else {
-      double scale;
-      int kend;
-      scale = 3.3121686421112381E-170;
-      kend = n + 1;
-      for (int k = 2; k <= kend; k++) {
-        double absxk;
-        absxk = std::abs(x_data[k - 1]);
-        if (absxk > scale) {
-          double t;
-          t = scale / absxk;
-          y = y * t * t + 1.0;
-          scale = absxk;
-        } else {
-          double t;
-          t = absxk / scale;
-          y += t * t;
-        }
-      }
-
-      y = scale * std::sqrt(y);
-    }
-  }
-
-  return y;
-}
-
-//
-// Arguments    : int n
 //                const coder::array<double, 2U> *x
 //                int ix0
 // Return Type  : double
 //
-double ntf_d_xnrm2(int n, const coder::array<double, 2U> &x, int ix0)
+double ntf_c_xnrm2(int n, const coder::array<double, 2U> &x, int ix0)
 {
   double y;
   y = 0.0;
