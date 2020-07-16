@@ -5,11 +5,12 @@
 // File: ntf_inataf_initialize.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
 #include "ntf_inataf_initialize.h"
+#include "ntf_betafit.h"
 #include "ntf_eml_rand_mt19937ar_stateful.h"
 #include "ntf_inataf.h"
 #include "rt_nonfinite.h"
@@ -23,6 +24,7 @@
 void inataf_initialize()
 {
   rt_InitInfAndNaN();
+  ntf_negloglike_init();
   ntf_eml_rand_mt19937ar_stateful();
 }
 

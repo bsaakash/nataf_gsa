@@ -5,7 +5,7 @@
 // File: ntf_gammainc.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -18,7 +18,7 @@
 #include <cmath>
 
 // Function Declarations
-static double ntf_b_eml_gammainc(double x, double a, double la, double lgap1);
+static double ntf_d_eml_gammainc(double x, double a, double la, double lgap1);
 
 // Function Definitions
 
@@ -29,7 +29,7 @@ static double ntf_b_eml_gammainc(double x, double a, double la, double lgap1);
 //                double lgap1
 // Return Type  : double
 //
-static double ntf_b_eml_gammainc(double x, double a, double la, double lgap1)
+static double ntf_d_eml_gammainc(double x, double a, double la, double lgap1)
 {
   double rval;
   double asq;
@@ -318,7 +318,7 @@ creal_T ntf_gammainc(double x, double a)
   Iax = a + 1.0;
   ntf_gammaln(&Iax);
   if (!(x < 0.0)) {
-    b.re = ntf_b_eml_gammainc(x, a, std::log(a), Iax);
+    b.re = ntf_d_eml_gammainc(x, a, std::log(a), Iax);
     b.im = 0.0;
   } else {
     double pax_modulus;

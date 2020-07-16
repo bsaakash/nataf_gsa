@@ -5,7 +5,7 @@
 // File: ntf_fzero.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -13,6 +13,7 @@
 #include "ntf_ERANataf.h"
 #include "ntf_gamma.h"
 #include "ntf_inataf.h"
+#include "ntf_pdf.h"
 #include "rt_nonfinite.h"
 #include <cmath>
 
@@ -558,14 +559,257 @@ void ntf_d_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x, double 
 }
 
 //
-// Arguments    : const ntf_b_coder_internal_anonymous_ *FunFcn
+// Arguments    : const double x[2]
+//                const coder::array<double, 1U> *varargin_1
+//                double varargin_3
+//                double *b
+//                double *fval
+//                double *exitflag
+// Return Type  : void
+//
+void ntf_e_fzero(const double x[2], const coder::array<double, 1U> &varargin_1,
+                 double varargin_3, double *b, double *fval, double *exitflag)
+{
+  double a;
+  coder::array<double, 1U> wt;
+  int nx;
+  int k;
+  coder::array<double, 1U> b_x;
+  double p;
+  double q;
+  double fa;
+  double savefa;
+  double savefb;
+  *exitflag = 1.0;
+  a = x[0];
+  *b = x[1];
+  wt.set_size(varargin_1.size(0));
+  nx = varargin_1.size(0);
+  for (k = 0; k < nx; k++) {
+    wt[k] = varargin_1[k] / x[0];
+  }
+
+  nx = wt.size(0);
+  for (k = 0; k < nx; k++) {
+    wt[k] = std::exp(wt[k]);
+  }
+
+  b_x.set_size(varargin_1.size(0));
+  nx = varargin_1.size(0);
+  for (k = 0; k < nx; k++) {
+    b_x[k] = varargin_1[k] * wt[k];
+  }
+
+  nx = b_x.size(0);
+  if (b_x.size(0) == 0) {
+    p = 0.0;
+  } else {
+    p = b_x[0];
+    for (k = 2; k <= nx; k++) {
+      p += b_x[k - 1];
+    }
+  }
+
+  nx = wt.size(0);
+  if (wt.size(0) == 0) {
+    q = 0.0;
+  } else {
+    q = wt[0];
+    for (k = 2; k <= nx; k++) {
+      q += wt[k - 1];
+    }
+  }
+
+  fa = (x[0] + varargin_3) - p / q;
+  wt.set_size(varargin_1.size(0));
+  nx = varargin_1.size(0);
+  for (k = 0; k < nx; k++) {
+    wt[k] = varargin_1[k] / x[1];
+  }
+
+  nx = wt.size(0);
+  for (k = 0; k < nx; k++) {
+    wt[k] = std::exp(wt[k]);
+  }
+
+  b_x.set_size(varargin_1.size(0));
+  nx = varargin_1.size(0);
+  for (k = 0; k < nx; k++) {
+    b_x[k] = varargin_1[k] * wt[k];
+  }
+
+  nx = b_x.size(0);
+  if (b_x.size(0) == 0) {
+    p = 0.0;
+  } else {
+    p = b_x[0];
+    for (k = 2; k <= nx; k++) {
+      p += b_x[k - 1];
+    }
+  }
+
+  nx = wt.size(0);
+  if (wt.size(0) == 0) {
+    q = 0.0;
+  } else {
+    q = wt[0];
+    for (k = 2; k <= nx; k++) {
+      q += wt[k - 1];
+    }
+  }
+
+  *fval = (x[1] + varargin_3) - p / q;
+  savefa = fa;
+  savefb = *fval;
+  if (fa == 0.0) {
+    *b = x[0];
+    *fval = fa;
+  } else {
+    if (!(*fval == 0.0)) {
+      double fc;
+      double c;
+      double e;
+      double d;
+      boolean_T exitg1;
+      fc = *fval;
+      c = x[1];
+      e = 0.0;
+      d = 0.0;
+      exitg1 = false;
+      while ((!exitg1) && ((*fval != 0.0) && (a != *b))) {
+        double m;
+        double toler;
+        if ((*fval > 0.0) == (fc > 0.0)) {
+          c = a;
+          fc = fa;
+          d = *b - a;
+          e = d;
+        }
+
+        if (std::abs(fc) < std::abs(*fval)) {
+          a = *b;
+          *b = c;
+          c = a;
+          fa = *fval;
+          *fval = fc;
+          fc = fa;
+        }
+
+        m = 0.5 * (c - *b);
+        q = std::abs(*b);
+        if (!(q > 1.0)) {
+          q = 1.0;
+        }
+
+        toler = 2.0E-6 * q;
+        if ((std::abs(m) <= toler) || (*fval == 0.0)) {
+          exitg1 = true;
+        } else {
+          if ((std::abs(e) < toler) || (std::abs(fa) <= std::abs(*fval))) {
+            d = m;
+            e = m;
+          } else {
+            double s;
+            s = *fval / fa;
+            if (a == c) {
+              p = 2.0 * m * s;
+              q = 1.0 - s;
+            } else {
+              q = fa / fc;
+              fa = *fval / fc;
+              p = s * (2.0 * m * q * (q - fa) - (*b - a) * (fa - 1.0));
+              q = (q - 1.0) * (fa - 1.0) * (s - 1.0);
+            }
+
+            if (p > 0.0) {
+              q = -q;
+            } else {
+              p = -p;
+            }
+
+            if ((2.0 * p < 3.0 * m * q - std::abs(toler * q)) && (p < std::abs
+                 (0.5 * e * q))) {
+              e = d;
+              d = p / q;
+            } else {
+              d = m;
+              e = m;
+            }
+          }
+
+          a = *b;
+          fa = *fval;
+          if (std::abs(d) > toler) {
+            *b += d;
+          } else if (*b > c) {
+            *b -= toler;
+          } else {
+            *b += toler;
+          }
+
+          wt.set_size(varargin_1.size(0));
+          nx = varargin_1.size(0);
+          for (k = 0; k < nx; k++) {
+            wt[k] = varargin_1[k] / *b;
+          }
+
+          nx = wt.size(0);
+          for (k = 0; k < nx; k++) {
+            wt[k] = std::exp(wt[k]);
+          }
+
+          b_x.set_size(varargin_1.size(0));
+          nx = varargin_1.size(0);
+          for (k = 0; k < nx; k++) {
+            b_x[k] = varargin_1[k] * wt[k];
+          }
+
+          nx = b_x.size(0);
+          if (b_x.size(0) == 0) {
+            p = 0.0;
+          } else {
+            p = b_x[0];
+            for (k = 2; k <= nx; k++) {
+              p += b_x[k - 1];
+            }
+          }
+
+          nx = wt.size(0);
+          if (wt.size(0) == 0) {
+            q = 0.0;
+          } else {
+            q = wt[0];
+            for (k = 2; k <= nx; k++) {
+              q += wt[k - 1];
+            }
+          }
+
+          *fval = (*b + varargin_3) - p / q;
+        }
+      }
+
+      q = std::abs(savefa);
+      p = std::abs(savefb);
+      if ((q > p) || rtIsNaN(p)) {
+        p = q;
+      }
+
+      if (!(std::abs(*fval) <= p)) {
+        *exitflag = -5.0;
+      }
+    }
+  }
+}
+
+//
+// Arguments    : const ntf_d_coder_internal_anonymous_ *FunFcn
 //                double x
 //                double *b
 //                double *fval
 //                double *exitflag
 // Return Type  : void
 //
-void ntf_e_fzero(const ntf_b_coder_internal_anonymous_ *FunFcn, double x, double
+void ntf_f_fzero(const ntf_d_coder_internal_anonymous_ *FunFcn, double x, double
                  *b, double *fval, double *exitflag)
 {
   double fx;

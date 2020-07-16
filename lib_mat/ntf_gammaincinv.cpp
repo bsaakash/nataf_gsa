@@ -5,7 +5,7 @@
 // File: ntf_gammaincinv.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -27,7 +27,7 @@
 //                boolean_T upper
 // Return Type  : double
 //
-double ntf_eml_gammainc(double x, double a, double la, double lgap1, boolean_T
+double ntf_c_eml_gammainc(double x, double a, double la, double lgap1, boolean_T
   upper)
 {
   double rval;
@@ -486,11 +486,11 @@ double ntf_eml_gammaincinv(double p, double a, double la, double lga, double
     i = 0;
     exitg1 = false;
     while ((!exitg1) && (i < 1000)) {
-      log1mpLower = static_cast<double>(sgn) * (ntf_eml_gammainc(rval, a, la,
+      log1mpLower = static_cast<double>(sgn) * (ntf_c_eml_gammainc(rval, a, la,
         lgap1, upper) - p);
       if ((log1mpLower * r < 0.0) && (std::abs(r) <= std::abs(log1mpLower))) {
         rval = 0.5 * rval + 0.5 * oldz;
-        log1mpLower = static_cast<double>(sgn) * (ntf_eml_gammainc(rval, a, la,
+        log1mpLower = static_cast<double>(sgn) * (ntf_c_eml_gammainc(rval, a, la,
           lgap1, upper) - p);
       }
 
@@ -514,8 +514,8 @@ double ntf_eml_gammaincinv(double p, double a, double la, double lga, double
           if (rval <= nu) {
             if (nu == 0.0) {
               if (std::abs(static_cast<double>(upper) - p) < std::abs
-                  (ntf_eml_gammainc(2.2250738585072014E-308, a, la, lgap1, upper)
-                   - p)) {
+                  (ntf_c_eml_gammainc(2.2250738585072014E-308, a, la, lgap1,
+                                      upper) - p)) {
                 rval = 0.0;
                 exitg1 = true;
               } else {
@@ -535,8 +535,8 @@ double ntf_eml_gammaincinv(double p, double a, double la, double lga, double
         } else {
           if (1.0E+8 * nu < p1) {
             oldz = 1.0E+8 * nu;
-            r = static_cast<double>(sgn) * (ntf_eml_gammainc(oldz, a, la, lgap1,
-              upper) - p);
+            r = static_cast<double>(sgn) * (ntf_c_eml_gammainc(oldz, a, la,
+              lgap1, upper) - p);
             if (r > 0.0) {
               p1 = oldz;
             } else {

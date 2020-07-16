@@ -5,7 +5,7 @@
 // File: ntf_inataf_types.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 #ifndef NTF_INATAF_TYPES_H
 #define NTF_INATAF_TYPES_H
@@ -26,15 +26,23 @@ struct ntf_cell_wrap_3
   double f1[4];
 };
 
+struct ntf_cell_wrap_16
+{
+  coder::array<double, 1U> f1;
+};
+
 class ntf_ERADist
 {
  public:
   void ntf_init(const coder::array<char, 2U> &name, const coder::array<char, 2U>
-                &opt, const coder::array<double, 2U> &val_temp);
-  void ntf_eb_icdf(const double p[1048576], double InverseCDF[1048576]) const;
-  void ntf_eb_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U>
+                &opt, const coder::array<double, 2U> &val_temp, const coder::
+                array<double, 2U> &add);
+  static double ntf___anon_fcn(const coder::array<double, 1U> &val, const double
+    b[3]);
+  void ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576]) const;
+  void ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U>
                    &InverseCDF) const;
-  void ntf_p_cdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
+  void ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
                  &CDF) const;
   void ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
                  &PDF) const;
@@ -65,7 +73,25 @@ class ntf_ERANataf
   coder::array<ntf_ERADist, 1U> Marginals;
 };
 
-struct ntf_cell_11
+class ntf_b_coder_internal_anonymous_
+{
+ public:
+  ntf_cell_wrap_16 tunableEnvironment[2];
+};
+
+class ntf_c_coder_internal_anonymous_
+{
+ public:
+  ntf_cell_wrap_16 tunableEnvironment[1];
+};
+
+class ntf_coder_internal_anonymous_fu
+{
+ public:
+  ntf_cell_wrap_3 tunableEnvironment[1];
+};
+
+struct ntf_cell_23
 {
   double f1[1048576];
   double f2[1048576];
@@ -75,26 +101,74 @@ struct ntf_cell_11
   double f6;
 };
 
-class ntf_b_coder_internal_anonymous_
+class ntf_d_coder_internal_anonymous_
 {
  public:
-  ntf_cell_11 tunableEnvironment;
+  ntf_cell_23 tunableEnvironment;
 };
 
-class ntf_coder_internal_anonymous_fu
+class ntf_prob_coder_BetaDistribution
 {
  public:
-  ntf_cell_wrap_3 tunableEnvironment[1];
+  static ntf_prob_coder_BetaDistribution ntf_fit(const coder::array<double, 1U>
+    &x);
+  void ntf_init(double a, double b);
+  double ParameterValues[2];
 };
 
-struct ntf_cell_wrap_0
+class ntf_prob_coder_ExponentialDistr
 {
-  coder::array<char, 2U> f1;
+ public:
+  static ntf_prob_coder_ExponentialDistr ntf_fit(const coder::array<double, 1U>
+    &x);
+  void ntf_init(double mu);
+  double ParameterValues;
+};
+
+class ntf_prob_coder_ExtremeValueDist
+{
+ public:
+  static ntf_prob_coder_ExtremeValueDist ntf_fit(const coder::array<double, 1U>
+    &x);
+  void ntf_init(double mu, double sigma);
+  double ParameterValues[2];
+};
+
+class ntf_prob_coder_LognormalDistrib
+{
+ public:
+  static ntf_prob_coder_LognormalDistrib ntf_fit(const coder::array<double, 1U>
+    &x);
+  void ntf_init(double mu, double sigma);
+  double ParameterValues[2];
+};
+
+class ntf_prob_coder_NormalDistributi
+{
+ public:
+  static ntf_prob_coder_NormalDistributi ntf_fit(const coder::array<double, 1U>
+    &x);
+  void ntf_init(double mu, double sigma);
+  double ParameterValues[2];
+};
+
+class ntf_prob_coder_WeibullDistribut
+{
+ public:
+  static ntf_prob_coder_WeibullDistribut ntf_fit(const coder::array<double, 1U>
+    &x);
+  void ntf_init(double a, double b);
+  double ParameterValues[2];
 };
 
 struct ntf_cell_wrap_1
 {
   coder::array<double, 2U> f1;
+};
+
+struct ntf_cell_wrap_0
+{
+  coder::array<char, 2U> f1;
 };
 
 #ifdef _MSC_VER

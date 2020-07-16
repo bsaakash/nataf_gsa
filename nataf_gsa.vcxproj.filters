@@ -15,266 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="my_gsa.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="my_nataf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="my_readjson.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_stirlerr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_strcmp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_svd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_wblstat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_xaxpy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_xnrm2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_xrotg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_xzgeqp3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\rt_nonfinite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\rtGetInf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\rtGetNaN.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_bsxfun.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_combineVectorElements.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_eml_rand_mt19937ar_stateful.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_eml_setop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_heapsort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_insertionsort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_introsort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_mixGaussEm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_mrdivide_helper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_mycholcov.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_mymvnpdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_qrsolve.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_rand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_runGSA.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_runGSA_data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_runGSA_initialize.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_sparse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_stack1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_unique.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_vvarstd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_xgeqp3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_xgetrf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_xnrm2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\gsa_xzgeqp3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_betaincinv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_binodeviance.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_binopdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_cdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_chol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_cospiAndSinpi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_eml_rand_mt19937ar_stateful.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_ERADist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_ERANataf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_erfcinv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_expm1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_fzero.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_gamma.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_gammainc.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_gammaincinv.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_gammaln.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_gevstat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_gpstat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_icdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_inataf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_inataf_data.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_inataf_initialize.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_inataf_rtwutil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_mod.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_mrdivide_helper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_mycholcov.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_nbinpdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_norm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_pdf.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lib_mat\ntf_rand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="my_nataf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="my_functions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_stirlerr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_strcmp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_svd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_wblstat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_xaxpy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_xnrm2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_xrotg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\ntf_xzgeqp3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\rt_nonfinite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\rtGetInf.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\rtGetNaN.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\rtwtypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\tmwtypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\coder_array.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib_mat\gsa_bsxfun.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lib_mat\gsa_combineVectorElements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -347,6 +87,15 @@
     <ClInclude Include="lib_mat\gsa_xzgeqp3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_BetaDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_betafit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_betainc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lib_mat\ntf_betaincinv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -356,10 +105,19 @@
     <ClInclude Include="lib_mat\ntf_binopdf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_binostat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lib_mat\ntf_cdf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_chol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_colon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_corrcoef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_cospiAndSinpi.h">
@@ -377,7 +135,19 @@
     <ClInclude Include="lib_mat\ntf_erfcinv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_evfit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lib_mat\ntf_expm1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_ExponentialDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_ExtremeValueDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_fminsearch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_fzero.h">
@@ -393,6 +163,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_gammaln.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_gampdf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_gevinv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_gevstat.h">
@@ -419,7 +195,22 @@
     <ClInclude Include="lib_mat\ntf_inataf_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_LognormalDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_lognstat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_lower.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_minOrMax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lib_mat\ntf_mod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_mod1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_mrdivide_helper.h">
@@ -431,14 +222,376 @@
     <ClInclude Include="lib_mat\ntf_nbinpdf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_nbinstat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lib_mat\ntf_norm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_NormalDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_normfit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib_mat\ntf_pdf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_polyfit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="lib_mat\ntf_rand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="lib_mat\ntf_sort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_sortIdx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_std.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_stirlerr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_strcmp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_svd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_var.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_wblstat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_WeibullDistribution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_xaxpy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_xnrm2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_xrotg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\ntf_xzgeqp3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\rt_nonfinite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\rtGetInf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\rtGetNaN.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\rtwtypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\tmwtypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\coder_array.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib_mat\gsa_bsxfun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="my_functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="lib_mat\gsa_eml_rand_mt19937ar_stateful.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_eml_setop.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_heapsort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_insertionsort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_introsort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_mixGaussEm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_mrdivide_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_mycholcov.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_mymvnpdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_qrsolve.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_rand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_runGSA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_runGSA_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_runGSA_initialize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_sparse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_stack1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_unique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_vvarstd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_xgeqp3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_xgetrf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_xnrm2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_xzgeqp3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_BetaDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_betafit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_betainc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_betaincinv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_binodeviance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_binopdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_binostat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_cdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_chol.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_colon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_corrcoef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_cospiAndSinpi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_eml_rand_mt19937ar_stateful.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_ERADist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_ERANataf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_erfcinv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_evfit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_expm1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_ExponentialDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_ExtremeValueDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_fminsearch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_fzero.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gamma.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gammainc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gammaincinv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gammaln.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gampdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gevinv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gevstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_gpstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_icdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_inataf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_inataf_data.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_inataf_initialize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_inataf_rtwutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_LognormalDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_lognstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_lower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_minOrMax.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_mod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_mod1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_mrdivide_helper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_mycholcov.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_nbinpdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_nbinstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_norm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_NormalDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_normfit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_pdf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_polyfit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_rand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_sort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_sortIdx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_std.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_stirlerr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_strcmp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_svd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_var.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_wblstat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_WeibullDistribution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_xaxpy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_xnrm2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_xrotg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\ntf_xzgeqp3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\rt_nonfinite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\rtGetInf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\rtGetNaN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_bsxfun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib_mat\gsa_combineVectorElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="my_gsa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="my_nataf.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="my_readjson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

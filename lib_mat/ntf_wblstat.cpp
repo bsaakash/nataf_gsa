@@ -5,7 +5,7 @@
 // File: ntf_wblstat.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -27,19 +27,24 @@ void ntf_wblstat(double A, double B, double *m, double *v)
 {
   double gam1;
   double gam2;
-  double gamdiff;
-  gam1 = 1.0 / B + 1.0;
-  ntf_gamma(&gam1);
-  gam2 = 2.0 / B + 1.0;
-  ntf_gamma(&gam2);
-  gamdiff = gam2 - gam1 * gam1;
-  *m = A * gam1;
-  if (gam2 == rtInf) {
-    *v = rtInf;
-  } else if (gamdiff > 0.0) {
-    *v = A * A * gamdiff;
+  if ((A > 0.0) && (B > 0.0)) {
+    double gamdiff;
+    gam1 = 1.0 / B + 1.0;
+    ntf_gamma(&gam1);
+    gam2 = 2.0 / B + 1.0;
+    ntf_gamma(&gam2);
+    gamdiff = gam2 - gam1 * gam1;
+    *m = A * gam1;
+    if (gam2 == rtInf) {
+      *v = rtInf;
+    } else if (gamdiff > 0.0) {
+      *v = A * A * gamdiff;
+    } else {
+      *v = 0.0;
+    }
   } else {
-    *v = 0.0;
+    *m = rtNaN;
+    *v = rtNaN;
   }
 }
 

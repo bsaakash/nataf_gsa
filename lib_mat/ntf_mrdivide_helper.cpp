@@ -5,7 +5,7 @@
 // File: ntf_mrdivide_helper.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -267,7 +267,7 @@ void ntf_mrdiv(coder::array<double, 2U> &A, const coder::array<double, 2U> &B)
         jpvt[k] = k + 1;
       }
 
-      ntf_qrpf(b_A, b_A.size(0), b_A.size(1), tau, jpvt);
+      ntf_b_qrpf(b_A, b_A.size(0), b_A.size(1), tau, jpvt);
     }
 
     rankR = 0;

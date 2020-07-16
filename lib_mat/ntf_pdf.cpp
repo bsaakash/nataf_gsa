@@ -5,7 +5,7 @@
 // File: ntf_pdf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -197,70 +197,6 @@ void ntf_f_pdf(const coder::array<double, 1U> &x, double varargin_1, double
                varargin_2, coder::array<double, 1U> &y)
 {
   int i;
-  double b_y;
-  y.set_size(x.size(0));
-  i = x.size(0);
-  for (int k = 0; k < i; k++) {
-    if ((varargin_1 >= 0.0) && (varargin_2 > 0.0) && (!rtIsNaN(x[k]))) {
-      double zk;
-      zk = x[k] / varargin_2;
-      if (zk == 0.0) {
-        if (varargin_1 < 1.0) {
-          y[k] = rtInf;
-        } else if (varargin_1 > 1.0) {
-          y[k] = 0.0;
-        } else {
-          y[k] = 1.0 / varargin_2;
-        }
-      } else if ((zk < 0.0) || rtIsInf(zk) || rtIsInf(varargin_1)) {
-        y[k] = 0.0;
-      } else if (varargin_1 < 1.0) {
-        if (varargin_1 <= 2.2250738585072014E-308 * zk) {
-          b_y = std::exp(-zk);
-        } else if (zk < 2.2250738585072014E-308 * varargin_1) {
-          b_y = varargin_1 + 1.0;
-          ntf_gammaln(&b_y);
-          b_y = std::exp((varargin_1 * std::log(zk) - zk) - b_y);
-        } else {
-          b_y = ((-0.91893853320467267 - 0.5 * std::log(varargin_1)) -
-                 ntf_stirlerr(varargin_1)) - ntf_binodeviance(varargin_1, zk);
-          b_y = std::exp(b_y);
-        }
-
-        y[k] = b_y * std::exp(std::log(varargin_1) - std::log(zk)) / varargin_2;
-      } else {
-        if (varargin_1 - 1.0 <= 2.2250738585072014E-308 * zk) {
-          b_y = std::exp(-zk);
-        } else if (zk < 2.2250738585072014E-308 * (varargin_1 - 1.0)) {
-          b_y = (varargin_1 - 1.0) + 1.0;
-          ntf_gammaln(&b_y);
-          b_y = std::exp(((varargin_1 - 1.0) * std::log(zk) - zk) - b_y);
-        } else {
-          b_y = ((-0.91893853320467267 - 0.5 * std::log(varargin_1 - 1.0)) -
-                 ntf_stirlerr(varargin_1 - 1.0)) - ntf_binodeviance(varargin_1 -
-            1.0, zk);
-          b_y = std::exp(b_y);
-        }
-
-        y[k] = b_y / varargin_2;
-      }
-    } else {
-      y[k] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const coder::array<double, 1U> *x
-//                double varargin_1
-//                double varargin_2
-//                coder::array<double, 1U> *y
-// Return Type  : void
-//
-void ntf_g_pdf(const coder::array<double, 1U> &x, double varargin_1, double
-               varargin_2, coder::array<double, 1U> &y)
-{
-  int i;
   double b_logb;
   double absz;
   double d;
@@ -304,6 +240,34 @@ void ntf_g_pdf(const coder::array<double, 1U> &x, double varargin_1, double
         y[k] = rtInf;
       } else {
         y[k] = 0.0;
+      }
+    } else {
+      y[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const coder::array<double, 1U> *x
+//                double varargin_1
+//                double varargin_2
+//                coder::array<double, 1U> *y
+// Return Type  : void
+//
+void ntf_g_pdf(const coder::array<double, 1U> &x, double varargin_1, double
+               varargin_2, coder::array<double, 1U> &y)
+{
+  int i;
+  y.set_size(x.size(0));
+  i = x.size(0);
+  for (int k = 0; k < i; k++) {
+    if (varargin_2 > 0.0) {
+      double zk;
+      zk = (x[k] - varargin_1) / varargin_2;
+      if (zk > 709.782712893384) {
+        y[k] = 0.0;
+      } else {
+        y[k] = std::exp(zk - std::exp(zk)) / varargin_2;
       }
     } else {
       y[k] = rtNaN;

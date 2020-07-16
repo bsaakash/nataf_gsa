@@ -5,7 +5,7 @@
 // File: ntf_inataf.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 #ifndef NTF_INATAF_H
 #define NTF_INATAF_H
@@ -21,8 +21,8 @@ extern void inataf(const coder::array<double, 2U> &u, const coder::array<
                    ntf_cell_wrap_0, 2U> &distnames, const coder::array<
                    ntf_cell_wrap_0, 2U> &opts, const coder::array<
                    ntf_cell_wrap_1, 2U> &vals, const coder::array<double, 2U>
-                   &corrs, coder::array<double, 2U> &x, coder::array<double, 1U>
-                   &px);
+                   &corrs, const coder::array<ntf_cell_wrap_1, 2U> &addition,
+                   coder::array<double, 2U> &x, coder::array<double, 1U> &px);
 
 #endif
 

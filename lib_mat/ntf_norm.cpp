@@ -5,13 +5,14 @@
 // File: ntf_norm.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
 #include "ntf_norm.h"
 #include "ntf_ERANataf.h"
 #include "ntf_inataf.h"
+#include "ntf_pdf.h"
 #include "ntf_svd.h"
 #include "rt_nonfinite.h"
 #include <cmath>
@@ -25,55 +26,56 @@
 double ntf_norm(const coder::array<double, 2U> &x)
 {
   double y;
-  double tmp_data[2];
-  int tmp_size[1];
-  if (x.size(1) == 0) {
+  coder::array<double, 1U> r;
+  if ((x.size(0) == 0) || (x.size(1) == 0)) {
     y = 0.0;
-  } else if (x.size(1) == 1) {
-    double absx;
-    double absxk;
-    double t;
-    absx = 3.3121686421112381E-170;
-    absxk = std::abs(x[0]);
-    if (absxk > 3.3121686421112381E-170) {
-      y = 1.0;
-      absx = absxk;
-    } else {
-      t = absxk / 3.3121686421112381E-170;
-      y = t * t;
-    }
-
-    absxk = std::abs(x[1]);
-    if (absxk > absx) {
-      t = absx / absxk;
-      y = y * t * t + 1.0;
-      absx = absxk;
-    } else {
-      t = absxk / absx;
-      y += t * t;
-    }
-
-    y = absx * std::sqrt(y);
-  } else {
+  } else if ((x.size(0) == 1) || (x.size(1) == 1)) {
     int n;
+    n = x.size(0) * x.size(1);
+    y = 0.0;
+    if (n >= 1) {
+      if (n == 1) {
+        y = std::abs(x[0]);
+      } else {
+        double absx;
+        absx = 3.3121686421112381E-170;
+        for (int m = 0; m < n; m++) {
+          double absxk;
+          absxk = std::abs(x[m]);
+          if (absxk > absx) {
+            double t;
+            t = absx / absxk;
+            y = y * t * t + 1.0;
+            absx = absxk;
+          } else {
+            double t;
+            t = absxk / absx;
+            y += t * t;
+          }
+        }
+
+        y = absx * std::sqrt(y);
+      }
+    }
+  } else {
+    int m;
+    int n;
+    m = x.size(0);
     n = x.size(1);
     y = 0.0;
     for (int j = 0; j < n; j++) {
-      double absx;
-      absx = std::abs(x[2 * j]);
-      if (rtIsNaN(absx) || (absx > y)) {
-        y = absx;
-      }
-
-      absx = std::abs(x[2 * j + 1]);
-      if (rtIsNaN(absx) || (absx > y)) {
-        y = absx;
+      for (int i = 0; i < m; i++) {
+        double absx;
+        absx = std::abs(x[i + x.size(0) * j]);
+        if (rtIsNaN(absx) || (absx > y)) {
+          y = absx;
+        }
       }
     }
 
     if ((!rtIsInf(y)) && (!rtIsNaN(y))) {
-      ntf_svd(x, tmp_data, tmp_size);
-      y = tmp_data[0];
+      ntf_svd(x, r);
+      y = r[0];
     }
   }
 

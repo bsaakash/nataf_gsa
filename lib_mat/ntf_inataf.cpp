@@ -5,7 +5,7 @@
 // File: ntf_inataf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -22,6 +22,7 @@
 //                const coder::array<ntf_cell_wrap_0, 2U> *opts
 //                const coder::array<ntf_cell_wrap_1, 2U> *vals
 //                const coder::array<double, 2U> *corrs
+//                const coder::array<ntf_cell_wrap_1, 2U> *addition
 //                coder::array<double, 2U> *x
 //                coder::array<double, 1U> *px
 // Return Type  : void
@@ -29,8 +30,9 @@
 void inataf(const coder::array<double, 2U> &u, const coder::array<
             ntf_cell_wrap_0, 2U> &distnames, const coder::array<ntf_cell_wrap_0,
             2U> &opts, const coder::array<ntf_cell_wrap_1, 2U> &vals, const
-            coder::array<double, 2U> &corrs, coder::array<double, 2U> &x, coder::
-            array<double, 1U> &px)
+            coder::array<double, 2U> &corrs, const coder::array<ntf_cell_wrap_1,
+            2U> &addition, coder::array<double, 2U> &x, coder::array<double, 1U>
+            &px)
 {
   int i;
   coder::array<ntf_ERADist, 1U> M;
@@ -45,11 +47,12 @@ void inataf(const coder::array<double, 2U> &u, const coder::array<
   i = u.size(1);
   M.set_size(u.size(1));
   for (b_i = 0; b_i < i; b_i++) {
-    M[b_i].ntf_init(distnames[b_i].f1, opts[b_i].f1, vals[b_i].f1);
+    M[b_i].ntf_init(distnames[b_i].f1, opts[b_i].f1, vals[b_i].f1, addition[b_i]
+                    .f1);
   }
 
-  //      disp(num2str([M{1}.mean, M{1}.std M{1}.Par;
-  //                    M{2}.mean, M{2}.std M{2}.Par]));
+  // valB=[M{2}.mean, M{2}.std M{2}.Par'];
+  // disp(num2str(valB));
   // == Change into Physical domain
   Distobj.ntf_init(M, corrs);
   b_u.set_size(u.size(1), u.size(0));

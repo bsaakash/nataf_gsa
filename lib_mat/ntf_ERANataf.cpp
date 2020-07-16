@@ -5,7 +5,7 @@
 // File: ntf_ERANataf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
@@ -555,7 +555,7 @@ void ntf_ERANataf::ntf_U2X(const coder::array<double, 2U> &U, coder::array<
         p[k] = 0.5 * bkj;
       }
 
-      this->Marginals[i].ntf_eb_icdf(p, x);
+      this->Marginals[i].ntf_gb_icdf(p, x);
       mc = x.size(1);
       for (inner = 0; inner < mc; inner++) {
         X[i + X.size(0) * inner] = x[inner];
@@ -586,7 +586,7 @@ void ntf_ERANataf::ntf_U2X(const coder::array<double, 2U> &U, coder::array<
         p[k] = 0.5 * bkj;
       }
 
-      this->Marginals[i].ntf_eb_icdf(p, x);
+      this->Marginals[i].ntf_gb_icdf(p, x);
       mc = x.size(1);
       for (inner = 0; inner < mc; inner++) {
         X[i + X.size(0) * inner] = x[inner];
@@ -644,8 +644,8 @@ double ntf_ERANataf::ntf___anon_fcn(const double coef[1048576], const double xi
     x += y[k + 1];
   }
 
-  return x - Obj->Rho_X[(static_cast<int>(i) + 2 * (static_cast<int>(j) - 1)) -
-    1];
+  return x - Obj->Rho_X[(static_cast<int>(i) + Obj->Rho_X.size(0) * (
+    static_cast<int>(j) - 1)) - 1];
 }
 
 //
@@ -681,7 +681,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
 
   double Vj;
   double Vi;
-  static ntf_b_coder_internal_anonymous_ fun;
+  static ntf_d_coder_internal_anonymous_ fun;
   double exitflag;
   this->A.set_size(0, 0);
   this->Marginals.set_size(M.size(0));
@@ -690,7 +690,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
     this->Marginals[i] = M[i];
   }
 
-  this->Rho_X.set_size(2, Correlation.size(1));
+  this->Rho_X.set_size(Correlation.size(0), Correlation.size(1));
   ibtile = Correlation.size(0) * Correlation.size(1);
   for (i = 0; i < ibtile; i++) {
     this->Rho_X[i] = Correlation[i];
@@ -776,7 +776,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
     this->Rho_Z[i] = Obj_tmp[i];
   }
 
-  b_Correlation.set_size(2, Correlation.size(1));
+  b_Correlation.set_size(Correlation.size(0), Correlation.size(1));
   ibtile = Correlation.size(0) * Correlation.size(1);
   for (i = 0; i < ibtile; i++) {
     b_Correlation[i] = Correlation[i] - static_cast<double>(Obj_tmp[i]);
@@ -844,7 +844,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
         unsigned int b_j;
         b_j = (static_cast<unsigned int>(b_i) + j) + 2U;
         m = static_cast<int>(b_j) - 1;
-        b_init = Correlation[b_i + 2 * m];
+        b_init = Correlation[b_i + Correlation.size(0) * m];
         if (!(b_init == 0.0)) {
           boolean_T guard2 = false;
           boolean_T guard3 = false;
@@ -1117,7 +1117,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               b[k] = 0.5 * b_init;
             }
 
-            M[static_cast<int>(b_j) - 1].ntf_eb_icdf(b, c_b);
+            M[static_cast<int>(b_j) - 1].ntf_gb_icdf(b, c_b);
             for (ibtile = 0; ibtile < 1048576; ibtile++) {
               c_b[ibtile] -= M[m].mean;
             }
@@ -1127,7 +1127,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
               b[k] = 0.5 * b_init;
             }
 
-            M[b_i].ntf_eb_icdf(b, b_b);
+            M[b_i].ntf_gb_icdf(b, b_b);
             for (ibtile = 0; ibtile < 1048576; ibtile++) {
               b_init = b_b[ibtile] - M[b_i].mean;
               b_b[ibtile] = b_init;
@@ -1142,15 +1142,15 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
             fun.tunableEnvironment.f4 = *this;
             fun.tunableEnvironment.f5 = b_i + 1;
             fun.tunableEnvironment.f6 = b_j;
-            ntf_e_fzero(&fun, Correlation[b_i + 2 * (static_cast<int>(b_j) - 1)],
-                        &Vj, &b_init, &exitflag);
+            ntf_f_fzero(&fun, Correlation[b_i + Correlation.size(0) * (
+              static_cast<int>(b_j) - 1)], &Vj, &b_init, &exitflag);
             if (exitflag > 0.0) {
               this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = Vj;
               this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
                 this->Rho_Z.size(0) * m];
             } else {
-              ntf_e_fzero(&fun, -Correlation[b_i + 2 * (static_cast<int>(b_j) -
-                1)], &Vj, &b_init, &exitflag);
+              ntf_f_fzero(&fun, -Correlation[b_i + Correlation.size(0) * (
+                static_cast<int>(b_j) - 1)], &Vj, &b_init, &exitflag);
               if (exitflag > 0.0) {
                 this->Rho_Z[b_i + this->Rho_Z.size(0) * m] = Vj;
                 this->Rho_Z[m + this->Rho_Z.size(0) * b_i] = this->Rho_Z[b_i +
@@ -1161,7 +1161,7 @@ void ntf_ERANataf::ntf_init(const coder::array<ntf_ERADist, 1U> &M, const coder:
                 exitg2 = false;
                 while ((!exitg2) && (k < 10)) {
                   b_init = 2.0 * ntf_rand() - 1.0;
-                  ntf_e_fzero(&fun, b_init, &Vj, &Vi, &exitflag);
+                  ntf_f_fzero(&fun, b_init, &Vj, &Vi, &exitflag);
                   if (exitflag > 0.0) {
                     exitg2 = true;
                   } else {
@@ -1249,7 +1249,7 @@ void ntf_ERANataf::ntf_q_pdf(const coder::array<double, 2U> &X, coder::array<
       b_X[i] = X[i + X.size(0) * nx];
     }
 
-    this->Marginals[nx].ntf_p_cdf(b_X, quadform);
+    this->Marginals[nx].ntf_q_cdf(b_X, quadform);
     i = quadform.size(0);
     r.set_size(quadform.size(0));
     for (k = 0; k < i; k++) {

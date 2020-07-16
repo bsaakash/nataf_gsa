@@ -5,7 +5,7 @@
 // File: ntf_cdf.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 #ifndef NTF_CDF_H
 #define NTF_CDF_H
@@ -19,7 +19,6 @@
 // Function Declarations
 extern void ntf_b_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_3, coder::array<double, 1U> &p);
-extern double ntf_betainc_cf(double x, double a, double b);
 extern void ntf_c_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, double varargin_3, coder::array<double, 1U> &p);
 extern void ntf_cdf(const coder::array<double, 1U> &varargin_1, double
@@ -34,22 +33,24 @@ extern void ntf_f_cdf(const coder::array<double, 1U> &varargin_1, double
 extern void ntf_g_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, double varargin_3, coder::array<double, 1U> &p);
 extern void ntf_h_cdf(const coder::array<double, 1U> &varargin_1, double
-                      varargin_2, double varargin_3, double varargin_4, coder::
-                      array<double, 1U> &p);
-extern void ntf_i_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, double varargin_3, coder::array<double, 1U> &p);
-extern void ntf_j_cdf(const coder::array<double, 1U> &varargin_1, double
+extern void ntf_i_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, double varargin_3, double varargin_4, coder::
                       array<double, 1U> &p);
+extern void ntf_j_cdf(const coder::array<double, 1U> &varargin_1, double
+                      varargin_2, double varargin_3, coder::array<double, 1U> &p);
 extern void ntf_k_cdf(const coder::array<double, 1U> &varargin_1, double
-                      varargin_2, coder::array<double, 1U> &p);
+                      varargin_2, double varargin_3, double varargin_4, coder::
+                      array<double, 1U> &p);
 extern void ntf_l_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, coder::array<double, 1U> &p);
 extern void ntf_m_cdf(const coder::array<double, 1U> &varargin_1, double
-                      varargin_2, double varargin_3, coder::array<double, 1U> &p);
+                      varargin_2, coder::array<double, 1U> &p);
 extern void ntf_n_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, double varargin_3, coder::array<double, 1U> &p);
 extern void ntf_o_cdf(const coder::array<double, 1U> &varargin_1, double
+                      varargin_2, double varargin_3, coder::array<double, 1U> &p);
+extern void ntf_p_cdf(const coder::array<double, 1U> &varargin_1, double
                       varargin_2, double varargin_3, coder::array<double, 1U> &p);
 
 #endif

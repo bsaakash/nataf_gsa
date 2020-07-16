@@ -5,7 +5,7 @@
 // File: ntf_inataf_data.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 #ifndef NTF_INATAF_DATA_H
 #define NTF_INATAF_DATA_H
@@ -17,6 +17,13 @@
 #include "ntf_inataf_types.h"
 
 // Variable Declarations
+extern double ntf_sumlogx;
+extern double ntf_sumlog1mx;
+extern double ntf_n0;
+extern double ntf_n1;
+extern double ntf_n2;
+extern double ntf_xl;
+extern double ntf_xu;
 extern unsigned int ntf_state[625];
 extern const char ntf_cv1[14];
 extern const char ntf_cv2[16];

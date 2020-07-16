@@ -5,7 +5,7 @@
 // File: ntf_mod.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 #ifndef NTF_MOD_H
 #define NTF_MOD_H
@@ -17,7 +17,8 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
-extern double ntf_mod(double x);
+extern void ntf_b_mod(const coder::array<double, 1U> &x, coder::array<double, 1U>
+                      &r);
 
 #endif
 

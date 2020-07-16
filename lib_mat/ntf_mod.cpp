@@ -5,40 +5,47 @@
 // File: ntf_mod.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
 #include "ntf_mod.h"
 #include "ntf_inataf.h"
+#include "ntf_pdf.h"
 #include "rt_nonfinite.h"
 #include <cmath>
 
 // Function Definitions
 
 //
-// Arguments    : double x
-// Return Type  : double
+// Arguments    : const coder::array<double, 1U> *x
+//                coder::array<double, 1U> *r
+// Return Type  : void
 //
-double ntf_mod(double x)
+void ntf_b_mod(const coder::array<double, 1U> &x, coder::array<double, 1U> &r)
 {
-  double r;
-  if (rtIsNaN(x) || rtIsInf(x)) {
-    r = rtNaN;
-  } else if (x == 0.0) {
-    r = 0.0;
-  } else {
-    r = std::fmod(x, 1.0);
-    if (r == 0.0) {
-      r = 0.0;
+  int nx;
+  r.set_size(x.size(0));
+  nx = x.size(0);
+  for (int k = 0; k < nx; k++) {
+    double b_r;
+    if (rtIsNaN(x[k]) || rtIsInf(x[k])) {
+      b_r = rtNaN;
+    } else if (x[k] == 0.0) {
+      b_r = 0.0;
     } else {
-      if (x < 0.0) {
-        r++;
+      b_r = std::fmod(x[k], 1.0);
+      if (b_r == 0.0) {
+        b_r = 0.0;
+      } else {
+        if (x[k] < 0.0) {
+          b_r++;
+        }
       }
     }
-  }
 
-  return r;
+    r[k] = b_r;
+  }
 }
 
 //

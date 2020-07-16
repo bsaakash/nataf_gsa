@@ -1,5 +1,5 @@
 
-#include "lib_json\json.hpp"
+#include "lib_json/json.hpp"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -12,17 +12,21 @@ using json = nlohmann::json;
 
 void Getpnames(std::string distname, std::string optname, std::vector<std::string>& par_char);
 
-void readjson(int &nmc, int& nrv, int &rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_pars,
-					std::vector<std::string>& get_opts, std::vector<double>& get_corr)
+void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_vals,
+					std::vector<std::string>& get_opts, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add)
 {
 	// === IMPORTANT* need to additionally import correlation matrix & "input option" to GUI
 	get_corr = { 1.0, 0.2, 0.2, 1.0 }; // {{row1}, {row2},...}
-	get_opts = { "MOM","MOM" }; // either "MOM" or "PAR" (later, extend to "DATA")
-	//get_corr = { 1.0, 0.2, 0.0, 0.2, 1.0, 0.2, 0.0, 0.2, 1.0}; 
-	//get_opts = { "MOM","MOM","MOM" }; 
+	get_opts = { "DATA","DATA" }; // either "MOM" or "PAR" (later, extend to "DATA")
+	//get_opts = { "PAR","PAR" }; // either "MOM" or "PAR" (later, extend to "DATA")
+	ng = 3; // Number of outputs
+	//get_corr = { 1.0, 0.2, 0.2, 0.2,   0.2, 1.0, 0.2, 0.2 ,  0.2, 0.2, 1.0, 0.2,   0.2, 0.2, 0.2, 1.0}; 
+	//get_corr = { 1.0, 0.0, 0.0, 0.0,   0.0, 1.0, 0.0, 0.0 ,  0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0 };
+	//get_opts = { "MOM","MOM","MOM","MOM" };
 
 	// === read json
-	std::ifstream myfile("dakota.json");
+	//std::ifstream myfile("dakotaDataExact.json");
+	std::ifstream myfile("dakotaData.json");
 	json UQjson = json::parse(myfile);
 
 	// === get variables
@@ -30,7 +34,7 @@ void readjson(int &nmc, int& nrv, int &rseed, std::string& UQ_method, std::vecto
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQ_method  = UQjson["UQ_Method"]["samplingMethodData"]["method"];
 
-	// === Manually specify parameters in each distributions.
+	// === Specify parameters in each distributions.
 	nrv = 0;
 	for (auto& elem : UQjson["randomVariables"])
 	{
@@ -38,15 +42,58 @@ void readjson(int &nmc, int& nrv, int &rseed, std::string& UQ_method, std::vecto
 
 		std::vector<std::string> pnames;
 		Getpnames(get_distnames[nrv], get_opts[nrv], pnames); // get parameter names from dist name
+		std::vector<double> addDefault{ 0.0, 0.0 };
+		// IF Data
+		if (get_opts[nrv].compare("DATA") == 0) {
 
-		std::vector<double> pars_temp;
-		for (auto& pn : pnames)
-		{
-			pars_temp.push_back(elem[pn]); // get parameter value from dist & parameter name
+			std::string directory = elem["datafile"];
+			std::ifstream data_table(directory);
+			if (!data_table.is_open()) {
+				//std::cerr << "There was a problem opening the input file!\n";
+				//exit(1);//exit or do additional error checking
+				// PRINT ERROR
+			}
+
+			std::vector<double> vals_temp;
+			double samps = 0.0;
+			while (data_table >> samps) {
+				vals_temp.push_back(samps);
+			}
+			get_vals.push_back(vals_temp);
+			data_table.close();
+			//std::vector<double> add_temp;
+
+			if (get_distnames[nrv].compare("binomial") == 0) {
+				//add_temp.push_back(elem["n"]);
+				//add_temp.push_back(0.0);
+				//get_add.push_back(add_temp);
+				get_add.push_back({ elem["n"],0.0 });
+			}
+			else if (get_distnames[nrv].compare("beta") == 0) {
+				//add_temp.push_back(elem["lower"]);
+				//add_temp.push_back(elem["upper"]);
+				//get_add.push_back(add_temp);
+				get_add.push_back({ elem["lower"],elem["upper"] });
+
+			} 
+			else
+			{
+				get_add.push_back(addDefault);
+			}
 		}
-		get_pars.push_back(pars_temp);
+		else
+		{ 
+			std::vector<double> vals_temp;
+			for (auto& pn : pnames)
+			{
+				vals_temp.push_back(elem[pn]); // get parameter value from dist & parameter name
+			}
+			get_vals.push_back(vals_temp);		
+			get_add.push_back(addDefault);
+		}
 		nrv++;
 	}
+
 }
 
 
@@ -77,7 +124,7 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		}
 		else if (distname.compare("normal") == 0) {
 			par_char.push_back("mean");
-			par_char.push_back("std");
+			par_char.push_back("stdDev");
 		}
 		else if (distname.compare("lognormal") == 0) {
 			par_char.push_back("logmean");
@@ -132,9 +179,8 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("chisquare") == 0) {
 			par_char.push_back("k");
 		}
-		else
-		{
-			// disabled
+		else {
+			// NA
 		}
 	} 
 	else if (optname.compare("MOM") == 0) { // Get Moments
@@ -175,9 +221,16 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("stdDev");
 		}
 	}
-	else
-	{
-	// disabled
+	else if (optname.compare("DATA") == 0) { // Get DATA	
+		if (distname.compare("binomial") == 0) {
+			par_char.push_back("n");
+		}
+		else if (distname.compare("beta") == 0) {
+			par_char.push_back("lower");
+			par_char.push_back("upper");
+		}
 	}
-
+	else {
+		//NA
+	}
 }

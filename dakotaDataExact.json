@@ -1,0 +1,60 @@
+{
+    "Applications": {
+        "UQ": {
+            "Application": "Dakota-UQ",
+            "ApplicationData": {
+            }
+        }
+    },
+    "EDP": [
+        {
+            "name": "Node_3_Disp_2"
+        },
+        {
+            "name": "Node_5_Disp_2"
+        }
+    ],
+    "UQ_Method": {
+        "samplingMethodData": {
+            "method": "LHS",
+            "samples": 1000,
+            "seed": 15
+        },
+        "uqEngine": "Dakota",
+        "uqType": "Forward Propagation"
+    },
+    "fem": {
+        "dir": "/Users/fmckenna/release/quoFEM/examples/exampleOpenSeesForward",
+        "inputFile": "/Users/fmckenna/release/quoFEM/examples/exampleOpenSeesForward/TrussTemplate.tcl",
+        "mainInput": "TrussTemplate.tcl",
+        "mainPostprocessScript": "postprocess.tcl",
+        "numInputs": 1,
+        "postprocessScript": "/Users/fmckenna/release/quoFEM/examples/exampleOpenSeesForward/postprocess.tcl",
+        "program": "OpenSees"
+    },
+    "localAppDir": "/Users/fmckenna/release/quoFEM",
+    "python": "/usr/local/bin/python3",
+    "randomVariables": [
+        {
+            "distribution": "Normal",
+            "mean": 100,
+            "name": "E",
+            "refCount": 1,
+            "stdDev": 20,
+            "value": "RV.E",
+            "variableClass": "Uncertain"
+        },
+        {
+            "distribution": "Gumbel",
+            "an": 2.5,
+			"bn": 4.6,
+            "name": "P",
+            "refCount": 0,
+            "stdDev": 3,
+            "value": "RV.P",
+            "variableClass": "Uncertain"
+        }
+    ],
+    "remoteAppDir": "/home1/00477/tg457427/SimCenterBackendApplications/May-2020",
+    "workingDir": "/Users/fmckenna/Documents/quoFEM/LocalWorkDir"
+}

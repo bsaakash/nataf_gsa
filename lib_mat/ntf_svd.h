@@ -5,7 +5,7 @@
 // File: ntf_svd.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 #ifndef NTF_SVD_H
 #define NTF_SVD_H
@@ -17,8 +17,8 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
-extern void ntf_svd(const coder::array<double, 2U> &A, double U_data[], int
-                    U_size[1]);
+extern void ntf_svd(const coder::array<double, 2U> &A, coder::array<double, 1U>
+                    &U);
 
 #endif
 

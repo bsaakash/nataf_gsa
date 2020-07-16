@@ -36,7 +36,7 @@
     "python": "/usr/local/bin/python3",
     "randomVariables": [
         {
-            "distribution": "Gumbel",
+            "distribution": "weibull",
             "mean": 205,
             "name": "E",
             "refCount": 1,
@@ -59,6 +59,15 @@
             "name": "P",
             "refCount": 0,
             "stdDev": 3,
+            "value": "RV.P",
+            "variableClass": "Uncertain"
+        },
+		{
+            "distribution": "Pareto",
+            "mean": 5,
+            "name": "P",
+            "refCount": 0,
+            "stdDev": 1,
             "value": "RV.P",
             "variableClass": "Uncertain"
         }

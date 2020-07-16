@@ -5,12 +5,12 @@
 // File: ntf_betaincinv.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:30:41
+// C/C++ source code generated on  : 16-Jul-2020 21:26:42
 //
 
 // Include Files
 #include "ntf_betaincinv.h"
-#include "ntf_cdf.h"
+#include "ntf_betainc.h"
 #include "ntf_gammaincinv.h"
 #include "ntf_gammaln.h"
 #include "ntf_inataf.h"
@@ -157,8 +157,8 @@ static double ntf_eml_betainc(double x, double a, double b, double lbeta,
         } else {
           d = b;
           ntf_gammaln(&d);
-          rval = ntf_eml_gammainc(0.5 * (((a + b) - 1.0) * (3.0 - x) - (b - 1.0))
-            * (1.0 - x), b, std::log(b), d, !upper);
+          rval = ntf_c_eml_gammainc(0.5 * (((a + b) - 1.0) * (3.0 - x) - (b -
+            1.0)) * (1.0 - x), b, std::log(b), d, !upper);
         }
       }
     }
