@@ -5,12 +5,12 @@
 // File: ntf_chol.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 
 // Include Files
 #include "ntf_chol.h"
-#include "ntf_ERANataf.h"
+#include "ntf_ERADist.h"
 #include "ntf_inataf.h"
 #include "rt_nonfinite.h"
 #include <cmath>

@@ -5,7 +5,7 @@
 // File: gsa_runGSA_types.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:48:16
+// C/C++ source code generated on  : 23-Jul-2020 01:50:34
 //
 #ifndef GSA_RUNGSA_TYPES_H
 #define GSA_RUNGSA_TYPES_H
@@ -21,7 +21,7 @@
 #endif
 
 // Type Definitions
-struct gsa_cell_wrap_6
+struct gsa_cell_wrap_7
 {
   coder::array<int, 1U> f1;
 };
@@ -29,7 +29,7 @@ struct gsa_cell_wrap_6
 class gsa_coder_internal_anonymous_fu
 {
  public:
-  gsa_cell_wrap_6 tunableEnvironment[2];
+  gsa_cell_wrap_7 tunableEnvironment[2];
 };
 
 class gsa_coder_internal_sparse

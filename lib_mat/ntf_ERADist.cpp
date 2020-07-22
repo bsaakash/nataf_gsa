@@ -5,13 +5,12 @@
 // File: ntf_ERADist.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 
 // Include Files
 #include "ntf_ERADist.h"
 #include "ntf_BetaDistribution.h"
-#include "ntf_ERANataf.h"
 #include "ntf_ExponentialDistribution.h"
 #include "ntf_ExtremeValueDistribution.h"
 #include "ntf_LognormalDistribution.h"
@@ -35,6 +34,8 @@
 #include "ntf_minOrMax.h"
 #include "ntf_mod.h"
 #include "ntf_mod1.h"
+#include "ntf_mrdivide_helper.h"
+#include "ntf_mycholcov.h"
 #include "ntf_nbinstat.h"
 #include "ntf_pdf.h"
 #include "ntf_polyfit.h"
@@ -60,9 +61,58 @@ static const char ntf_cv[128] = { '\x00', '\x01', '\x02', '\x03', '\x04', '\x05'
   't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', '\x7f' };
 
 // Function Declarations
+static int ntf_div_s32_floor(int numerator, int denominator);
 static double ntf_rt_roundd_snf(double u);
 
 // Function Definitions
+
+//
+// Arguments    : int numerator
+//                int denominator
+// Return Type  : int
+//
+static int ntf_div_s32_floor(int numerator, int denominator)
+{
+  int quotient;
+  unsigned int absNumerator;
+  if (denominator == 0) {
+    if (numerator >= 0) {
+      quotient = MAX_int32_T;
+    } else {
+      quotient = MIN_int32_T;
+    }
+  } else {
+    unsigned int absDenominator;
+    boolean_T quotientNeedsNegation;
+    unsigned int tempAbsQuotient;
+    if (numerator < 0) {
+      absNumerator = ~static_cast<unsigned int>(numerator) + 1U;
+    } else {
+      absNumerator = static_cast<unsigned int>(numerator);
+    }
+
+    if (denominator < 0) {
+      absDenominator = ~static_cast<unsigned int>(denominator) + 1U;
+    } else {
+      absDenominator = static_cast<unsigned int>(denominator);
+    }
+
+    quotientNeedsNegation = ((numerator < 0) != (denominator < 0));
+    tempAbsQuotient = absNumerator / absDenominator;
+    if (quotientNeedsNegation) {
+      absNumerator %= absDenominator;
+      if (absNumerator > 0U) {
+        tempAbsQuotient++;
+      }
+
+      quotient = -static_cast<int>(tempAbsQuotient);
+    } else {
+      quotient = static_cast<int>(tempAbsQuotient);
+    }
+  }
+
+  return quotient;
+}
 
 //
 // Arguments    : double u
@@ -269,23 +319,20 @@ void ntf_ERADist::ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<
   int exitg1;
   static const char b_cv[8] = { 'b', 'i', 'n', 'o', 'm', 'i', 'a', 'l' };
 
+  coder::array<double, 2U> xvals_temp;
   static const char b_cv1[7] = { 'p', 'o', 'i', 's', 's', 'o', 'n' };
 
+  coder::array<int, 2U> iidx;
+  coder::array<double, 2U> pvals;
   static const char b_cv2[5] = { 'g', 'a', 'm', 'm', 'a' };
 
+  coder::array<boolean_T, 2U> x;
   static const char b_cv3[4] = { 'b', 'e', 't', 'a' };
 
-  static const char b_cv4[6] = { 'g', 'u', 'm', 'b', 'e', 'l' };
-
-  static const char b_cv5[7] = { 'f', 'r', 'e', 'c', 'h', 'e', 't' };
-
-  static const char b_cv6[3] = { 'g', 'e', 'v' };
-
-  static const char b_cv7[6] = { 'g', 'e', 'v', 'm', 'i', 'n' };
+  int ii_data_idx_0;
+  static const char t9_f2[8] = { 'g', 'a', 'u', 's', 's', 'i', 'a', 'n' };
 
   static const char t9_f1[6] = { 'n', 'o', 'r', 'm', 'a', 'l' };
-
-  static const char t9_f2[8] = { 'g', 'a', 'u', 's', 's', 'i', 'a', 'n' };
 
   // -----------------------------------------------------------------------
   //     function PDF = pdf(Obj,x)
@@ -466,14 +513,34 @@ void ntf_ERADist::ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<
 
               if (b_bool) {
                 loop_ub = 6;
+              } else if (ntf_m_strcmp(switch_expression)) {
+                loop_ub = 7;
+              } else if (ntf_n_strcmp(switch_expression)) {
+                loop_ub = 8;
+              } else if (ntf_o_strcmp(switch_expression)) {
+                loop_ub = 9;
+              } else if (ntf_p_strcmp(switch_expression)) {
+                loop_ub = 10;
+              } else if (ntf_q_strcmp(switch_expression)) {
+                loop_ub = 11;
+              } else if (ntf_r_strcmp(switch_expression)) {
+                loop_ub = 12;
+              } else if (ntf_s_strcmp(switch_expression)) {
+                loop_ub = 13;
+              } else if (ntf_t_strcmp(switch_expression)) {
+                loop_ub = 14;
+              } else if (ntf_u_strcmp(switch_expression)) {
+                loop_ub = 15;
+              } else if (ntf_v_strcmp(switch_expression)) {
+                loop_ub = 16;
               } else {
                 b_bool = false;
-                if (switch_expression.size(1) == 9) {
+                if (switch_expression.size(1) == 14) {
                   loop_ub = 0;
                   do {
                     exitg1 = 0;
-                    if (loop_ub < 9) {
-                      if (switch_expression[loop_ub] != ntf_cv6[loop_ub]) {
+                    if (loop_ub < 14) {
+                      if (switch_expression[loop_ub] != ntf_cv1[loop_ub]) {
                         exitg1 = 1;
                       } else {
                         loop_ub++;
@@ -486,15 +553,15 @@ void ntf_ERADist::ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<
                 }
 
                 if (b_bool) {
-                  loop_ub = 7;
+                  loop_ub = 17;
                 } else {
                   b_bool = false;
-                  if (switch_expression.size(1) == 6) {
+                  if (switch_expression.size(1) == 16) {
                     loop_ub = 0;
                     do {
                       exitg1 = 0;
-                      if (loop_ub < 6) {
-                        if (switch_expression[loop_ub] != b_cv4[loop_ub]) {
+                      if (loop_ub < 16) {
+                        if (switch_expression[loop_ub] != ntf_cv2[loop_ub]) {
                           exitg1 = 1;
                         } else {
                           loop_ub++;
@@ -507,15 +574,15 @@ void ntf_ERADist::ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<
                   }
 
                   if (b_bool) {
-                    loop_ub = 8;
+                    loop_ub = 17;
                   } else {
                     b_bool = false;
-                    if (switch_expression.size(1) == 7) {
+                    if (switch_expression.size(1) == 6) {
                       loop_ub = 0;
                       do {
                         exitg1 = 0;
-                        if (loop_ub < 7) {
-                          if (switch_expression[loop_ub] != b_cv5[loop_ub]) {
+                        if (loop_ub < 6) {
+                          if (switch_expression[loop_ub] != t9_f1[loop_ub]) {
                             exitg1 = 1;
                           } else {
                             loop_ub++;
@@ -528,158 +595,15 @@ void ntf_ERADist::ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<
                     }
 
                     if (b_bool) {
-                      loop_ub = 9;
-                    } else if (ntf_p_strcmp(switch_expression)) {
-                      loop_ub = 10;
+                      loop_ub = 18;
+                    } else if (ntf_ab_strcmp(switch_expression, t9_f2)) {
+                      loop_ub = 18;
+                    } else if (ntf_bb_strcmp(switch_expression)) {
+                      loop_ub = 19;
+                    } else if (ntf_cb_strcmp(switch_expression)) {
+                      loop_ub = 20;
                     } else {
-                      b_bool = false;
-                      if (switch_expression.size(1) == 3) {
-                        loop_ub = 0;
-                        do {
-                          exitg1 = 0;
-                          if (loop_ub < 3) {
-                            if (switch_expression[loop_ub] != b_cv6[loop_ub]) {
-                              exitg1 = 1;
-                            } else {
-                              loop_ub++;
-                            }
-                          } else {
-                            b_bool = true;
-                            exitg1 = 1;
-                          }
-                        } while (exitg1 == 0);
-                      }
-
-                      if (b_bool) {
-                        loop_ub = 11;
-                      } else {
-                        b_bool = false;
-                        if (switch_expression.size(1) == 6) {
-                          loop_ub = 0;
-                          do {
-                            exitg1 = 0;
-                            if (loop_ub < 6) {
-                              if (switch_expression[loop_ub] != b_cv7[loop_ub])
-                              {
-                                exitg1 = 1;
-                              } else {
-                                loop_ub++;
-                              }
-                            } else {
-                              b_bool = true;
-                              exitg1 = 1;
-                            }
-                          } while (exitg1 == 0);
-                        }
-
-                        if (b_bool) {
-                          loop_ub = 12;
-                        } else if (ntf_s_strcmp(switch_expression)) {
-                          loop_ub = 13;
-                        } else if (ntf_t_strcmp(switch_expression)) {
-                          loop_ub = 14;
-                        } else if (ntf_u_strcmp(switch_expression)) {
-                          loop_ub = 15;
-                        } else if (ntf_v_strcmp(switch_expression)) {
-                          loop_ub = 16;
-                        } else {
-                          b_bool = false;
-                          if (switch_expression.size(1) == 14) {
-                            loop_ub = 0;
-                            do {
-                              exitg1 = 0;
-                              if (loop_ub < 14) {
-                                if (switch_expression[loop_ub] !=
-                                    ntf_cv1[loop_ub]) {
-                                  exitg1 = 1;
-                                } else {
-                                  loop_ub++;
-                                }
-                              } else {
-                                b_bool = true;
-                                exitg1 = 1;
-                              }
-                            } while (exitg1 == 0);
-                          }
-
-                          if (b_bool) {
-                            loop_ub = 17;
-                          } else {
-                            b_bool = false;
-                            if (switch_expression.size(1) == 16) {
-                              loop_ub = 0;
-                              do {
-                                exitg1 = 0;
-                                if (loop_ub < 16) {
-                                  if (switch_expression[loop_ub] !=
-                                      ntf_cv2[loop_ub]) {
-                                    exitg1 = 1;
-                                  } else {
-                                    loop_ub++;
-                                  }
-                                } else {
-                                  b_bool = true;
-                                  exitg1 = 1;
-                                }
-                              } while (exitg1 == 0);
-                            }
-
-                            if (b_bool) {
-                              loop_ub = 17;
-                            } else {
-                              b_bool = false;
-                              if (switch_expression.size(1) == 6) {
-                                loop_ub = 0;
-                                do {
-                                  exitg1 = 0;
-                                  if (loop_ub < 6) {
-                                    if (switch_expression[loop_ub] !=
-                                        t9_f1[loop_ub]) {
-                                      exitg1 = 1;
-                                    } else {
-                                      loop_ub++;
-                                    }
-                                  } else {
-                                    b_bool = true;
-                                    exitg1 = 1;
-                                  }
-                                } while (exitg1 == 0);
-                              }
-
-                              if (b_bool) {
-                                loop_ub = 18;
-                              } else {
-                                b_bool = false;
-                                if (switch_expression.size(1) == 8) {
-                                  loop_ub = 0;
-                                  do {
-                                    exitg1 = 0;
-                                    if (loop_ub < 8) {
-                                      if (switch_expression[loop_ub] !=
-                                          t9_f2[loop_ub]) {
-                                        exitg1 = 1;
-                                      } else {
-                                        loop_ub++;
-                                      }
-                                    } else {
-                                      b_bool = true;
-                                      exitg1 = 1;
-                                    }
-                                  } while (exitg1 == 0);
-                                }
-
-                                if (b_bool) {
-                                  loop_ub = 18;
-                                } else if (ntf_bb_strcmp(switch_expression)) {
-                                  loop_ub = 19;
-                                } else {
-                                  loop_ub = -1;
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
+                      loop_ub = -1;
                     }
                   }
                 }
@@ -809,6 +733,74 @@ void ntf_ERADist::ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<
    case 19:
     ntf_fb_icdf(p, this->Par[0], this->Par[1], InverseCDF);
     break;
+
+   case 20:
+    {
+      int i1;
+      int ns;
+      int i2;
+      if (2 > this->Multinomial.size(1)) {
+        i = 0;
+        i1 = 1;
+      } else {
+        i = 1;
+        i1 = 2;
+      }
+
+      if (1 > this->Multinomial.size(1)) {
+        ns = 1;
+        i2 = -1;
+      } else {
+        ns = 2;
+        i2 = this->Multinomial.size(1) - 1;
+      }
+
+      loop_ub = ntf_div_s32_floor(i2, ns);
+      xvals_temp.set_size(1, (loop_ub + 1));
+      for (i2 = 0; i2 <= loop_ub; i2++) {
+        xvals_temp[i2] = this->Multinomial[ns * i2];
+      }
+
+      ntf_b_sort(xvals_temp, iidx);
+      pvals.set_size(1, iidx.size(1));
+      loop_ub = iidx.size(1);
+      for (ns = 0; ns < loop_ub; ns++) {
+        pvals[ns] = this->Multinomial[i + i1 * (iidx[ns] - 1)];
+      }
+
+      if ((iidx.size(1) != 0) && (iidx.size(1) != 1)) {
+        i = iidx.size(1);
+        for (loop_ub = 0; loop_ub <= i - 2; loop_ub++) {
+          pvals[loop_ub + 1] = pvals[loop_ub] + pvals[loop_ub + 1];
+        }
+      }
+
+      i = p.size(1);
+      for (ns = 0; ns < i; ns++) {
+        double b;
+        boolean_T exitg2;
+        x.set_size(1, pvals.size(1));
+        b = p[ns];
+        loop_ub = pvals.size(0) * pvals.size(1);
+        for (i1 = 0; i1 < loop_ub; i1++) {
+          x[i1] = (pvals[i1] - b >= 0.0);
+        }
+
+        loop_ub = 0;
+        exitg2 = false;
+        while ((!exitg2) && (loop_ub <= x.size(1) - 1)) {
+          if (x[loop_ub]) {
+            ii_data_idx_0 = loop_ub + 1;
+            exitg2 = true;
+          } else {
+            loop_ub++;
+          }
+        }
+
+        InverseCDF[ns] = xvals_temp[ii_data_idx_0 - 1];
+      }
+    }
+    break;
   }
 
   //     function InverseCDF = icdf(Obj,y)
@@ -916,29 +908,26 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
   const
 {
   coder::array<char, 2U> switch_expression;
-  int kstr;
+  int i;
   int k;
   boolean_T b_bool;
   int exitg1;
   static const char b_cv[8] = { 'b', 'i', 'n', 'o', 'm', 'i', 'a', 'l' };
 
+  coder::array<double, 2U> xvals_temp;
   static const char b_cv1[7] = { 'p', 'o', 'i', 's', 's', 'o', 'n' };
 
+  coder::array<int, 2U> iidx;
+  coder::array<double, 2U> pvals;
   static const char b_cv2[5] = { 'g', 'a', 'm', 'm', 'a' };
 
+  coder::array<boolean_T, 2U> x;
   static const char b_cv3[4] = { 'b', 'e', 't', 'a' };
 
+  int ii_data_idx_0;
   static const char b_cv4[6] = { 'g', 'u', 'm', 'b', 'e', 'l' };
 
   static const char b_cv5[7] = { 'f', 'r', 'e', 'c', 'h', 'e', 't' };
-
-  static const char b_cv6[7] = { 'w', 'e', 'i', 'b', 'u', 'l', 'l' };
-
-  static const char b_cv7[3] = { 'g', 'e', 'v' };
-
-  static const char cv8[6] = { 'g', 'e', 'v', 'm', 'i', 'n' };
-
-  static const char cv9[6] = { 'p', 'a', 'r', 'e', 't', 'o' };
 
   static const char t1_f1[6] = { 'n', 'o', 'r', 'm', 'a', 'l' };
 
@@ -966,22 +955,22 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
 
   // InverseCDF = icdf('binomial',p,Obj.Par(1),Obj.Par(2));
   switch_expression.set_size(this->Name.size(0), this->Name.size(1));
-  kstr = this->Name.size(1);
-  for (k = 0; k < kstr; k++) {
+  i = this->Name.size(1);
+  for (k = 0; k < i; k++) {
     switch_expression[k] = ntf_cv[static_cast<unsigned char>(this->Name[k]) &
       127];
   }
 
   b_bool = false;
   if (switch_expression.size(1) == 8) {
-    kstr = 0;
+    k = 0;
     do {
       exitg1 = 0;
-      if (kstr < 8) {
-        if (switch_expression[kstr] != b_cv[kstr]) {
+      if (k < 8) {
+        if (switch_expression[k] != b_cv[k]) {
           exitg1 = 1;
         } else {
-          kstr++;
+          k++;
         }
       } else {
         b_bool = true;
@@ -991,18 +980,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
   }
 
   if (b_bool) {
-    kstr = 0;
+    k = 0;
   } else {
     b_bool = false;
     if (switch_expression.size(1) == 9) {
-      kstr = 0;
+      k = 0;
       do {
         exitg1 = 0;
-        if (kstr < 9) {
-          if (switch_expression[kstr] != ntf_cv3[kstr]) {
+        if (k < 9) {
+          if (switch_expression[k] != ntf_cv3[k]) {
             exitg1 = 1;
           } else {
-            kstr++;
+            k++;
           }
         } else {
           b_bool = true;
@@ -1012,18 +1001,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
     }
 
     if (b_bool) {
-      kstr = 1;
+      k = 1;
     } else {
       b_bool = false;
       if (switch_expression.size(1) == 16) {
-        kstr = 0;
+        k = 0;
         do {
           exitg1 = 0;
-          if (kstr < 16) {
-            if (switch_expression[kstr] != ntf_cv4[kstr]) {
+          if (k < 16) {
+            if (switch_expression[k] != ntf_cv4[k]) {
               exitg1 = 1;
             } else {
-              kstr++;
+              k++;
             }
           } else {
             b_bool = true;
@@ -1033,18 +1022,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
       }
 
       if (b_bool) {
-        kstr = 2;
+        k = 2;
       } else {
         b_bool = false;
         if (switch_expression.size(1) == 7) {
-          kstr = 0;
+          k = 0;
           do {
             exitg1 = 0;
-            if (kstr < 7) {
-              if (switch_expression[kstr] != b_cv1[kstr]) {
+            if (k < 7) {
+              if (switch_expression[k] != b_cv1[k]) {
                 exitg1 = 1;
               } else {
-                kstr++;
+                k++;
               }
             } else {
               b_bool = true;
@@ -1054,18 +1043,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
         }
 
         if (b_bool) {
-          kstr = 3;
+          k = 3;
         } else {
           b_bool = false;
           if (switch_expression.size(1) == 11) {
-            kstr = 0;
+            k = 0;
             do {
               exitg1 = 0;
-              if (kstr < 11) {
-                if (switch_expression[kstr] != ntf_cv5[kstr]) {
+              if (k < 11) {
+                if (switch_expression[k] != ntf_cv5[k]) {
                   exitg1 = 1;
                 } else {
-                  kstr++;
+                  k++;
                 }
               } else {
                 b_bool = true;
@@ -1075,18 +1064,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
           }
 
           if (b_bool) {
-            kstr = 4;
+            k = 4;
           } else {
             b_bool = false;
             if (switch_expression.size(1) == 5) {
-              kstr = 0;
+              k = 0;
               do {
                 exitg1 = 0;
-                if (kstr < 5) {
-                  if (switch_expression[kstr] != b_cv2[kstr]) {
+                if (k < 5) {
+                  if (switch_expression[k] != b_cv2[k]) {
                     exitg1 = 1;
                   } else {
-                    kstr++;
+                    k++;
                   }
                 } else {
                   b_bool = true;
@@ -1096,18 +1085,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
             }
 
             if (b_bool) {
-              kstr = 5;
+              k = 5;
             } else {
               b_bool = false;
               if (switch_expression.size(1) == 4) {
-                kstr = 0;
+                k = 0;
                 do {
                   exitg1 = 0;
-                  if (kstr < 4) {
-                    if (switch_expression[kstr] != b_cv3[kstr]) {
+                  if (k < 4) {
+                    if (switch_expression[k] != b_cv3[k]) {
                       exitg1 = 1;
                     } else {
-                      kstr++;
+                      k++;
                     }
                   } else {
                     b_bool = true;
@@ -1117,18 +1106,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
               }
 
               if (b_bool) {
-                kstr = 6;
+                k = 6;
               } else {
                 b_bool = false;
                 if (switch_expression.size(1) == 9) {
-                  kstr = 0;
+                  k = 0;
                   do {
                     exitg1 = 0;
-                    if (kstr < 9) {
-                      if (switch_expression[kstr] != ntf_cv6[kstr]) {
+                    if (k < 9) {
+                      if (switch_expression[k] != ntf_cv6[k]) {
                         exitg1 = 1;
                       } else {
-                        kstr++;
+                        k++;
                       }
                     } else {
                       b_bool = true;
@@ -1138,18 +1127,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
                 }
 
                 if (b_bool) {
-                  kstr = 7;
+                  k = 7;
                 } else {
                   b_bool = false;
                   if (switch_expression.size(1) == 6) {
-                    kstr = 0;
+                    k = 0;
                     do {
                       exitg1 = 0;
-                      if (kstr < 6) {
-                        if (switch_expression[kstr] != b_cv4[kstr]) {
+                      if (k < 6) {
+                        if (switch_expression[k] != b_cv4[k]) {
                           exitg1 = 1;
                         } else {
-                          kstr++;
+                          k++;
                         }
                       } else {
                         b_bool = true;
@@ -1159,18 +1148,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
                   }
 
                   if (b_bool) {
-                    kstr = 8;
+                    k = 8;
                   } else {
                     b_bool = false;
                     if (switch_expression.size(1) == 7) {
-                      kstr = 0;
+                      k = 0;
                       do {
                         exitg1 = 0;
-                        if (kstr < 7) {
-                          if (switch_expression[kstr] != b_cv5[kstr]) {
+                        if (k < 7) {
+                          if (switch_expression[k] != b_cv5[k]) {
                             exitg1 = 1;
                           } else {
-                            kstr++;
+                            k++;
                           }
                         } else {
                           b_bool = true;
@@ -1180,18 +1169,32 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
                     }
 
                     if (b_bool) {
-                      kstr = 9;
+                      k = 9;
+                    } else if (ntf_p_strcmp(switch_expression)) {
+                      k = 10;
+                    } else if (ntf_q_strcmp(switch_expression)) {
+                      k = 11;
+                    } else if (ntf_r_strcmp(switch_expression)) {
+                      k = 12;
+                    } else if (ntf_s_strcmp(switch_expression)) {
+                      k = 13;
+                    } else if (ntf_t_strcmp(switch_expression)) {
+                      k = 14;
+                    } else if (ntf_u_strcmp(switch_expression)) {
+                      k = 15;
+                    } else if (ntf_v_strcmp(switch_expression)) {
+                      k = 16;
                     } else {
                       b_bool = false;
-                      if (switch_expression.size(1) == 7) {
-                        kstr = 0;
+                      if (switch_expression.size(1) == 14) {
+                        k = 0;
                         do {
                           exitg1 = 0;
-                          if (kstr < 7) {
-                            if (switch_expression[kstr] != b_cv6[kstr]) {
+                          if (k < 14) {
+                            if (switch_expression[k] != ntf_cv1[k]) {
                               exitg1 = 1;
                             } else {
-                              kstr++;
+                              k++;
                             }
                           } else {
                             b_bool = true;
@@ -1201,18 +1204,18 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
                       }
 
                       if (b_bool) {
-                        kstr = 10;
+                        k = 17;
                       } else {
                         b_bool = false;
-                        if (switch_expression.size(1) == 3) {
-                          kstr = 0;
+                        if (switch_expression.size(1) == 16) {
+                          k = 0;
                           do {
                             exitg1 = 0;
-                            if (kstr < 3) {
-                              if (switch_expression[kstr] != b_cv7[kstr]) {
+                            if (k < 16) {
+                              if (switch_expression[k] != ntf_cv2[k]) {
                                 exitg1 = 1;
                               } else {
-                                kstr++;
+                                k++;
                               }
                             } else {
                               b_bool = true;
@@ -1222,154 +1225,17 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
                         }
 
                         if (b_bool) {
-                          kstr = 11;
+                          k = 17;
+                        } else if (ntf_y_strcmp(switch_expression, t1_f1)) {
+                          k = 18;
+                        } else if (ntf_ab_strcmp(switch_expression, t1_f2)) {
+                          k = 18;
+                        } else if (ntf_bb_strcmp(switch_expression)) {
+                          k = 19;
+                        } else if (ntf_cb_strcmp(switch_expression)) {
+                          k = 20;
                         } else {
-                          b_bool = false;
-                          if (switch_expression.size(1) == 6) {
-                            kstr = 0;
-                            do {
-                              exitg1 = 0;
-                              if (kstr < 6) {
-                                if (switch_expression[kstr] != cv8[kstr]) {
-                                  exitg1 = 1;
-                                } else {
-                                  kstr++;
-                                }
-                              } else {
-                                b_bool = true;
-                                exitg1 = 1;
-                              }
-                            } while (exitg1 == 0);
-                          }
-
-                          if (b_bool) {
-                            kstr = 12;
-                          } else {
-                            b_bool = false;
-                            if (switch_expression.size(1) == 6) {
-                              kstr = 0;
-                              do {
-                                exitg1 = 0;
-                                if (kstr < 6) {
-                                  if (switch_expression[kstr] != cv9[kstr]) {
-                                    exitg1 = 1;
-                                  } else {
-                                    kstr++;
-                                  }
-                                } else {
-                                  b_bool = true;
-                                  exitg1 = 1;
-                                }
-                              } while (exitg1 == 0);
-                            }
-
-                            if (b_bool) {
-                              kstr = 13;
-                            } else if (ntf_t_strcmp(switch_expression)) {
-                              kstr = 14;
-                            } else if (ntf_u_strcmp(switch_expression)) {
-                              kstr = 15;
-                            } else if (ntf_v_strcmp(switch_expression)) {
-                              kstr = 16;
-                            } else {
-                              b_bool = false;
-                              if (switch_expression.size(1) == 14) {
-                                kstr = 0;
-                                do {
-                                  exitg1 = 0;
-                                  if (kstr < 14) {
-                                    if (switch_expression[kstr] != ntf_cv1[kstr])
-                                    {
-                                      exitg1 = 1;
-                                    } else {
-                                      kstr++;
-                                    }
-                                  } else {
-                                    b_bool = true;
-                                    exitg1 = 1;
-                                  }
-                                } while (exitg1 == 0);
-                              }
-
-                              if (b_bool) {
-                                kstr = 17;
-                              } else {
-                                b_bool = false;
-                                if (switch_expression.size(1) == 16) {
-                                  kstr = 0;
-                                  do {
-                                    exitg1 = 0;
-                                    if (kstr < 16) {
-                                      if (switch_expression[kstr] !=
-                                          ntf_cv2[kstr]) {
-                                        exitg1 = 1;
-                                      } else {
-                                        kstr++;
-                                      }
-                                    } else {
-                                      b_bool = true;
-                                      exitg1 = 1;
-                                    }
-                                  } while (exitg1 == 0);
-                                }
-
-                                if (b_bool) {
-                                  kstr = 17;
-                                } else {
-                                  b_bool = false;
-                                  if (switch_expression.size(1) == 6) {
-                                    kstr = 0;
-                                    do {
-                                      exitg1 = 0;
-                                      if (kstr < 6) {
-                                        if (switch_expression[kstr] !=
-                                            t1_f1[kstr]) {
-                                          exitg1 = 1;
-                                        } else {
-                                          kstr++;
-                                        }
-                                      } else {
-                                        b_bool = true;
-                                        exitg1 = 1;
-                                      }
-                                    } while (exitg1 == 0);
-                                  }
-
-                                  if (b_bool) {
-                                    kstr = 18;
-                                  } else {
-                                    b_bool = false;
-                                    if (switch_expression.size(1) == 8) {
-                                      kstr = 0;
-                                      do {
-                                        exitg1 = 0;
-                                        if (kstr < 8) {
-                                          if (switch_expression[kstr] !=
-                                              t1_f2[kstr]) {
-                                            exitg1 = 1;
-                                          } else {
-                                            kstr++;
-                                          }
-                                        } else {
-                                          b_bool = true;
-                                          exitg1 = 1;
-                                        }
-                                      } while (exitg1 == 0);
-                                    }
-
-                                    if (b_bool) {
-                                      kstr = 18;
-                                    } else if (ntf_bb_strcmp(switch_expression))
-                                    {
-                                      kstr = 19;
-                                    } else {
-                                      kstr = -1;
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
+                          k = -1;
                         }
                       }
                     }
@@ -1383,22 +1249,22 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
     }
   }
 
-  switch (kstr) {
+  switch (k) {
    case 0:
     ntf_icdf(p, this->Par[0], this->Par[1], InverseCDF);
     break;
 
    case 1:
     ntf_b_icdf(p, 1.0, this->Par[0], InverseCDF);
-    for (kstr = 0; kstr < 1048576; kstr++) {
-      InverseCDF[kstr]++;
+    for (i = 0; i < 1048576; i++) {
+      InverseCDF[i]++;
     }
     break;
 
    case 2:
     ntf_b_icdf(p, this->Par[0], this->Par[1], InverseCDF);
-    for (kstr = 0; kstr < 1048576; kstr++) {
-      InverseCDF[kstr] += this->Par[0];
+    for (i = 0; i < 1048576; i++) {
+      InverseCDF[i] += this->Par[0];
     }
     break;
 
@@ -1423,8 +1289,8 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
       double b;
       b = this->Par[3] - this->Par[2];
       ntf_f_icdf(p, this->Par[0], this->Par[1], InverseCDF);
-      for (kstr = 0; kstr < 1048576; kstr++) {
-        InverseCDF[kstr] = InverseCDF[kstr] * b + this->Par[2];
+      for (i = 0; i < 1048576; i++) {
+        InverseCDF[i] = InverseCDF[i] * b + this->Par[2];
       }
     }
     break;
@@ -1456,8 +1322,8 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
 
    case 12:
     ntf_h_icdf(p, this->Par[0], this->Par[1], -this->Par[2], InverseCDF);
-    for (kstr = 0; kstr < 1048576; kstr++) {
-      InverseCDF[kstr] = -InverseCDF[kstr];
+    for (i = 0; i < 1048576; i++) {
+      InverseCDF[i] = -InverseCDF[i];
     }
     break;
 
@@ -1500,6 +1366,71 @@ void ntf_ERADist::ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576
 
    case 19:
     ntf_m_icdf(p, this->Par[0], this->Par[1], InverseCDF);
+    break;
+
+   case 20:
+    {
+      int ns;
+      int i1;
+      int loop_ub;
+      if (2 > this->Multinomial.size(1)) {
+        i = 0;
+        k = 1;
+      } else {
+        i = 1;
+        k = 2;
+      }
+
+      if (1 > this->Multinomial.size(1)) {
+        ns = 1;
+        i1 = -1;
+      } else {
+        ns = 2;
+        i1 = this->Multinomial.size(1) - 1;
+      }
+
+      loop_ub = ntf_div_s32_floor(i1, ns);
+      xvals_temp.set_size(1, (loop_ub + 1));
+      for (i1 = 0; i1 <= loop_ub; i1++) {
+        xvals_temp[i1] = this->Multinomial[ns * i1];
+      }
+
+      ntf_b_sort(xvals_temp, iidx);
+      pvals.set_size(1, iidx.size(1));
+      loop_ub = iidx.size(1);
+      for (ns = 0; ns < loop_ub; ns++) {
+        pvals[ns] = this->Multinomial[i + k * (iidx[ns] - 1)];
+      }
+
+      if ((iidx.size(1) != 0) && (iidx.size(1) != 1)) {
+        i = iidx.size(1);
+        for (k = 0; k <= i - 2; k++) {
+          pvals[k + 1] = pvals[k] + pvals[k + 1];
+        }
+      }
+
+      loop_ub = pvals.size(0) * pvals.size(1);
+      for (ns = 0; ns < 1048576; ns++) {
+        boolean_T exitg2;
+        x.set_size(1, pvals.size(1));
+        for (i = 0; i < loop_ub; i++) {
+          x[i] = (pvals[i] - p[ns] >= 0.0);
+        }
+
+        k = 0;
+        exitg2 = false;
+        while ((!exitg2) && (k <= x.size(1) - 1)) {
+          if (x[k]) {
+            ii_data_idx_0 = k + 1;
+            exitg2 = true;
+          } else {
+            k++;
+          }
+        }
+
+        InverseCDF[ns] = xvals_temp[ii_data_idx_0 - 1];
+      }
+    }
     break;
   }
 
@@ -1645,6 +1576,7 @@ void ntf_ERADist::ntf_init(const coder::array<char, 2U> &name, const coder::
   ntf_b_coder_internal_anonymous_ b_this;
   ntf_c_coder_internal_anonymous_ c_this;
   coder::array<double, 1U> r1;
+  coder::array<double, 2U> x;
   double b[3];
 
   //  Generation of distribution objects
@@ -1750,6 +1682,12 @@ void ntf_ERADist::ntf_init(const coder::array<char, 2U> &name, const coder::
   this->Par[1] = 0.0;
   this->Par[2] = 0.0;
   this->Par[3] = 0.0;
+  this->Multinomial.set_size(1, val_temp.size(1));
+  vlen = val_temp.size(0) * val_temp.size(1);
+  for (i = 0; i < vlen; i++) {
+    this->Multinomial[i] = val_temp[i];
+  }
+
   Mean = 0.0;
   Var = 0.0;
   Std = 0.0;
@@ -1771,316 +1709,407 @@ void ntf_ERADist::ntf_init(const coder::array<char, 2U> &name, const coder::
 
   switch (vlen) {
    case 0:
-    // -----------------------------------------------------------------
-    val[0] = 0.0;
-    val[1] = 0.0;
-    val[2] = 0.0;
-    val[3] = 0.0;
-    vlen = val_temp.size(1);
-    for (i = 0; i < vlen; i++) {
-      val[i] = val_temp[i];
-    }
-
-    this->Par[0] = val[0];
-    this->Par[1] = val[1];
-    this->Par[2] = val[2];
-    this->Par[3] = val[3];
-    if (ntf_d_strcmp(name) || ntf_e_strcmp(name)) {
+    {
+      // -----------------------------------------------------------------
       val[0] = 0.0;
-      val[1] = 1.0;
-    }
-
-    switch_expression.set_size(name.size(0), name.size(1));
-    i = name.size(1);
-    for (k = 0; k < i; k++) {
-      switch_expression[k] = ntf_cv[static_cast<unsigned char>(name[k]) & 127];
-    }
-
-    if (ntf_f_strcmp(switch_expression)) {
-      vlen = 0;
-    } else if (ntf_g_strcmp(switch_expression)) {
-      vlen = 1;
-    } else if (ntf_h_strcmp(switch_expression)) {
-      vlen = 2;
-    } else if (ntf_i_strcmp(switch_expression)) {
-      vlen = 3;
-    } else if (ntf_j_strcmp(switch_expression)) {
-      vlen = 4;
-    } else if (ntf_k_strcmp(switch_expression)) {
-      vlen = 5;
-    } else if (ntf_l_strcmp(switch_expression)) {
-      vlen = 6;
-    } else if (ntf_m_strcmp(switch_expression)) {
-      vlen = 7;
-    } else if (ntf_n_strcmp(switch_expression)) {
-      vlen = 8;
-    } else if (ntf_o_strcmp(switch_expression)) {
-      vlen = 9;
-    } else if (ntf_p_strcmp(switch_expression)) {
-      vlen = 10;
-    } else if (ntf_q_strcmp(switch_expression)) {
-      vlen = 11;
-    } else if (ntf_r_strcmp(switch_expression)) {
-      vlen = 12;
-    } else if (ntf_s_strcmp(switch_expression)) {
-      vlen = 13;
-    } else if (ntf_t_strcmp(switch_expression)) {
-      vlen = 14;
-    } else if (ntf_u_strcmp(switch_expression)) {
-      vlen = 15;
-    } else if (ntf_v_strcmp(switch_expression)) {
-      vlen = 16;
-    } else if (ntf_w_strcmp(switch_expression, ntf_cv1)) {
-      vlen = 17;
-    } else if (ntf_x_strcmp(switch_expression, ntf_cv2)) {
-      vlen = 17;
-    } else if (ntf_y_strcmp(switch_expression, t3_f1)) {
-      vlen = 18;
-    } else if (ntf_ab_strcmp(switch_expression, t3_f2)) {
-      vlen = 18;
-    } else if (ntf_bb_strcmp(switch_expression)) {
-      vlen = 19;
-    } else {
-      vlen = -1;
-    }
-
-    switch (vlen) {
-     case 0:
-      if ((0.0 <= val[1]) && (val[1] <= 1.0) && (val[0] > 0.0) && (ntf_mod(val[0])
-           == 0.0)) {
-        ntf_binostat(val[0], val[1], &Mean, &Var);
-
-        //  Obj.Dist = mymakedist(name,'N',val(1),'p',val(2));
-        //  CDF = cdf(name,x,val(1),val(2));
-      }
-      break;
-
-     case 1:
-      //  special case of negative binomial distribution
-      if ((0.0 < val[0]) && (val[0] <= 1.0)) {
-        Mean = (1.0 - val[0]) / val[0];
-        Var = Mean / val[0];
-        Mean++;
-
-        //  Obj.Dist = mymakedist('negativebinomial','r',1,'p',val);
-        //  CDF = cdf('negativebinomial',x,1,val);
-      }
-      break;
-
-     case 2:
-      if ((0.0 < val[1]) && (val[1] <= 1.0) && (val[0] > 0.0) && (ntf_mod(val[0])
-           == 0.0)) {
-        ntf_nbinstat(val[0], val[1], &Mean, &Var);
-        Mean += val[0];
-
-        //  Obj.Dist = mymakedist(name,'r',val(1),'p',val(2));
-        //  CDF  = cdf(name,x,val(1),val(2));
-      }
-      break;
-
-     case 3:
-      if (val[1] == 0.0) {
-        if (val[0] > 0.0) {
-          //  Obj.Dist = mymakedist(name,'lambda',val);
-          //  CDF  = cdf(name,x,val);
-          Mean = val[0];
-          Var = val[0];
-        }
+      val[1] = 0.0;
+      val[2] = 0.0;
+      val[3] = 0.0;
+      if (4 < val_temp.size(1)) {
+        i = 3;
       } else {
-        if ((val[0] > 0.0) && (val[1] > 0.0)) {
-          //  Obj.Dist = mymakedist(name,'lambda',val(1)*val(2));
-          //  CDF  = cdf(name,x,val(1)*val(2));
-          Mean = val[0] * val[1];
+        i = val_temp.size(1) - 1;
+      }
+
+      for (vlen = 0; vlen <= i; vlen++) {
+        val[vlen] = val_temp[vlen];
+      }
+
+      this->Par[0] = val[0];
+      this->Par[1] = val[1];
+      this->Par[2] = val[2];
+      this->Par[3] = val[3];
+      if (ntf_d_strcmp(name) || ntf_e_strcmp(name)) {
+        val[0] = 0.0;
+        val[1] = 1.0;
+      }
+
+      switch_expression.set_size(name.size(0), name.size(1));
+      i = name.size(1);
+      for (k = 0; k < i; k++) {
+        switch_expression[k] = ntf_cv[static_cast<unsigned char>(name[k]) & 127];
+      }
+
+      if (ntf_f_strcmp(switch_expression)) {
+        vlen = 0;
+      } else if (ntf_g_strcmp(switch_expression)) {
+        vlen = 1;
+      } else if (ntf_h_strcmp(switch_expression)) {
+        vlen = 2;
+      } else if (ntf_i_strcmp(switch_expression)) {
+        vlen = 3;
+      } else if (ntf_j_strcmp(switch_expression)) {
+        vlen = 4;
+      } else if (ntf_k_strcmp(switch_expression)) {
+        vlen = 5;
+      } else if (ntf_l_strcmp(switch_expression)) {
+        vlen = 6;
+      } else if (ntf_m_strcmp(switch_expression)) {
+        vlen = 7;
+      } else if (ntf_n_strcmp(switch_expression)) {
+        vlen = 8;
+      } else if (ntf_o_strcmp(switch_expression)) {
+        vlen = 9;
+      } else if (ntf_p_strcmp(switch_expression)) {
+        vlen = 10;
+      } else if (ntf_q_strcmp(switch_expression)) {
+        vlen = 11;
+      } else if (ntf_r_strcmp(switch_expression)) {
+        vlen = 12;
+      } else if (ntf_s_strcmp(switch_expression)) {
+        vlen = 13;
+      } else if (ntf_t_strcmp(switch_expression)) {
+        vlen = 14;
+      } else if (ntf_u_strcmp(switch_expression)) {
+        vlen = 15;
+      } else if (ntf_v_strcmp(switch_expression)) {
+        vlen = 16;
+      } else if (ntf_w_strcmp(switch_expression, ntf_cv1)) {
+        vlen = 17;
+      } else if (ntf_x_strcmp(switch_expression, ntf_cv2)) {
+        vlen = 17;
+      } else if (ntf_y_strcmp(switch_expression, t3_f1)) {
+        vlen = 18;
+      } else if (ntf_ab_strcmp(switch_expression, t3_f2)) {
+        vlen = 18;
+      } else if (ntf_bb_strcmp(switch_expression)) {
+        vlen = 19;
+      } else if (ntf_cb_strcmp(switch_expression)) {
+        vlen = 20;
+      } else {
+        vlen = -1;
+      }
+
+      switch (vlen) {
+       case 0:
+        if ((0.0 <= val[1]) && (val[1] <= 1.0) && (val[0] > 0.0) && (ntf_mod
+             (val[0]) == 0.0)) {
+          ntf_binostat(val[0], val[1], &Mean, &Var);
+
+          //  Obj.Dist = mymakedist(name,'N',val(1),'p',val(2));
+          //  CDF = cdf(name,x,val(1),val(2));
+        }
+        break;
+
+       case 1:
+        //  special case of negative binomial distribution
+        if ((0.0 < val[0]) && (val[0] <= 1.0)) {
+          Mean = (1.0 - val[0]) / val[0];
+          Var = Mean / val[0];
+          Mean++;
+
+          //  Obj.Dist = mymakedist('negativebinomial','r',1,'p',val);
+          //  CDF = cdf('negativebinomial',x,1,val);
+        }
+        break;
+
+       case 2:
+        if ((0.0 < val[1]) && (val[1] <= 1.0) && (val[0] > 0.0) && (ntf_mod(val
+              [0]) == 0.0)) {
+          ntf_nbinstat(val[0], val[1], &Mean, &Var);
+          Mean += val[0];
+
+          //  Obj.Dist = mymakedist(name,'r',val(1),'p',val(2));
+          //  CDF  = cdf(name,x,val(1),val(2));
+        }
+        break;
+
+       case 3:
+        if (val[1] == 0.0) {
+          if (val[0] > 0.0) {
+            //  Obj.Dist = mymakedist(name,'lambda',val);
+            //  CDF  = cdf(name,x,val);
+            Mean = val[0];
+            Var = val[0];
+          }
+        } else {
+          if ((val[0] > 0.0) && (val[1] > 0.0)) {
+            //  Obj.Dist = mymakedist(name,'lambda',val(1)*val(2));
+            //  CDF  = cdf(name,x,val(1)*val(2));
+            Mean = val[0] * val[1];
+            if (Mean > 0.0) {
+              Var = Mean;
+            } else {
+              Mean = rtNaN;
+              Var = rtNaN;
+            }
+          }
+        }
+        break;
+
+       case 4:
+        if (val[0] > 0.0) {
+          //  Obj.Dist = mymakedist(name,'mu',1/val);
+          //  CDF  = cdf(name,x,1/val);
+          Mean = 1.0 / val[0];
           if (Mean > 0.0) {
-            Var = Mean;
+            Var = Mean * Mean;
           } else {
             Mean = rtNaN;
             Var = rtNaN;
           }
         }
-      }
-      break;
+        break;
 
-     case 4:
-      if (val[0] > 0.0) {
-        //  Obj.Dist = mymakedist(name,'mu',1/val);
-        //  CDF  = cdf(name,x,1/val);
-        Mean = 1.0 / val[0];
-        if (Mean > 0.0) {
-          Var = Mean * Mean;
-        } else {
-          Mean = rtNaN;
-          Var = rtNaN;
+       case 5:
+        if ((val[0] > 0.0) && (val[1] > 0.0)) {
+          //  Obj.Dist = mymakedist(name,'a',val(2),'b',1/val(1));
+          //  CDF  = cdf(name,x,val(2),1/val(1));
+          Var = 1.0 / val[0];
+          if (Var > 0.0) {
+            Mean = val[1] * Var;
+            Var *= Mean;
+          } else {
+            Mean = rtNaN;
+            Var = rtNaN;
+          }
         }
-      }
-      break;
+        break;
 
-     case 5:
-      if ((val[0] > 0.0) && (val[1] > 0.0)) {
-        //  Obj.Dist = mymakedist(name,'a',val(2),'b',1/val(1));
-        //  CDF  = cdf(name,x,val(2),1/val(1));
-        Var = 1.0 / val[0];
-        if (Var > 0.0) {
-          Mean = val[1] * Var;
-          Var *= Mean;
-        } else {
-          Mean = rtNaN;
-          Var = rtNaN;
+       case 6:
+        if ((val[0] > 0.0) && (val[1] > 0.0) && (val[2] < val[3])) {
+          //  Obj.Dist = mymakedist(name,'a',val(1),'b',val(2));
+          //  CDF  = cdf(name,x,val(1),val(2));
+          Var = val[0] + val[1];
+          Mean = (val[1] * val[2] + val[0] * val[3]) / Var;
+
+          // Var  =Var*(val(4)-val(3));
+          // Var  =(val(1)*val(2)*(val(4)-val(3))/(val(1)+val(2))^2/(val(1)+val(2)+1)); 
+          sigma0 = val[3] - val[2];
+          Var = val[0] / Var * val[1] / (Var * (Var + 1.0)) * (sigma0 * sigma0);
         }
-      }
-      break;
+        break;
 
-     case 6:
-      if ((val[0] > 0.0) && (val[1] > 0.0) && (val[2] < val[3])) {
-        //  Obj.Dist = mymakedist(name,'a',val(1),'b',val(2));
-        //  CDF  = cdf(name,x,val(1),val(2));
-        Var = val[0] + val[1];
-        Mean = (val[1] * val[2] + val[0] * val[3]) / Var;
-
-        // Var  =Var*(val(4)-val(3));
-        // Var  =(val(1)*val(2)*(val(4)-val(3))/(val(1)+val(2))^2/(val(1)+val(2)+1)); 
-        sigma0 = val[3] - val[2];
-        Var = val[0] / Var * val[1] / (Var * (Var + 1.0)) * (sigma0 * sigma0);
-      }
-      break;
-
-     case 7:
-      //  this distribution can be used to model minima
-      if (val[0] > 0.0) {
-        //  sigma is the scale parameter
-        //  mu is the location parameter
-        //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',0,'sigma',val(1),'mu',-val(2)); 
-        //  CDF  = cdf('GeneralizedExtremeValue',x,0,val(1),-val(2));
-        Mean = val[1] + -0.57721566490153231 * val[0];
-        Var = val[0] * 3.1415926535897931;
-        Var = Var * Var / 6.0;
-      }
-      break;
-
-     case 8:
-      //  mirror image of this distribution can be used to model maxima
-      if (val[0] > 0.0) {
-        //  sigma is the scale parameter
-        //  mu is the location parameter
-        //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',0,'sigma',val(1),'mu',val(2));  
-        //  CDF  = cdf('GeneralizedExtremeValue',x,0,val(1),val(2));
-        if (!rtIsNaN(val[1])) {
-          Mean = val[1] + 0.57721566490153231 * val[0];
-          Var = 1.6449340668482264 * (val[0] * val[0]);
-        } else {
-          Mean = rtNaN;
-          Var = rtNaN;
+       case 7:
+        //  this distribution can be used to model minima
+        if (val[0] > 0.0) {
+          //  sigma is the scale parameter
+          //  mu is the location parameter
+          //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',0,'sigma',val(1),'mu',-val(2)); 
+          //  CDF  = cdf('GeneralizedExtremeValue',x,0,val(1),-val(2));
+          Mean = val[1] + -0.57721566490153231 * val[0];
+          Var = val[0] * 3.1415926535897931;
+          Var = Var * Var / 6.0;
         }
-      }
-      break;
+        break;
 
-     case 9:
-      if ((val[0] > 0.0) && (val[1] > 0.0)) {
-        //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',1/val(2),'sigma',val(1)/val(2),'mu',val(1)); 
-        //  CDF  = cdf('GeneralizedExtremeValue',x,1/val(2),val(1)/val(2),val(1)); 
-        ntf_gevstat(1.0 / val[1], val[0] / val[1], val[0], &Mean, &Var);
-      }
-      break;
-
-     case 10:
-      if ((val[0] > 0.0) && (val[1] > 0.0)) {
-        //  Obj.Dist = mymakedist(name,'a',val(1),'b',val(2));
-        //  CDF  = cdf(name,x,val(1),val(2));
-        ntf_wblstat(val[0], val[1], &Mean, &Var);
-      }
-      break;
-
-     case 11:
-      if (val[1] > 0.0) {
-        //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',val(1),'sigma',val(2),'mu',val(3)); 
-        //  CDF  = cdf('GeneralizedExtremeValue',x,val(1),val(2),val(3));
-        ntf_gevstat(val[0], val[1], val[2], &Mean, &Var);
-      }
-      break;
-
-     case 12:
-      if (val[1] > 0.0) {
-        //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',val(1),'sigma',val(2),'mu',-val(3)); 
-        //  CDF = cdf('GeneralizedExtremeValue',x,val(1),val(2),-val(3));
-        ntf_gevstat(val[0], val[1], -val[2], &Mean, &Var);
-        Mean = -Mean;
-      }
-      break;
-
-     case 13:
-      if ((val[0] > 0.0) && (val[1] > 0.0)) {
-        //  Obj.Dist = mymakedist('Generalizedpareto','k',1/val(2),'sigma',val(1)/val(2),'theta',val(1)); 
-        //  CDF = cdf('Generalizedpareto',x,1/val(2),val(1)/val(2),val(1));
-        ntf_gpstat(1.0 / val[1], val[0] / val[1], val[0], &Mean, &Var);
-      }
-      break;
-
-     case 14:
-      if (val[0] > 0.0) {
-        //  Obj.Dist = mymakedist(name,'b',val);
-        //  CDF = cdf(name,x,val);
-        Mean = val[0] * 1.2533141373155001;
-        Var = 0.42920367320510344 * (val[0] * val[0]);
-      }
-      break;
-
-     case 15:
-      //  special case of gamma distribution
-      if ((val[0] > 0.0) && (ntf_mod(val[0]) == 0.0)) {
-        //   Obj.Dist = mymakedist('gamma','a',val/2,'b',2);
-        //   CDF = cdf('gamma',x,val/2,2);
-        sigma0 = val[0] / 2.0;
-        if (sigma0 > 0.0) {
-          Mean = sigma0 * 2.0;
-          Var = Mean * 2.0;
-        } else {
-          Mean = rtNaN;
-          Var = rtNaN;
+       case 8:
+        //  mirror image of this distribution can be used to model maxima
+        if (val[0] > 0.0) {
+          //  sigma is the scale parameter
+          //  mu is the location parameter
+          //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',0,'sigma',val(1),'mu',val(2));  
+          //  CDF  = cdf('GeneralizedExtremeValue',x,0,val(1),val(2));
+          if (!rtIsNaN(val[1])) {
+            Mean = val[1] + 0.57721566490153231 * val[0];
+            Var = 1.6449340668482264 * (val[0] * val[0]);
+          } else {
+            Mean = rtNaN;
+            Var = rtNaN;
+          }
         }
-      }
-      break;
+        break;
 
-     case 16:
-      //  Obj.Dist = mymakedist(name,'lower',val(1),'upper',val(2));
-      //  CDF = cdf(name,x,val(1),val(2));
-      if (val[0] <= val[1]) {
-        Mean = (val[0] + val[1]) / 2.0;
-        Var = val[1] - val[0];
-        Var = Var * Var / 12.0;
-      } else {
-        Mean = rtNaN;
-        Var = rtNaN;
-      }
-      break;
+       case 9:
+        if ((val[0] > 0.0) && (val[1] > 0.0)) {
+          //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',1/val(2),'sigma',val(1)/val(2),'mu',val(1)); 
+          //  CDF  = cdf('GeneralizedExtremeValue',x,1/val(2),val(1)/val(2),val(1)); 
+          ntf_gevstat(1.0 / val[1], val[0] / val[1], val[0], &Mean, &Var);
+        }
+        break;
 
-     case 17:
-      //  special case of normal distribution
-      //  Obj.Dist = mymakedist('normal');
-      //  CDF = cdf('normal',x,0,1);
-      Var = 1.0;
-      break;
+       case 10:
+        if ((val[0] > 0.0) && (val[1] > 0.0)) {
+          //  Obj.Dist = mymakedist(name,'a',val(1),'b',val(2));
+          //  CDF  = cdf(name,x,val(1),val(2));
+          ntf_wblstat(val[0], val[1], &Mean, &Var);
+        }
+        break;
 
-     case 18:
-      if (val[1] > 0.0) {
-        //  Obj.Dist = mymakedist(name,'mu',val(1),'sigma',val(2));
+       case 11:
+        if (val[1] > 0.0) {
+          //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',val(1),'sigma',val(2),'mu',val(3)); 
+          //  CDF  = cdf('GeneralizedExtremeValue',x,val(1),val(2),val(3));
+          ntf_gevstat(val[0], val[1], val[2], &Mean, &Var);
+        }
+        break;
+
+       case 12:
+        if (val[1] > 0.0) {
+          //  Obj.Dist = mymakedist('GeneralizedExtremeValue','k',val(1),'sigma',val(2),'mu',-val(3)); 
+          //  CDF = cdf('GeneralizedExtremeValue',x,val(1),val(2),-val(3));
+          ntf_gevstat(val[0], val[1], -val[2], &Mean, &Var);
+          Mean = -Mean;
+        }
+        break;
+
+       case 13:
+        if ((val[0] > 0.0) && (val[1] > 0.0)) {
+          //  Obj.Dist = mymakedist('Generalizedpareto','k',1/val(2),'sigma',val(1)/val(2),'theta',val(1)); 
+          //  CDF = cdf('Generalizedpareto',x,1/val(2),val(1)/val(2),val(1));
+          ntf_gpstat(1.0 / val[1], val[0] / val[1], val[0], &Mean, &Var);
+        }
+        break;
+
+       case 14:
+        if (val[0] > 0.0) {
+          //  Obj.Dist = mymakedist(name,'b',val);
+          //  CDF = cdf(name,x,val);
+          Mean = val[0] * 1.2533141373155001;
+          Var = 0.42920367320510344 * (val[0] * val[0]);
+        }
+        break;
+
+       case 15:
+        //  special case of gamma distribution
+        if ((val[0] > 0.0) && (ntf_mod(val[0]) == 0.0)) {
+          //   Obj.Dist = mymakedist('gamma','a',val/2,'b',2);
+          //   CDF = cdf('gamma',x,val/2,2);
+          sigma0 = val[0] / 2.0;
+          if (sigma0 > 0.0) {
+            Mean = sigma0 * 2.0;
+            Var = Mean * 2.0;
+          } else {
+            Mean = rtNaN;
+            Var = rtNaN;
+          }
+        }
+        break;
+
+       case 16:
+        //  Obj.Dist = mymakedist(name,'lower',val(1),'upper',val(2));
         //  CDF = cdf(name,x,val(1),val(2));
-        Mean = val[0];
-        Var = val[1] * val[1];
-      }
-      break;
+        if (val[0] <= val[1]) {
+          Mean = (val[0] + val[1]) / 2.0;
+          Var = val[1] - val[0];
+          Var = Var * Var / 12.0;
+        } else {
+          Mean = rtNaN;
+          Var = rtNaN;
+        }
+        break;
 
-     case 19:
-      if (val[1] > 0.0) {
-        //  Obj.Dist = mymakedist(name,'mu',val(1),'sigma',val(2));
-        //  CDF = cdf(name,x,val(1),val(2));
-        ntf_lognstat(val[0], val[1], &Mean, &Var);
+       case 17:
+        //  special case of normal distribution
+        //  Obj.Dist = mymakedist('normal');
+        //  CDF = cdf('normal',x,0,1);
+        Var = 1.0;
+        break;
+
+       case 18:
+        if (val[1] > 0.0) {
+          //  Obj.Dist = mymakedist(name,'mu',val(1),'sigma',val(2));
+          //  CDF = cdf(name,x,val(1),val(2));
+          Mean = val[0];
+          Var = val[1] * val[1];
+        }
+        break;
+
+       case 19:
+        if (val[1] > 0.0) {
+          //  Obj.Dist = mymakedist(name,'mu',val(1),'sigma',val(2));
+          //  CDF = cdf(name,x,val(1),val(2));
+          ntf_lognstat(val[0], val[1], &Mean, &Var);
+        }
+        break;
+
+       case 20:
+        {
+          int i1;
+          int i2;
+          int i3;
+
+          // vals=[3,0.2,5,0.3,9,0.1,6,0.2,12,0.2];
+          if (2 > val_temp.size(1)) {
+            i = 0;
+            i1 = 1;
+            i2 = -1;
+          } else {
+            i = 1;
+            i1 = 2;
+            i2 = val_temp.size(1) - 1;
+          }
+
+          if (1 > val_temp.size(1)) {
+            i3 = 1;
+          } else {
+            i3 = 2;
+          }
+
+          vlen = ntf_div_s32_floor(i2 - i, i1);
+          x.set_size(1, (vlen + 1));
+          for (i2 = 0; i2 <= vlen; i2++) {
+            x[i2] = val_temp[i + i1 * i2] * val_temp[i3 * i2];
+          }
+
+          vlen = x.size(1);
+          if (x.size(1) != 0) {
+            Mean = x[0];
+            for (k = 2; k <= vlen; k++) {
+              Mean += x[k - 1];
+            }
+          }
+
+          if (2 > val_temp.size(1)) {
+            i = 0;
+            i1 = 1;
+            i2 = -1;
+          } else {
+            i = 1;
+            i1 = 2;
+            i2 = val_temp.size(1) - 1;
+          }
+
+          if (1 > val_temp.size(1)) {
+            i3 = 1;
+            vlen = 0;
+          } else {
+            i3 = 2;
+            vlen = val_temp.size(1);
+          }
+
+          vlen = ntf_div_s32_floor(vlen - 1, i3) + 1;
+          y.set_size(1, vlen);
+          for (k = 0; k < vlen; k++) {
+            Var = val_temp[i3 * k];
+            y[k] = Var * Var;
+          }
+
+          vlen = ntf_div_s32_floor(i2 - i, i1);
+          x.set_size(1, (vlen + 1));
+          for (i2 = 0; i2 <= vlen; i2++) {
+            x[i2] = val_temp[i + i1 * i2] * y[i2];
+          }
+
+          vlen = x.size(1);
+          if (x.size(1) == 0) {
+            mu0 = 0.0;
+          } else {
+            mu0 = x[0];
+            for (k = 2; k <= vlen; k++) {
+              mu0 += x[k - 1];
+            }
+          }
+
+          Var = mu0 - Mean * Mean;
+        }
+        break;
       }
-      break;
+
+      Std = std::sqrt(Var);
+
+      // -----------------------------------------------------------------
     }
-
-    Std = std::sqrt(Var);
-
-    // -----------------------------------------------------------------
     break;
 
    case 1:
@@ -3061,27 +3090,29 @@ void ntf_ERADist::ntf_init(const coder::array<char, 2U> &name, const coder::
 void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
   double, 1U> &CDF) const
 {
-  int loop_ub;
+  int vlen;
   int i;
   coder::array<char, 2U> switch_expression;
+  int k;
   boolean_T b_bool;
   int exitg1;
   static const char b_cv[8] = { 'b', 'i', 'n', 'o', 'm', 'i', 'a', 'l' };
 
+  double Obj;
   coder::array<double, 1U> b_x;
+  int i1;
+  int i2;
+  coder::array<double, 2U> c_x;
+  int loop_ub;
+  int i3;
+  int i4;
   static const char b_cv1[7] = { 'p', 'o', 'i', 's', 's', 'o', 'n' };
 
   static const char b_cv2[5] = { 'g', 'a', 'm', 'm', 'a' };
 
   static const char b_cv3[4] = { 'b', 'e', 't', 'a' };
 
-  static const char b_cv4[6] = { 'g', 'u', 'm', 'b', 'e', 'l' };
-
-  static const char b_cv5[7] = { 'f', 'r', 'e', 'c', 'h', 'e', 't' };
-
-  static const char b_cv6[3] = { 'g', 'e', 'v' };
-
-  static const char b_cv7[6] = { 'g', 'e', 'v', 'm', 'i', 'n' };
+  static const char b_cv4[3] = { 'g', 'e', 'v' };
 
   static const char t7_f1[6] = { 'n', 'o', 'r', 'm', 'a', 'l' };
 
@@ -3117,28 +3148,28 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
   // -----------------------------------------------------------------------
   // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
   CDF.set_size(x.size(0));
-  loop_ub = x.size(0);
-  for (i = 0; i < loop_ub; i++) {
+  vlen = x.size(0);
+  for (i = 0; i < vlen; i++) {
     CDF[i] = 0.0;
   }
 
   switch_expression.set_size(this->Name.size(0), this->Name.size(1));
   i = this->Name.size(1);
-  for (loop_ub = 0; loop_ub < i; loop_ub++) {
-    switch_expression[loop_ub] = ntf_cv[static_cast<unsigned char>(this->
-      Name[loop_ub]) & 127];
+  for (k = 0; k < i; k++) {
+    switch_expression[k] = ntf_cv[static_cast<unsigned char>(this->Name[k]) &
+      127];
   }
 
   b_bool = false;
   if (switch_expression.size(1) == 8) {
-    loop_ub = 0;
+    vlen = 0;
     do {
       exitg1 = 0;
-      if (loop_ub < 8) {
-        if (switch_expression[loop_ub] != b_cv[loop_ub]) {
+      if (vlen < 8) {
+        if (switch_expression[vlen] != b_cv[vlen]) {
           exitg1 = 1;
         } else {
-          loop_ub++;
+          vlen++;
         }
       } else {
         b_bool = true;
@@ -3148,18 +3179,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
   }
 
   if (b_bool) {
-    loop_ub = 0;
+    vlen = 0;
   } else {
     b_bool = false;
     if (switch_expression.size(1) == 9) {
-      loop_ub = 0;
+      vlen = 0;
       do {
         exitg1 = 0;
-        if (loop_ub < 9) {
-          if (switch_expression[loop_ub] != ntf_cv3[loop_ub]) {
+        if (vlen < 9) {
+          if (switch_expression[vlen] != ntf_cv3[vlen]) {
             exitg1 = 1;
           } else {
-            loop_ub++;
+            vlen++;
           }
         } else {
           b_bool = true;
@@ -3169,18 +3200,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     }
 
     if (b_bool) {
-      loop_ub = 1;
+      vlen = 1;
     } else {
       b_bool = false;
       if (switch_expression.size(1) == 16) {
-        loop_ub = 0;
+        vlen = 0;
         do {
           exitg1 = 0;
-          if (loop_ub < 16) {
-            if (switch_expression[loop_ub] != ntf_cv4[loop_ub]) {
+          if (vlen < 16) {
+            if (switch_expression[vlen] != ntf_cv4[vlen]) {
               exitg1 = 1;
             } else {
-              loop_ub++;
+              vlen++;
             }
           } else {
             b_bool = true;
@@ -3190,18 +3221,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
       }
 
       if (b_bool) {
-        loop_ub = 2;
+        vlen = 2;
       } else {
         b_bool = false;
         if (switch_expression.size(1) == 7) {
-          loop_ub = 0;
+          vlen = 0;
           do {
             exitg1 = 0;
-            if (loop_ub < 7) {
-              if (switch_expression[loop_ub] != b_cv1[loop_ub]) {
+            if (vlen < 7) {
+              if (switch_expression[vlen] != b_cv1[vlen]) {
                 exitg1 = 1;
               } else {
-                loop_ub++;
+                vlen++;
               }
             } else {
               b_bool = true;
@@ -3211,18 +3242,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
         }
 
         if (b_bool) {
-          loop_ub = 3;
+          vlen = 3;
         } else {
           b_bool = false;
           if (switch_expression.size(1) == 11) {
-            loop_ub = 0;
+            vlen = 0;
             do {
               exitg1 = 0;
-              if (loop_ub < 11) {
-                if (switch_expression[loop_ub] != ntf_cv5[loop_ub]) {
+              if (vlen < 11) {
+                if (switch_expression[vlen] != ntf_cv5[vlen]) {
                   exitg1 = 1;
                 } else {
-                  loop_ub++;
+                  vlen++;
                 }
               } else {
                 b_bool = true;
@@ -3232,18 +3263,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
           }
 
           if (b_bool) {
-            loop_ub = 4;
+            vlen = 4;
           } else {
             b_bool = false;
             if (switch_expression.size(1) == 5) {
-              loop_ub = 0;
+              vlen = 0;
               do {
                 exitg1 = 0;
-                if (loop_ub < 5) {
-                  if (switch_expression[loop_ub] != b_cv2[loop_ub]) {
+                if (vlen < 5) {
+                  if (switch_expression[vlen] != b_cv2[vlen]) {
                     exitg1 = 1;
                   } else {
-                    loop_ub++;
+                    vlen++;
                   }
                 } else {
                   b_bool = true;
@@ -3253,18 +3284,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
             }
 
             if (b_bool) {
-              loop_ub = 5;
+              vlen = 5;
             } else {
               b_bool = false;
               if (switch_expression.size(1) == 4) {
-                loop_ub = 0;
+                vlen = 0;
                 do {
                   exitg1 = 0;
-                  if (loop_ub < 4) {
-                    if (switch_expression[loop_ub] != b_cv3[loop_ub]) {
+                  if (vlen < 4) {
+                    if (switch_expression[vlen] != b_cv3[vlen]) {
                       exitg1 = 1;
                     } else {
-                      loop_ub++;
+                      vlen++;
                     }
                   } else {
                     b_bool = true;
@@ -3274,18 +3305,26 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
               }
 
               if (b_bool) {
-                loop_ub = 6;
+                vlen = 6;
+              } else if (ntf_m_strcmp(switch_expression)) {
+                vlen = 7;
+              } else if (ntf_n_strcmp(switch_expression)) {
+                vlen = 8;
+              } else if (ntf_o_strcmp(switch_expression)) {
+                vlen = 9;
+              } else if (ntf_p_strcmp(switch_expression)) {
+                vlen = 10;
               } else {
                 b_bool = false;
-                if (switch_expression.size(1) == 9) {
-                  loop_ub = 0;
+                if (switch_expression.size(1) == 3) {
+                  vlen = 0;
                   do {
                     exitg1 = 0;
-                    if (loop_ub < 9) {
-                      if (switch_expression[loop_ub] != ntf_cv6[loop_ub]) {
+                    if (vlen < 3) {
+                      if (switch_expression[vlen] != b_cv4[vlen]) {
                         exitg1 = 1;
                       } else {
-                        loop_ub++;
+                        vlen++;
                       }
                     } else {
                       b_bool = true;
@@ -3295,18 +3334,28 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
                 }
 
                 if (b_bool) {
-                  loop_ub = 7;
+                  vlen = 11;
+                } else if (ntf_r_strcmp(switch_expression)) {
+                  vlen = 12;
+                } else if (ntf_s_strcmp(switch_expression)) {
+                  vlen = 13;
+                } else if (ntf_t_strcmp(switch_expression)) {
+                  vlen = 14;
+                } else if (ntf_u_strcmp(switch_expression)) {
+                  vlen = 15;
+                } else if (ntf_v_strcmp(switch_expression)) {
+                  vlen = 16;
                 } else {
                   b_bool = false;
-                  if (switch_expression.size(1) == 6) {
-                    loop_ub = 0;
+                  if (switch_expression.size(1) == 14) {
+                    vlen = 0;
                     do {
                       exitg1 = 0;
-                      if (loop_ub < 6) {
-                        if (switch_expression[loop_ub] != b_cv4[loop_ub]) {
+                      if (vlen < 14) {
+                        if (switch_expression[vlen] != ntf_cv1[vlen]) {
                           exitg1 = 1;
                         } else {
-                          loop_ub++;
+                          vlen++;
                         }
                       } else {
                         b_bool = true;
@@ -3316,18 +3365,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
                   }
 
                   if (b_bool) {
-                    loop_ub = 8;
+                    vlen = 17;
                   } else {
                     b_bool = false;
-                    if (switch_expression.size(1) == 7) {
-                      loop_ub = 0;
+                    if (switch_expression.size(1) == 16) {
+                      vlen = 0;
                       do {
                         exitg1 = 0;
-                        if (loop_ub < 7) {
-                          if (switch_expression[loop_ub] != b_cv5[loop_ub]) {
+                        if (vlen < 16) {
+                          if (switch_expression[vlen] != ntf_cv2[vlen]) {
                             exitg1 = 1;
                           } else {
-                            loop_ub++;
+                            vlen++;
                           }
                         } else {
                           b_bool = true;
@@ -3337,20 +3386,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
                     }
 
                     if (b_bool) {
-                      loop_ub = 9;
-                    } else if (ntf_p_strcmp(switch_expression)) {
-                      loop_ub = 10;
+                      vlen = 17;
                     } else {
                       b_bool = false;
-                      if (switch_expression.size(1) == 3) {
-                        loop_ub = 0;
+                      if (switch_expression.size(1) == 6) {
+                        vlen = 0;
                         do {
                           exitg1 = 0;
-                          if (loop_ub < 3) {
-                            if (switch_expression[loop_ub] != b_cv6[loop_ub]) {
+                          if (vlen < 6) {
+                            if (switch_expression[vlen] != t7_f1[vlen]) {
                               exitg1 = 1;
                             } else {
-                              loop_ub++;
+                              vlen++;
                             }
                           } else {
                             b_bool = true;
@@ -3360,19 +3407,18 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
                       }
 
                       if (b_bool) {
-                        loop_ub = 11;
+                        vlen = 18;
                       } else {
                         b_bool = false;
-                        if (switch_expression.size(1) == 6) {
-                          loop_ub = 0;
+                        if (switch_expression.size(1) == 8) {
+                          vlen = 0;
                           do {
                             exitg1 = 0;
-                            if (loop_ub < 6) {
-                              if (switch_expression[loop_ub] != b_cv7[loop_ub])
-                              {
+                            if (vlen < 8) {
+                              if (switch_expression[vlen] != t7_f2[vlen]) {
                                 exitg1 = 1;
                               } else {
-                                loop_ub++;
+                                vlen++;
                               }
                             } else {
                               b_bool = true;
@@ -3382,111 +3428,13 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
                         }
 
                         if (b_bool) {
-                          loop_ub = 12;
-                        } else if (ntf_s_strcmp(switch_expression)) {
-                          loop_ub = 13;
-                        } else if (ntf_t_strcmp(switch_expression)) {
-                          loop_ub = 14;
-                        } else if (ntf_u_strcmp(switch_expression)) {
-                          loop_ub = 15;
-                        } else if (ntf_v_strcmp(switch_expression)) {
-                          loop_ub = 16;
+                          vlen = 18;
+                        } else if (ntf_bb_strcmp(switch_expression)) {
+                          vlen = 19;
+                        } else if (ntf_cb_strcmp(switch_expression)) {
+                          vlen = 20;
                         } else {
-                          b_bool = false;
-                          if (switch_expression.size(1) == 14) {
-                            loop_ub = 0;
-                            do {
-                              exitg1 = 0;
-                              if (loop_ub < 14) {
-                                if (switch_expression[loop_ub] !=
-                                    ntf_cv1[loop_ub]) {
-                                  exitg1 = 1;
-                                } else {
-                                  loop_ub++;
-                                }
-                              } else {
-                                b_bool = true;
-                                exitg1 = 1;
-                              }
-                            } while (exitg1 == 0);
-                          }
-
-                          if (b_bool) {
-                            loop_ub = 17;
-                          } else {
-                            b_bool = false;
-                            if (switch_expression.size(1) == 16) {
-                              loop_ub = 0;
-                              do {
-                                exitg1 = 0;
-                                if (loop_ub < 16) {
-                                  if (switch_expression[loop_ub] !=
-                                      ntf_cv2[loop_ub]) {
-                                    exitg1 = 1;
-                                  } else {
-                                    loop_ub++;
-                                  }
-                                } else {
-                                  b_bool = true;
-                                  exitg1 = 1;
-                                }
-                              } while (exitg1 == 0);
-                            }
-
-                            if (b_bool) {
-                              loop_ub = 17;
-                            } else {
-                              b_bool = false;
-                              if (switch_expression.size(1) == 6) {
-                                loop_ub = 0;
-                                do {
-                                  exitg1 = 0;
-                                  if (loop_ub < 6) {
-                                    if (switch_expression[loop_ub] !=
-                                        t7_f1[loop_ub]) {
-                                      exitg1 = 1;
-                                    } else {
-                                      loop_ub++;
-                                    }
-                                  } else {
-                                    b_bool = true;
-                                    exitg1 = 1;
-                                  }
-                                } while (exitg1 == 0);
-                              }
-
-                              if (b_bool) {
-                                loop_ub = 18;
-                              } else {
-                                b_bool = false;
-                                if (switch_expression.size(1) == 8) {
-                                  loop_ub = 0;
-                                  do {
-                                    exitg1 = 0;
-                                    if (loop_ub < 8) {
-                                      if (switch_expression[loop_ub] !=
-                                          t7_f2[loop_ub]) {
-                                        exitg1 = 1;
-                                      } else {
-                                        loop_ub++;
-                                      }
-                                    } else {
-                                      b_bool = true;
-                                      exitg1 = 1;
-                                    }
-                                  } while (exitg1 == 0);
-                                }
-
-                                if (b_bool) {
-                                  loop_ub = 18;
-                                } else if (ntf_bb_strcmp(switch_expression)) {
-                                  loop_ub = 19;
-                                } else {
-                                  loop_ub = -1;
-                                }
-                              }
-                            }
-                          }
+                          vlen = -1;
                         }
                       }
                     }
@@ -3500,7 +3448,7 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     }
   }
 
-  switch (loop_ub) {
+  switch (vlen) {
    case 0:
     ntf_cdf(x, this->Par[0], this->Par[1], CDF);
     break;
@@ -3509,8 +3457,8 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     // CDF = Obj.Dist.cdf(x-1);
     // CDF = cdf('negativebinomial',x,1,Obj.Par);
     b_x.set_size(x.size(0));
-    loop_ub = x.size(0);
-    for (i = 0; i < loop_ub; i++) {
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
       b_x[i] = x[i] - 1.0;
     }
 
@@ -3521,8 +3469,8 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     // CDF = Obj.Dist.cdf(x-Obj.Par(1));
     // CDF  = cdf(name,x,Obj.Par(1),Obj.Par(2));
     b_x.set_size(x.size(0));
-    loop_ub = x.size(0);
-    for (i = 0; i < loop_ub; i++) {
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
       b_x[i] = x[i] - this->Par[0];
     }
 
@@ -3546,20 +3494,16 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     break;
 
    case 6:
-    {
-      double Obj;
-
-      // CDF = Obj.Dist.cdf();
-      // CDF  = cdf(name,x,Obj.Par(1),Obj.Par(2));
-      Obj = this->Par[3] - this->Par[2];
-      b_x.set_size(x.size(0));
-      loop_ub = x.size(0);
-      for (i = 0; i < loop_ub; i++) {
-        b_x[i] = (x[i] - this->Par[2]) / Obj;
-      }
-
-      ntf_g_cdf(b_x, this->Par[0], this->Par[1], CDF);
+    // CDF = Obj.Dist.cdf();
+    // CDF  = cdf(name,x,Obj.Par(1),Obj.Par(2));
+    Obj = this->Par[3] - this->Par[2];
+    b_x.set_size(x.size(0));
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
+      b_x[i] = (x[i] - this->Par[2]) / Obj;
     }
+
+    ntf_g_cdf(b_x, this->Par[0], this->Par[1], CDF);
     break;
 
    case 7:
@@ -3571,19 +3515,15 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     break;
 
    case 8:
-    {
-      double Obj;
-
-      //  mirror image of this distribution can be used to model maxima
-      Obj = this->Par[0];
-      CDF.set_size(x.size(0));
-      i = x.size(0);
-      for (loop_ub = 0; loop_ub < i; loop_ub++) {
-        if (Obj > 0.0) {
-          CDF[loop_ub] = std::exp(-std::exp(-((x[loop_ub] - this->Par[1]) / Obj)));
-        } else {
-          CDF[loop_ub] = rtNaN;
-        }
+    //  mirror image of this distribution can be used to model maxima
+    Obj = this->Par[0];
+    CDF.set_size(x.size(0));
+    i = x.size(0);
+    for (vlen = 0; vlen < i; vlen++) {
+      if (Obj > 0.0) {
+        CDF[vlen] = std::exp(-std::exp(-((x[vlen] - this->Par[1]) / Obj)));
+      } else {
+        CDF[vlen] = rtNaN;
       }
     }
     break;
@@ -3605,8 +3545,8 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     // CDF = Obj.Dist.cdf(-x);
     // CDF = cdf('GeneralizedExtremeValue',x,Obj.Par(1),Obj.Par(2),-Obj.Par(3)); 
     b_x.set_size(x.size(0));
-    loop_ub = x.size(0);
-    for (i = 0; i < loop_ub; i++) {
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
       b_x[i] = -x[i];
     }
 
@@ -3631,14 +3571,11 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
     break;
 
    case 17:
-    {
-      CDF.set_size(x.size(0));
-      i = x.size(0);
-      for (loop_ub = 0; loop_ub < i; loop_ub++) {
-        double Obj;
-        Obj = ntf_eml_erfcore(-x[loop_ub] / 1.4142135623730951);
-        CDF[loop_ub] = 0.5 * Obj;
-      }
+    CDF.set_size(x.size(0));
+    i = x.size(0);
+    for (k = 0; k < i; k++) {
+      Obj = ntf_eml_erfcore(-x[k] / 1.4142135623730951);
+      CDF[k] = 0.5 * Obj;
     }
     break;
 
@@ -3648,6 +3585,49 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
 
    case 19:
     ntf_p_cdf(x, this->Par[0], this->Par[1], CDF);
+    break;
+
+   case 20:
+    i = x.size(0);
+    if (0 <= x.size(0) - 1) {
+      if (1 > this->Multinomial.size(1)) {
+        i1 = 1;
+        i2 = -1;
+      } else {
+        i1 = 2;
+        i2 = this->Multinomial.size(1) - 1;
+      }
+
+      if (2 > this->Multinomial.size(1)) {
+        i3 = 0;
+        i4 = 1;
+      } else {
+        i3 = 1;
+        i4 = 2;
+      }
+
+      loop_ub = ntf_div_s32_floor(i2, i1);
+    }
+
+    for (int ns = 0; ns < i; ns++) {
+      c_x.set_size(1, (ntf_div_s32_floor(i2, i1) + 1));
+      for (vlen = 0; vlen <= loop_ub; vlen++) {
+        c_x[vlen] = static_cast<double>(x[ns] - this->Multinomial[i1 * vlen] >=
+          0.0) * this->Multinomial[i3 + i4 * vlen];
+      }
+
+      vlen = c_x.size(1);
+      if (c_x.size(1) == 0) {
+        Obj = 0.0;
+      } else {
+        Obj = c_x[0];
+        for (k = 2; k <= vlen; k++) {
+          Obj += c_x[k - 1];
+        }
+      }
+
+      CDF[ns] = Obj;
+    }
     break;
   }
 }
@@ -3660,27 +3640,29 @@ void ntf_ERADist::ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<
 void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
   double, 1U> &PDF) const
 {
-  int loop_ub;
+  int vlen;
   int i;
   coder::array<char, 2U> switch_expression;
+  int k;
   boolean_T b_bool;
   int exitg1;
   static const char b_cv[8] = { 'b', 'i', 'n', 'o', 'm', 'i', 'a', 'l' };
 
   coder::array<double, 1U> b_x;
+  double Obj_tmp;
+  int i1;
+  int i2;
+  coder::array<double, 2U> c_x;
+  int loop_ub;
+  int i3;
+  int i4;
   static const char b_cv1[7] = { 'p', 'o', 'i', 's', 's', 'o', 'n' };
 
   static const char b_cv2[5] = { 'g', 'a', 'm', 'm', 'a' };
 
   static const char b_cv3[4] = { 'b', 'e', 't', 'a' };
 
-  static const char b_cv4[6] = { 'g', 'u', 'm', 'b', 'e', 'l' };
-
-  static const char b_cv5[7] = { 'f', 'r', 'e', 'c', 'h', 'e', 't' };
-
-  static const char b_cv6[3] = { 'g', 'e', 'v' };
-
-  static const char b_cv7[6] = { 'g', 'e', 'v', 'm', 'i', 'n' };
+  static const char b_cv4[3] = { 'g', 'e', 'v' };
 
   static const char t5_f1[6] = { 'n', 'o', 'r', 'm', 'a', 'l' };
 
@@ -3704,28 +3686,28 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
   //        end
   //     end
   PDF.set_size(x.size(0));
-  loop_ub = x.size(0);
-  for (i = 0; i < loop_ub; i++) {
+  vlen = x.size(0);
+  for (i = 0; i < vlen; i++) {
     PDF[i] = 0.0;
   }
 
   switch_expression.set_size(this->Name.size(0), this->Name.size(1));
   i = this->Name.size(1);
-  for (loop_ub = 0; loop_ub < i; loop_ub++) {
-    switch_expression[loop_ub] = ntf_cv[static_cast<unsigned char>(this->
-      Name[loop_ub]) & 127];
+  for (k = 0; k < i; k++) {
+    switch_expression[k] = ntf_cv[static_cast<unsigned char>(this->Name[k]) &
+      127];
   }
 
   b_bool = false;
   if (switch_expression.size(1) == 8) {
-    loop_ub = 0;
+    vlen = 0;
     do {
       exitg1 = 0;
-      if (loop_ub < 8) {
-        if (switch_expression[loop_ub] != b_cv[loop_ub]) {
+      if (vlen < 8) {
+        if (switch_expression[vlen] != b_cv[vlen]) {
           exitg1 = 1;
         } else {
-          loop_ub++;
+          vlen++;
         }
       } else {
         b_bool = true;
@@ -3735,18 +3717,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
   }
 
   if (b_bool) {
-    loop_ub = 0;
+    vlen = 0;
   } else {
     b_bool = false;
     if (switch_expression.size(1) == 9) {
-      loop_ub = 0;
+      vlen = 0;
       do {
         exitg1 = 0;
-        if (loop_ub < 9) {
-          if (switch_expression[loop_ub] != ntf_cv3[loop_ub]) {
+        if (vlen < 9) {
+          if (switch_expression[vlen] != ntf_cv3[vlen]) {
             exitg1 = 1;
           } else {
-            loop_ub++;
+            vlen++;
           }
         } else {
           b_bool = true;
@@ -3756,18 +3738,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
     }
 
     if (b_bool) {
-      loop_ub = 1;
+      vlen = 1;
     } else {
       b_bool = false;
       if (switch_expression.size(1) == 16) {
-        loop_ub = 0;
+        vlen = 0;
         do {
           exitg1 = 0;
-          if (loop_ub < 16) {
-            if (switch_expression[loop_ub] != ntf_cv4[loop_ub]) {
+          if (vlen < 16) {
+            if (switch_expression[vlen] != ntf_cv4[vlen]) {
               exitg1 = 1;
             } else {
-              loop_ub++;
+              vlen++;
             }
           } else {
             b_bool = true;
@@ -3777,18 +3759,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
       }
 
       if (b_bool) {
-        loop_ub = 2;
+        vlen = 2;
       } else {
         b_bool = false;
         if (switch_expression.size(1) == 7) {
-          loop_ub = 0;
+          vlen = 0;
           do {
             exitg1 = 0;
-            if (loop_ub < 7) {
-              if (switch_expression[loop_ub] != b_cv1[loop_ub]) {
+            if (vlen < 7) {
+              if (switch_expression[vlen] != b_cv1[vlen]) {
                 exitg1 = 1;
               } else {
-                loop_ub++;
+                vlen++;
               }
             } else {
               b_bool = true;
@@ -3798,18 +3780,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
         }
 
         if (b_bool) {
-          loop_ub = 3;
+          vlen = 3;
         } else {
           b_bool = false;
           if (switch_expression.size(1) == 11) {
-            loop_ub = 0;
+            vlen = 0;
             do {
               exitg1 = 0;
-              if (loop_ub < 11) {
-                if (switch_expression[loop_ub] != ntf_cv5[loop_ub]) {
+              if (vlen < 11) {
+                if (switch_expression[vlen] != ntf_cv5[vlen]) {
                   exitg1 = 1;
                 } else {
-                  loop_ub++;
+                  vlen++;
                 }
               } else {
                 b_bool = true;
@@ -3819,18 +3801,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
           }
 
           if (b_bool) {
-            loop_ub = 4;
+            vlen = 4;
           } else {
             b_bool = false;
             if (switch_expression.size(1) == 5) {
-              loop_ub = 0;
+              vlen = 0;
               do {
                 exitg1 = 0;
-                if (loop_ub < 5) {
-                  if (switch_expression[loop_ub] != b_cv2[loop_ub]) {
+                if (vlen < 5) {
+                  if (switch_expression[vlen] != b_cv2[vlen]) {
                     exitg1 = 1;
                   } else {
-                    loop_ub++;
+                    vlen++;
                   }
                 } else {
                   b_bool = true;
@@ -3840,18 +3822,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
             }
 
             if (b_bool) {
-              loop_ub = 5;
+              vlen = 5;
             } else {
               b_bool = false;
               if (switch_expression.size(1) == 4) {
-                loop_ub = 0;
+                vlen = 0;
                 do {
                   exitg1 = 0;
-                  if (loop_ub < 4) {
-                    if (switch_expression[loop_ub] != b_cv3[loop_ub]) {
+                  if (vlen < 4) {
+                    if (switch_expression[vlen] != b_cv3[vlen]) {
                       exitg1 = 1;
                     } else {
-                      loop_ub++;
+                      vlen++;
                     }
                   } else {
                     b_bool = true;
@@ -3861,18 +3843,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
               }
 
               if (b_bool) {
-                loop_ub = 6;
+                vlen = 6;
               } else {
                 b_bool = false;
                 if (switch_expression.size(1) == 9) {
-                  loop_ub = 0;
+                  vlen = 0;
                   do {
                     exitg1 = 0;
-                    if (loop_ub < 9) {
-                      if (switch_expression[loop_ub] != ntf_cv6[loop_ub]) {
+                    if (vlen < 9) {
+                      if (switch_expression[vlen] != ntf_cv6[vlen]) {
                         exitg1 = 1;
                       } else {
-                        loop_ub++;
+                        vlen++;
                       }
                     } else {
                       b_bool = true;
@@ -3882,18 +3864,24 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
                 }
 
                 if (b_bool) {
-                  loop_ub = 7;
+                  vlen = 7;
+                } else if (ntf_n_strcmp(switch_expression)) {
+                  vlen = 8;
+                } else if (ntf_o_strcmp(switch_expression)) {
+                  vlen = 9;
+                } else if (ntf_p_strcmp(switch_expression)) {
+                  vlen = 10;
                 } else {
                   b_bool = false;
-                  if (switch_expression.size(1) == 6) {
-                    loop_ub = 0;
+                  if (switch_expression.size(1) == 3) {
+                    vlen = 0;
                     do {
                       exitg1 = 0;
-                      if (loop_ub < 6) {
-                        if (switch_expression[loop_ub] != b_cv4[loop_ub]) {
+                      if (vlen < 3) {
+                        if (switch_expression[vlen] != b_cv4[vlen]) {
                           exitg1 = 1;
                         } else {
-                          loop_ub++;
+                          vlen++;
                         }
                       } else {
                         b_bool = true;
@@ -3903,18 +3891,28 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
                   }
 
                   if (b_bool) {
-                    loop_ub = 8;
+                    vlen = 11;
+                  } else if (ntf_r_strcmp(switch_expression)) {
+                    vlen = 12;
+                  } else if (ntf_s_strcmp(switch_expression)) {
+                    vlen = 13;
+                  } else if (ntf_t_strcmp(switch_expression)) {
+                    vlen = 14;
+                  } else if (ntf_u_strcmp(switch_expression)) {
+                    vlen = 15;
+                  } else if (ntf_v_strcmp(switch_expression)) {
+                    vlen = 16;
                   } else {
                     b_bool = false;
-                    if (switch_expression.size(1) == 7) {
-                      loop_ub = 0;
+                    if (switch_expression.size(1) == 14) {
+                      vlen = 0;
                       do {
                         exitg1 = 0;
-                        if (loop_ub < 7) {
-                          if (switch_expression[loop_ub] != b_cv5[loop_ub]) {
+                        if (vlen < 14) {
+                          if (switch_expression[vlen] != ntf_cv1[vlen]) {
                             exitg1 = 1;
                           } else {
-                            loop_ub++;
+                            vlen++;
                           }
                         } else {
                           b_bool = true;
@@ -3924,20 +3922,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
                     }
 
                     if (b_bool) {
-                      loop_ub = 9;
-                    } else if (ntf_p_strcmp(switch_expression)) {
-                      loop_ub = 10;
+                      vlen = 17;
                     } else {
                       b_bool = false;
-                      if (switch_expression.size(1) == 3) {
-                        loop_ub = 0;
+                      if (switch_expression.size(1) == 16) {
+                        vlen = 0;
                         do {
                           exitg1 = 0;
-                          if (loop_ub < 3) {
-                            if (switch_expression[loop_ub] != b_cv6[loop_ub]) {
+                          if (vlen < 16) {
+                            if (switch_expression[vlen] != ntf_cv2[vlen]) {
                               exitg1 = 1;
                             } else {
-                              loop_ub++;
+                              vlen++;
                             }
                           } else {
                             b_bool = true;
@@ -3947,19 +3943,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
                       }
 
                       if (b_bool) {
-                        loop_ub = 11;
+                        vlen = 17;
                       } else {
                         b_bool = false;
                         if (switch_expression.size(1) == 6) {
-                          loop_ub = 0;
+                          vlen = 0;
                           do {
                             exitg1 = 0;
-                            if (loop_ub < 6) {
-                              if (switch_expression[loop_ub] != b_cv7[loop_ub])
-                              {
+                            if (vlen < 6) {
+                              if (switch_expression[vlen] != t5_f1[vlen]) {
                                 exitg1 = 1;
                               } else {
-                                loop_ub++;
+                                vlen++;
                               }
                             } else {
                               b_bool = true;
@@ -3969,27 +3964,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
                         }
 
                         if (b_bool) {
-                          loop_ub = 12;
-                        } else if (ntf_s_strcmp(switch_expression)) {
-                          loop_ub = 13;
-                        } else if (ntf_t_strcmp(switch_expression)) {
-                          loop_ub = 14;
-                        } else if (ntf_u_strcmp(switch_expression)) {
-                          loop_ub = 15;
-                        } else if (ntf_v_strcmp(switch_expression)) {
-                          loop_ub = 16;
+                          vlen = 18;
                         } else {
                           b_bool = false;
-                          if (switch_expression.size(1) == 14) {
-                            loop_ub = 0;
+                          if (switch_expression.size(1) == 8) {
+                            vlen = 0;
                             do {
                               exitg1 = 0;
-                              if (loop_ub < 14) {
-                                if (switch_expression[loop_ub] !=
-                                    ntf_cv1[loop_ub]) {
+                              if (vlen < 8) {
+                                if (switch_expression[vlen] != t5_f2[vlen]) {
                                   exitg1 = 1;
                                 } else {
-                                  loop_ub++;
+                                  vlen++;
                                 }
                               } else {
                                 b_bool = true;
@@ -3999,80 +3985,13 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
                           }
 
                           if (b_bool) {
-                            loop_ub = 17;
+                            vlen = 18;
+                          } else if (ntf_bb_strcmp(switch_expression)) {
+                            vlen = 19;
+                          } else if (ntf_cb_strcmp(switch_expression)) {
+                            vlen = 20;
                           } else {
-                            b_bool = false;
-                            if (switch_expression.size(1) == 16) {
-                              loop_ub = 0;
-                              do {
-                                exitg1 = 0;
-                                if (loop_ub < 16) {
-                                  if (switch_expression[loop_ub] !=
-                                      ntf_cv2[loop_ub]) {
-                                    exitg1 = 1;
-                                  } else {
-                                    loop_ub++;
-                                  }
-                                } else {
-                                  b_bool = true;
-                                  exitg1 = 1;
-                                }
-                              } while (exitg1 == 0);
-                            }
-
-                            if (b_bool) {
-                              loop_ub = 17;
-                            } else {
-                              b_bool = false;
-                              if (switch_expression.size(1) == 6) {
-                                loop_ub = 0;
-                                do {
-                                  exitg1 = 0;
-                                  if (loop_ub < 6) {
-                                    if (switch_expression[loop_ub] !=
-                                        t5_f1[loop_ub]) {
-                                      exitg1 = 1;
-                                    } else {
-                                      loop_ub++;
-                                    }
-                                  } else {
-                                    b_bool = true;
-                                    exitg1 = 1;
-                                  }
-                                } while (exitg1 == 0);
-                              }
-
-                              if (b_bool) {
-                                loop_ub = 18;
-                              } else {
-                                b_bool = false;
-                                if (switch_expression.size(1) == 8) {
-                                  loop_ub = 0;
-                                  do {
-                                    exitg1 = 0;
-                                    if (loop_ub < 8) {
-                                      if (switch_expression[loop_ub] !=
-                                          t5_f2[loop_ub]) {
-                                        exitg1 = 1;
-                                      } else {
-                                        loop_ub++;
-                                      }
-                                    } else {
-                                      b_bool = true;
-                                      exitg1 = 1;
-                                    }
-                                  } while (exitg1 == 0);
-                                }
-
-                                if (b_bool) {
-                                  loop_ub = 18;
-                                } else if (ntf_bb_strcmp(switch_expression)) {
-                                  loop_ub = 19;
-                                } else {
-                                  loop_ub = -1;
-                                }
-                              }
-                            }
+                            vlen = -1;
                           }
                         }
                       }
@@ -4087,15 +4006,15 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
     }
   }
 
-  switch (loop_ub) {
+  switch (vlen) {
    case 0:
     ntf_pdf(x, this->Par[0], this->Par[1], PDF);
     break;
 
    case 1:
     b_x.set_size(x.size(0));
-    loop_ub = x.size(0);
-    for (i = 0; i < loop_ub; i++) {
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
       b_x[i] = x[i] - 1.0;
     }
 
@@ -4104,8 +4023,8 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
 
    case 2:
     b_x.set_size(x.size(0));
-    loop_ub = x.size(0);
-    for (i = 0; i < loop_ub; i++) {
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
       b_x[i] = x[i] - this->Par[0];
     }
 
@@ -4129,22 +4048,18 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
     break;
 
    case 6:
-    {
-      double Obj_tmp;
+    //                  PDF  = pdf('beta',(x-Obj.Par(3))/(Obj.Par(4)-Obj.Par(3)),Obj.Par(1),Obj.Par(2))./(Obj.Par(4)-Obj.Par(3)); 
+    Obj_tmp = this->Par[3] - this->Par[2];
+    b_x.set_size(x.size(0));
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
+      b_x[i] = (x[i] - this->Par[2]) / Obj_tmp;
+    }
 
-      //                  PDF  = pdf('beta',(x-Obj.Par(3))/(Obj.Par(4)-Obj.Par(3)),Obj.Par(1),Obj.Par(2))./(Obj.Par(4)-Obj.Par(3)); 
-      Obj_tmp = this->Par[3] - this->Par[2];
-      b_x.set_size(x.size(0));
-      loop_ub = x.size(0);
-      for (i = 0; i < loop_ub; i++) {
-        b_x[i] = (x[i] - this->Par[2]) / Obj_tmp;
-      }
-
-      ntf_f_pdf(b_x, this->Par[0], this->Par[1], PDF);
-      loop_ub = PDF.size(0);
-      for (i = 0; i < loop_ub; i++) {
-        PDF[i] = PDF[i] / Obj_tmp;
-      }
+    ntf_f_pdf(b_x, this->Par[0], this->Par[1], PDF);
+    vlen = PDF.size(0);
+    for (i = 0; i < vlen; i++) {
+      PDF[i] = PDF[i] / Obj_tmp;
     }
     break;
 
@@ -4173,8 +4088,8 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
 
    case 12:
     b_x.set_size(x.size(0));
-    loop_ub = x.size(0);
-    for (i = 0; i < loop_ub; i++) {
+    vlen = x.size(0);
+    for (i = 0; i < vlen; i++) {
       b_x[i] = -x[i];
     }
 
@@ -4201,9 +4116,8 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
    case 17:
     PDF.set_size(x.size(0));
     i = x.size(0);
-    for (loop_ub = 0; loop_ub < i; loop_ub++) {
-      PDF[loop_ub] = std::exp(-0.5 * x[loop_ub] * x[loop_ub]) /
-        2.5066282746310002;
+    for (k = 0; k < i; k++) {
+      PDF[k] = std::exp(-0.5 * x[k] * x[k]) / 2.5066282746310002;
     }
     break;
 
@@ -4213,6 +4127,49 @@ void ntf_ERADist::ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<
 
    case 19:
     ntf_p_pdf(x, this->Par[0], this->Par[1], PDF);
+    break;
+
+   case 20:
+    i = x.size(0);
+    if (0 <= x.size(0) - 1) {
+      if (1 > this->Multinomial.size(1)) {
+        i1 = 1;
+        i2 = -1;
+      } else {
+        i1 = 2;
+        i2 = this->Multinomial.size(1) - 1;
+      }
+
+      if (2 > this->Multinomial.size(1)) {
+        i3 = 0;
+        i4 = 1;
+      } else {
+        i3 = 1;
+        i4 = 2;
+      }
+
+      loop_ub = ntf_div_s32_floor(i2, i1);
+    }
+
+    for (int ns = 0; ns < i; ns++) {
+      c_x.set_size(1, (ntf_div_s32_floor(i2, i1) + 1));
+      for (vlen = 0; vlen <= loop_ub; vlen++) {
+        c_x[vlen] = static_cast<double>(x[ns] == this->Multinomial[i1 * vlen]) *
+          this->Multinomial[i3 + i4 * vlen];
+      }
+
+      vlen = c_x.size(1);
+      if (c_x.size(1) == 0) {
+        Obj_tmp = 0.0;
+      } else {
+        Obj_tmp = c_x[0];
+        for (k = 2; k <= vlen; k++) {
+          Obj_tmp += c_x[k - 1];
+        }
+      }
+
+      PDF[ns] = Obj_tmp;
+    }
     break;
   }
 }

@@ -92,21 +92,21 @@ vector<double>  FEM_analysis(int nrv, vector<double> x)
 		sum += (abs(x_elem));
 	}
 
-	double sum2 = 0;
-	for (double x_elem : x)
-	{
-		sum2 += (sqrt(abs(x_elem)));
-	}
+	//double sum2 = 0;
+	//for (double x_elem : x)
+	//{
+	//	sum2 += (sqrt(abs(x_elem)));
+	//}
 
-	double sum3 = 0;
-	for (double x_elem : x)
-	{
-		sum3 += sqrt(sqrt(abs(x_elem)));
-	}
+	//double sum3 = 0;
+	//for (double x_elem : x)
+	//{
+	//	sum3 += sqrt(sqrt(abs(x_elem)));
+	//}
 	vector<double> response;
 	response.push_back(sum);
-	response.push_back(sum2);
-	response.push_back(sum3);
+	//response.push_back(sum2);
+	//response.push_back(sum3);
 
 	return response;
 }

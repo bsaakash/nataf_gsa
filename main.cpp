@@ -38,7 +38,6 @@ int main()
 
 	// WRITE
 	std::cout << "Monte Carlo done.. running Global Sensitivity Analysis..." << std::endl;
-	std::cout << "Monte Carlo done.. running Global Sensitivity Analysis..." << std::endl;
 	//std::cout << "Monte Carlo done.. running Global Sensitivity Analysis..." << std::endl;
 	//  (3) GSA
 	coder::array<gsa_cell_wrap_0, 2U> combs;

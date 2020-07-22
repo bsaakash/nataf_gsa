@@ -5,7 +5,7 @@
 // File: gsa_rand.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:48:16
+// C/C++ source code generated on  : 23-Jul-2020 01:50:34
 //
 
 // Include Files
@@ -67,44 +67,45 @@ double gsa_rand()
   do {
     for (int j = 0; j < 2; j++) {
       unsigned int mti;
-      mti = state[624] + 1U;
+      mti = gsa_state[624] + 1U;
       if (mti >= 625U) {
         int kk;
         for (kk = 0; kk < 227; kk++) {
-          y = (state[kk] & 2147483648U) | (state[kk + 1] & 2147483647U);
+          y = (gsa_state[kk] & 2147483648U) | (gsa_state[kk + 1] & 2147483647U);
           if ((y & 1U) == 0U) {
             y >>= 1U;
           } else {
             y = y >> 1U ^ 2567483615U;
           }
 
-          state[kk] = state[kk + 397] ^ y;
+          gsa_state[kk] = gsa_state[kk + 397] ^ y;
         }
 
         for (kk = 0; kk < 396; kk++) {
-          y = (state[kk + 227] & 2147483648U) | (state[kk + 228] & 2147483647U);
+          y = (gsa_state[kk + 227] & 2147483648U) | (gsa_state[kk + 228] &
+            2147483647U);
           if ((y & 1U) == 0U) {
             y >>= 1U;
           } else {
             y = y >> 1U ^ 2567483615U;
           }
 
-          state[kk + 227] = state[kk] ^ y;
+          gsa_state[kk + 227] = gsa_state[kk] ^ y;
         }
 
-        y = (state[623] & 2147483648U) | (state[0] & 2147483647U);
+        y = (gsa_state[623] & 2147483648U) | (gsa_state[0] & 2147483647U);
         if ((y & 1U) == 0U) {
           y >>= 1U;
         } else {
           y = y >> 1U ^ 2567483615U;
         }
 
-        state[623] = state[396] ^ y;
+        gsa_state[623] = gsa_state[396] ^ y;
         mti = 1U;
       }
 
-      y = state[static_cast<int>(mti) - 1];
-      state[624] = mti;
+      y = gsa_state[static_cast<int>(mti) - 1];
+      gsa_state[624] = mti;
       y ^= y >> 11U;
       y ^= y << 7U & 2636928640U;
       y ^= y << 15U & 4022730752U;

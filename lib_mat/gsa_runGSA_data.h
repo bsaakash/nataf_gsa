@@ -5,7 +5,7 @@
 // File: gsa_runGSA_data.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:48:16
+// C/C++ source code generated on  : 23-Jul-2020 01:50:34
 //
 #ifndef GSA_RUNGSA_DATA_H
 #define GSA_RUNGSA_DATA_H
@@ -17,7 +17,7 @@
 #include "gsa_runGSA_types.h"
 
 // Variable Declarations
-extern unsigned int state[625];
+extern unsigned int gsa_state[625];
 
 #endif
 

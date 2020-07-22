@@ -5,7 +5,7 @@
 // File: ntf_sortIdx.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 #ifndef NTF_SORTIDX_H
 #define NTF_SORTIDX_H
@@ -17,6 +17,9 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
+extern void ntf_b_merge_block(coder::array<int, 2U> &idx, coder::array<double,
+  2U> &x, int offset, int n, int preSortLevel, coder::array<int, 1U> &iwork,
+  coder::array<double, 1U> &xwork);
 extern void ntf_b_sortIdx(const double x[4], int idx[4]);
 extern void ntf_c_sortIdx(coder::array<double, 1U> &x, coder::array<int, 1U>
   &idx);

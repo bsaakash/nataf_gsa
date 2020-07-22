@@ -5,7 +5,7 @@
 // File: gsa_runGSA_data.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:48:16
+// C/C++ source code generated on  : 23-Jul-2020 01:50:34
 //
 
 // Include Files
@@ -14,7 +14,7 @@
 #include "rt_nonfinite.h"
 
 // Variable Definitions
-unsigned int state[625];
+unsigned int gsa_state[625];
 
 //
 // File trailer for gsa_runGSA_data.cpp

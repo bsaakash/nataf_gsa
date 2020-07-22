@@ -5,7 +5,7 @@
 // File: ntf_inataf_data.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 #ifndef NTF_INATAF_DATA_H
 #define NTF_INATAF_DATA_H

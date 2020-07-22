@@ -5,7 +5,7 @@
 // File: ntf_sort.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 #ifndef NTF_SORT_H
 #define NTF_SORT_H
@@ -17,6 +17,7 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
+extern void ntf_b_sort(coder::array<double, 2U> &x, coder::array<int, 2U> &idx);
 extern void ntf_sort(coder::array<double, 1U> &x);
 
 #endif

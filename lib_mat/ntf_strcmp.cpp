@@ -5,7 +5,7 @@
 // File: ntf_strcmp.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 
 // Include Files
@@ -126,6 +126,38 @@ boolean_T ntf_c_strcmp(const coder::array<char, 2U> &a)
     do {
       exitg1 = 0;
       if (kstr < 4) {
+        if (a[kstr] != b_cv[kstr]) {
+          exitg1 = 1;
+        } else {
+          kstr++;
+        }
+      } else {
+        b_bool = true;
+        exitg1 = 1;
+      }
+    } while (exitg1 == 0);
+  }
+
+  return b_bool;
+}
+
+//
+// Arguments    : const coder::array<char, 2U> *a
+// Return Type  : boolean_T
+//
+boolean_T ntf_cb_strcmp(const coder::array<char, 2U> &a)
+{
+  boolean_T b_bool;
+  static const char b_cv[8] = { 'd', 'i', 's', 'c', 'r', 'e', 't', 'e' };
+
+  b_bool = false;
+  if (a.size(1) == 8) {
+    int kstr;
+    kstr = 0;
+    int exitg1;
+    do {
+      exitg1 = 0;
+      if (kstr < 8) {
         if (a[kstr] != b_cv[kstr]) {
           exitg1 = 1;
         } else {

@@ -39,6 +39,7 @@
     <ClInclude Include="lib_mat\gsa_runGSA_types.h" />
     <ClInclude Include="lib_mat\gsa_sparse.h" />
     <ClInclude Include="lib_mat\gsa_stack1.h" />
+    <ClInclude Include="lib_mat\gsa_sum.h" />
     <ClInclude Include="lib_mat\gsa_unique.h" />
     <ClInclude Include="lib_mat\gsa_vvarstd.h" />
     <ClInclude Include="lib_mat\gsa_xgeqp3.h" />
@@ -83,7 +84,6 @@
     <ClInclude Include="lib_mat\ntf_inataf_types.h" />
     <ClInclude Include="lib_mat\ntf_LognormalDistribution.h" />
     <ClInclude Include="lib_mat\ntf_lognstat.h" />
-    <ClInclude Include="lib_mat\ntf_lower.h" />
     <ClInclude Include="lib_mat\ntf_minOrMax.h" />
     <ClInclude Include="lib_mat\ntf_mod.h" />
     <ClInclude Include="lib_mat\ntf_mod1.h" />
@@ -136,6 +136,7 @@
     <ClCompile Include="lib_mat\gsa_runGSA_initialize.cpp" />
     <ClCompile Include="lib_mat\gsa_sparse.cpp" />
     <ClCompile Include="lib_mat\gsa_stack1.cpp" />
+    <ClCompile Include="lib_mat\gsa_sum.cpp" />
     <ClCompile Include="lib_mat\gsa_unique.cpp" />
     <ClCompile Include="lib_mat\gsa_vvarstd.cpp" />
     <ClCompile Include="lib_mat\gsa_xgeqp3.cpp" />
@@ -179,7 +180,6 @@
     <ClCompile Include="lib_mat\ntf_inataf_rtwutil.cpp" />
     <ClCompile Include="lib_mat\ntf_LognormalDistribution.cpp" />
     <ClCompile Include="lib_mat\ntf_lognstat.cpp" />
-    <ClCompile Include="lib_mat\ntf_lower.cpp" />
     <ClCompile Include="lib_mat\ntf_minOrMax.cpp" />
     <ClCompile Include="lib_mat\ntf_mod.cpp" />
     <ClCompile Include="lib_mat\ntf_mod1.cpp" />

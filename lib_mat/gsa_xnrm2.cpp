@@ -5,13 +5,13 @@
 // File: gsa_xnrm2.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:48:16
+// C/C++ source code generated on  : 23-Jul-2020 01:50:34
 //
 
 // Include Files
 #include "gsa_xnrm2.h"
-#include "gsa_combineVectorElements.h"
 #include "gsa_runGSA.h"
+#include "gsa_sum.h"
 #include "rt_nonfinite.h"
 #include <cmath>
 

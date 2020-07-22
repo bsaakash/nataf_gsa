@@ -5,13 +5,13 @@
 // File: ntf_var.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 
 // Include Files
 #include "ntf_var.h"
+#include "ntf_ERADist.h"
 #include "ntf_inataf.h"
-#include "ntf_pdf.h"
 #include "rt_nonfinite.h"
 
 // Function Definitions

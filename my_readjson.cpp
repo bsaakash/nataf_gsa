@@ -17,16 +17,19 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 {
 	// === IMPORTANT* need to additionally import correlation matrix & "input option" to GUI
 	get_corr = { 1.0, 0.2, 0.2, 1.0 }; // {{row1}, {row2},...}
-	get_opts = { "DATA","DATA" }; // either "MOM" or "PAR" (later, extend to "DATA")
-	//get_opts = { "PAR","PAR" }; // either "MOM" or "PAR" (later, extend to "DATA")
-	ng = 3; // Number of outputs
+	//get_opts = { "DATA","DATA" }; // either "MOM" or "PAR" (later, extend to "DATA")
+	
+	
+	get_opts = { "PAR","PAR" }; // either "MOM" or "PAR" (later, extend to "DATA")
+	ng = 1; // Number of outputs
 	//get_corr = { 1.0, 0.2, 0.2, 0.2,   0.2, 1.0, 0.2, 0.2 ,  0.2, 0.2, 1.0, 0.2,   0.2, 0.2, 0.2, 1.0}; 
 	//get_corr = { 1.0, 0.0, 0.0, 0.0,   0.0, 1.0, 0.0, 0.0 ,  0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0 };
 	//get_opts = { "MOM","MOM","MOM","MOM" };
 
 	// === read json
 	//std::ifstream myfile("dakotaDataExact.json");
-	std::ifstream myfile("dakotaData.json");
+	//std::ifstream myfile("dakotaData.json");
+	std::ifstream myfile("dakotaDataDiscrete.json");
 	json UQjson = json::parse(myfile);
 
 	// === get variables
@@ -83,12 +86,21 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 		}
 		else
 		{ 
-			std::vector<double> vals_temp;
-			for (auto& pn : pnames)
-			{
-				vals_temp.push_back(elem[pn]); // get parameter value from dist & parameter name
+
+			
+			if (get_distnames[nrv].compare("discrete") == 0) {
+				get_vals.push_back(elem[pnames[0]]);
 			}
-			get_vals.push_back(vals_temp);		
+			else
+			{
+				std::vector<double> vals_temp;
+				for (auto& pn : pnames)
+				{
+					vals_temp.push_back(elem[pn]); // get parameter value from dist & parameter name
+				}
+				get_vals.push_back(vals_temp);	
+			}
+				
 			get_add.push_back(addDefault);
 		}
 		nrv++;
@@ -178,6 +190,9 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		}
 		else if (distname.compare("chisquare") == 0) {
 			par_char.push_back("k");
+		}
+		else if (distname.compare("discrete") == 0) {
+			par_char.push_back("pmf");
 		}
 		else {
 			// NA

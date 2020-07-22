@@ -5,7 +5,7 @@
 // File: gsa_eml_rand_mt19937ar_stateful.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 06-Jul-2020 21:48:16
+// C/C++ source code generated on  : 23-Jul-2020 01:50:34
 //
 
 // Include Files
@@ -24,15 +24,15 @@
 void gsa_eml_rand_mt19937ar_stateful()
 {
   unsigned int r;
-  std::memset(&state[0], 0, 625U * sizeof(unsigned int));
+  std::memset(&gsa_state[0], 0, 625U * sizeof(unsigned int));
   r = 5489U;
-  state[0] = 5489U;
+  gsa_state[0] = 5489U;
   for (int mti = 0; mti < 623; mti++) {
     r = ((r ^ r >> 30U) * 1812433253U + mti) + 1U;
-    state[mti + 1] = r;
+    gsa_state[mti + 1] = r;
   }
 
-  state[624] = 624U;
+  gsa_state[624] = 624U;
 }
 
 //

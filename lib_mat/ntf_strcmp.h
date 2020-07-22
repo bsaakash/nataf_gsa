@@ -5,7 +5,7 @@
 // File: ntf_strcmp.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 #ifndef NTF_STRCMP_H
 #define NTF_STRCMP_H
@@ -21,6 +21,7 @@ extern boolean_T ntf_ab_strcmp(const coder::array<char, 2U> &a, const char b[8])
 extern boolean_T ntf_b_strcmp(const coder::array<char, 2U> &a);
 extern boolean_T ntf_bb_strcmp(const coder::array<char, 2U> &a);
 extern boolean_T ntf_c_strcmp(const coder::array<char, 2U> &a);
+extern boolean_T ntf_cb_strcmp(const coder::array<char, 2U> &a);
 extern boolean_T ntf_d_strcmp(const coder::array<char, 2U> &a);
 extern boolean_T ntf_e_strcmp(const coder::array<char, 2U> &a);
 extern boolean_T ntf_f_strcmp(const coder::array<char, 2U> &a);

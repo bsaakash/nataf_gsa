@@ -5,16 +5,22 @@
 // File: ntf_sortIdx.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 16-Jul-2020 21:26:42
+// C/C++ source code generated on  : 23-Jul-2020 00:47:20
 //
 
 // Include Files
 #include "ntf_sortIdx.h"
+#include "ntf_ERADist.h"
 #include "ntf_inataf.h"
+#include "ntf_mrdivide_helper.h"
 #include "ntf_pdf.h"
+#include "ntf_sort.h"
 #include "rt_nonfinite.h"
 
 // Function Declarations
+static void ntf_b_merge(coder::array<int, 2U> &idx, coder::array<double, 2U> &x,
+  int offset, int np, int nq, coder::array<int, 1U> &iwork, coder::array<double,
+  1U> &xwork);
 static void ntf_merge(coder::array<int, 1U> &idx, coder::array<double, 1U> &x,
                       int offset, int np, int nq, coder::array<int, 1U> &iwork,
                       coder::array<double, 1U> &xwork);
@@ -23,6 +29,68 @@ static void ntf_merge_block(coder::array<int, 1U> &idx, coder::array<double, 1U>
   array<double, 1U> &xwork);
 
 // Function Definitions
+
+//
+// Arguments    : coder::array<int, 2U> &idx
+//                coder::array<double, 2U> &x
+//                int offset
+//                int np
+//                int nq
+//                coder::array<int, 1U> &iwork
+//                coder::array<double, 1U> &xwork
+// Return Type  : void
+//
+static void ntf_b_merge(coder::array<int, 2U> &idx, coder::array<double, 2U> &x,
+  int offset, int np, int nq, coder::array<int, 1U> &iwork, coder::array<double,
+  1U> &xwork)
+{
+  if (nq != 0) {
+    int n_tmp;
+    int j;
+    int p;
+    int iout;
+    int q;
+    n_tmp = np + nq;
+    for (j = 0; j < n_tmp; j++) {
+      iout = offset + j;
+      iwork[j] = idx[iout];
+      xwork[j] = x[iout];
+    }
+
+    p = 0;
+    q = np;
+    iout = offset - 1;
+    int exitg1;
+    do {
+      exitg1 = 0;
+      iout++;
+      if (xwork[p] <= xwork[q]) {
+        idx[iout] = iwork[p];
+        x[iout] = xwork[p];
+        if (p + 1 < np) {
+          p++;
+        } else {
+          exitg1 = 1;
+        }
+      } else {
+        idx[iout] = iwork[q];
+        x[iout] = xwork[q];
+        if (q + 1 < n_tmp) {
+          q++;
+        } else {
+          q = iout - p;
+          for (j = p + 1; j <= np; j++) {
+            iout = q + j;
+            idx[iout] = iwork[j - 1];
+            x[iout] = xwork[j - 1];
+          }
+
+          exitg1 = 1;
+        }
+      }
+    } while (exitg1 == 0);
+  }
+}
 
 //
 // Arguments    : coder::array<int, 1U> &idx
@@ -127,6 +195,51 @@ static void ntf_merge_block(coder::array<int, 1U> &idx, coder::array<double, 1U>
 
   if (n > bLen) {
     ntf_merge(idx, x, offset, bLen, n - bLen, iwork, xwork);
+  }
+}
+
+//
+// Arguments    : coder::array<int, 2U> *idx
+//                coder::array<double, 2U> *x
+//                int offset
+//                int n
+//                int preSortLevel
+//                coder::array<int, 1U> *iwork
+//                coder::array<double, 1U> *xwork
+// Return Type  : void
+//
+void ntf_b_merge_block(coder::array<int, 2U> &idx, coder::array<double, 2U> &x,
+  int offset, int n, int preSortLevel, coder::array<int, 1U> &iwork, coder::
+  array<double, 1U> &xwork)
+{
+  int nPairs;
+  int bLen;
+  nPairs = n >> preSortLevel;
+  bLen = 1 << preSortLevel;
+  while (nPairs > 1) {
+    int tailOffset;
+    int nTail;
+    if ((nPairs & 1) != 0) {
+      nPairs--;
+      tailOffset = bLen * nPairs;
+      nTail = n - tailOffset;
+      if (nTail > bLen) {
+        ntf_b_merge(idx, x, offset + tailOffset, bLen, nTail - bLen, iwork,
+                    xwork);
+      }
+    }
+
+    tailOffset = bLen << 1;
+    nPairs >>= 1;
+    for (nTail = 0; nTail < nPairs; nTail++) {
+      ntf_b_merge(idx, x, offset + nTail * tailOffset, bLen, bLen, iwork, xwork);
+    }
+
+    bLen = tailOffset;
+  }
+
+  if (n > bLen) {
+    ntf_b_merge(idx, x, offset, bLen, n - bLen, iwork, xwork);
   }
 }
 
