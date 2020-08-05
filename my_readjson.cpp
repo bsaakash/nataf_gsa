@@ -13,7 +13,7 @@ using json = nlohmann::json;
 void Getpnames(std::string distname, std::string optname, std::vector<std::string>& par_char);
 
 void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_vals,
-					std::vector<std::string>& get_opts, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add)
+					std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add, std::string& get_workdir)
 {
 	// === IMPORTANT* need to additionally import correlation matrix & "input option" to GUI
 	get_corr = { 1.0, 0.2, 0.2, 1.0 }; // {{row1}, {row2},...}
@@ -27,21 +27,23 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 	//get_opts = { "MOM","MOM","MOM","MOM" };
 
 	// === read json
+	std::ifstream myfile("dakota.json");
 	//std::ifstream myfile("dakotaDataExact.json");
 	//std::ifstream myfile("dakotaData.json");
-	std::ifstream myfile("dakotaDataDiscrete.json");
+	//std::ifstream myfile("dakotaDataDiscrete.json");
 	json UQjson = json::parse(myfile);
 
 	// === get variables
 	nmc = UQjson["UQ_Method"]["samplingMethodData"]["samples"];
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQ_method  = UQjson["UQ_Method"]["samplingMethodData"]["method"];
-
+	get_workdir = UQjson["workingDir"];
 	// === Specify parameters in each distributions.
 	nrv = 0;
 	for (auto& elem : UQjson["randomVariables"])
 	{
 		get_distnames.push_back(elem["distribution"]);		
+		get_rvnames.push_back(elem["name"]);
 
 		std::vector<std::string> pnames;
 		Getpnames(get_distnames[nrv], get_opts[nrv], pnames); // get parameter names from dist name
@@ -64,18 +66,11 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 			}
 			get_vals.push_back(vals_temp);
 			data_table.close();
-			//std::vector<double> add_temp;
 
 			if (get_distnames[nrv].compare("binomial") == 0) {
-				//add_temp.push_back(elem["n"]);
-				//add_temp.push_back(0.0);
-				//get_add.push_back(add_temp);
 				get_add.push_back({ elem["n"],0.0 });
 			}
 			else if (get_distnames[nrv].compare("beta") == 0) {
-				//add_temp.push_back(elem["lower"]);
-				//add_temp.push_back(elem["upper"]);
-				//get_add.push_back(add_temp);
 				get_add.push_back({ elem["lower"],elem["upper"] });
 
 			} 
@@ -89,7 +84,18 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 
 			
 			if (get_distnames[nrv].compare("discrete") == 0) {
-				get_vals.push_back(elem[pnames[0]]);
+				std::vector<double> vals_temp;
+				for (int i=0 ; i< elem[pnames[0]].size();i++)
+				{
+					vals_temp.push_back(elem[pnames[0]][i]);
+					vals_temp.push_back(elem[pnames[1]][i]);
+				}
+				get_vals.push_back(vals_temp);
+				//get_vals.push_back(elem[pnames[0]]);
+				//get_vals.push_back(elem[pnames[1]]);
+				//get_vals = elem[pnames[0]];
+				//get_vals.insert(get_vals.end(), elem[pnames[0]].begin(), elem[pnames[0]].end());
+				//get_vals.insert(get_vals.end(), elem[pnames[1]].begin(), elem[pnames[1]].end());
 			}
 			else
 			{
@@ -115,14 +121,14 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 
 	if (optname.compare("PAR") == 0) { // Get parameters
 
-		if (distname.compare("binomial") == 0) {
+		if (distname.compare("binomial") == 0) {  // Not used
 			par_char.push_back("n");
 			par_char.push_back("p");
 		}
-		else if (distname.compare("geometric") == 0) {
+		else if (distname.compare("geometric") == 0) {  // Not used
 			par_char.push_back("p");
 		}
-		else if (distname.compare("negativebinomial") == 0) {
+		else if (distname.compare("negativebinomial") == 0) {  // Not used
 			par_char.push_back("k");
 			par_char.push_back("p");
 		}
@@ -155,7 +161,7 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("lower");
 			par_char.push_back("upper");
 		}
-		else if (distname.compare("gumbelMin") == 0) {
+		else if (distname.compare("gumbelMin") == 0) {  // Not used
 			par_char.push_back("an");
 			par_char.push_back("bn");
 		}
@@ -163,7 +169,7 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("an");
 			par_char.push_back("bn");
 		}
-		else if (distname.compare("frechet") == 0) {
+		else if (distname.compare("frechet") == 0) {  // Not used
 			par_char.push_back("an");
 			par_char.push_back("k");
 		}
@@ -171,35 +177,36 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("an");
 			par_char.push_back("k");
 		}
-		else if (distname.compare("GEV") == 0) {
+		else if (distname.compare("GEV") == 0) {  
 			par_char.push_back("beta");
 			par_char.push_back("alpha");
 			par_char.push_back("epsilon");
 		}
-		else if (distname.compare("GEVMin") == 0) {
+		else if (distname.compare("GEVMin") == 0) {  // Not used
 			par_char.push_back("beta");
 			par_char.push_back("alpha");
 			par_char.push_back("epsilon");
 		}
-		else if (distname.compare("pareto") == 0) {
+		else if (distname.compare("pareto") == 0) {  // Not used
 			par_char.push_back("x_m");
 			par_char.push_back("alpha");
 		}
-		else if (distname.compare("rayleigh") == 0) {
+		else if (distname.compare("rayleigh") == 0) {  // Not used
 			par_char.push_back("alpha");
 		}
 		else if (distname.compare("chisquare") == 0) {
 			par_char.push_back("k");
 		}
-		else if (distname.compare("discrete") == 0) {
-			par_char.push_back("pmf");
+		else if (distname.compare("discrete") == 0) { 
+			par_char.push_back("Values");
+			par_char.push_back("Weights");
 		}
 		else {
 			// NA
 		}
 	} 
 	else if (optname.compare("MOM") == 0) { // Get Moments
-		if (distname.compare("geometric") == 0) {
+		if (distname.compare("geometric") == 0) {  // Not used
 			par_char.push_back("mean");
 		}
 		else if (distname.compare("poisson") == 0) {
@@ -219,12 +226,12 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("stdDev");
 			par_char.push_back("epsilon");
 		}
-		else if (distname.compare("GEVMin") == 0) {
+		else if (distname.compare("GEVMin") == 0) {  // Not used
 			par_char.push_back("mean");
 			par_char.push_back("stdDev");
 			par_char.push_back("epsilon");
 		}
-		else if (distname.compare("rayleigh") == 0) {
+		else if (distname.compare("rayleigh") == 0) {  // Not used
 			par_char.push_back("mean");
 		}
 		else if (distname.compare("chisquare") == 0) {

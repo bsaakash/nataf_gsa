@@ -37,23 +37,23 @@
     "randomVariables": [
         {
             "distribution": "Normal",
-            "mean": 205,
-            "name": "E",
+            "mean": 0.5,
+            "name": "a",
             "refCount": 1,
-            "stdDev": 15,
+            "stdDev": 0.2,
             "value": "RV.E",
             "variableClass": "Uncertain"
         },
         {
             "distribution": "Normal",
-            "mean": 25,
-            "name": "P",
+            "mean": 0.5,
+            "name": "b",
             "refCount": 0,
-            "stdDev": 3,
+            "stdDev": 0.2,
             "value": "RV.P",
             "variableClass": "Uncertain"
         }
     ],
     "remoteAppDir": "/home1/00477/tg457427/SimCenterBackendApplications/May-2020",
-    "workingDir": "/Users/fmckenna/Documents/quoFEM/LocalWorkDir"
+    "workingDir": "C:/Users/yisan/Documents/quoFEM/LocalWorkDir"
 }

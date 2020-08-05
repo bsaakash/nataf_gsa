@@ -6,15 +6,19 @@
 #include "lib_mat/ntf_strcmp.h"
 #include "lib_mat/rt_nonfinite.h"
 #include <iostream>
+#include <fstream>
 #include <cmath>
+#include <filesystem>
+
 
 using std::vector;
+using std::string;
 
+vector<vector<double>> runApps(int nmc, int nrv, int ng, vector<vector<double>> x, vector<std::string> get_rvnames, std::string get_workdir);
 
-vector<double> FEM_analysis(int nrv, vector<double> x);
-
-void nataf_transf(int nmc, int nrv, vector<std::string> &get_distnames, vector<std::string> &get_opts,
-					vector<vector<double>> &get_vals, vector<double> &get_corr, vector<vector<double>> &get_add, coder::array<double, 2U> &u_temp,
+void nataf_transf(int nmc, int nrv, int ng, vector<string> &get_distnames, vector<string> &get_opts,
+					vector<vector<double>> &get_vals, vector<string>& get_rvnames, vector<double> &get_corr, 
+					vector<vector<double>> &get_add, string & get_workdir, coder::array<double, 2U> &u_temp,
 					vector<vector<double>> &x_val, vector<double> &px_val, vector<vector<double>> &g_val)
 {
 
@@ -43,13 +47,6 @@ void nataf_transf(int nmc, int nrv, vector<std::string> &get_distnames, vector<s
 		}
 
 	}
-	
-	//coder::array<double, 2U> u = u_temp;
-	//coder::array<ntf_cell_wrap_0, 2U> distnames = distnames_temp;
-	//coder::array<ntf_cell_wrap_0, 2U> opts = opts_temp;
-	//coder::array<ntf_cell_wrap_1, 2U> vals = vals_temp;
-	//coder::array<double, 2U> corrs = corrs_temp;
-	//coder::array<ntf_cell_wrap_1, 2U> add = add_temp;
 
 	coder::array<double, 2U> x;
 	coder::array<double, 1U> px;
@@ -72,41 +69,93 @@ void nataf_transf(int nmc, int nrv, vector<std::string> &get_distnames, vector<s
 		x_val.push_back(x_temp);
 	}
 
-	// Run FEM simulations
-
-	vector<double> FEM_val;
-	for (int i = 0; i < nmc; i++)
-	{
-		FEM_val = FEM_analysis(nrv, x_val[i]);
-		g_val.push_back(FEM_val); 
-	}
+	// Run FEM and other simulations
+	g_val = runApps(nmc, nrv, ng, x_val, get_rvnames, get_workdir );
+	
 }
 
 
-vector<double>  FEM_analysis(int nrv, vector<double> x)
+vector<vector<double>> runApps(int nmc, int nrv, int ng, vector<vector<double>> x, vector<std::string> get_rvnames, std::string get_workdir)
 {
+	vector<vector<double>> g_val;
 	
-	double sum = 0;
-	for (double x_elem : x)
+
+	for (int i = 0; i < nmc; i++)
 	{
-		sum += (abs(x_elem));
+
+		//
+		// (1) create "workdir.i " folder :need C++17 to use the filesystem namespace 
+		//
+		
+		string workDir = get_workdir + "/tmp.SimCenter/workdir." + std::to_string(i+1);
+		//std::filesystem::remove(workDir);
+		std::filesystem::create_directory(workDir);
+		std::filesystem::current_path(workDir);
+
+		//
+		// (2) copy files from templatedir to workdir.i
+		//
+
+		const auto copyOptions = std::filesystem::copy_options::overwrite_existing;
+		std::filesystem::copy(get_workdir + "/tmp.SimCenter/templateDir", workDir, copyOptions);
+
+		//
+		// (3) write param.in file
+		//
+
+		string params = workDir + "/params.in";
+		std::ofstream writeFile(params.data());
+		if (writeFile.is_open()) {
+			writeFile << std::to_string(nrv)+ "\n";
+			for (int j = 0; j < nrv; j++) {
+				writeFile << get_rvnames[j] + " ";
+				writeFile << std::to_string(x[i][j]) + "\n";
+			}
+			writeFile.close();
+		}
+
+		//
+		// (4) run workflow_driver.bat(e.g. It will make "SimCenterInput.tcl" and run OpenSees)
+		//
+
+		string workflowDriver_string = workDir + "/workflow_driver.bat";
+		const char* workflowDriver_char = workflowDriver_string.c_str();
+		system(workflowDriver_char);
+
+		//
+		// (5) get the values in "results.out"
+		//
+
+		string results = workDir + "/results.out";
+		std::ifstream readFile(results.data());
+		vector<double> g_tmp(ng);
+		if (readFile.is_open()) {
+			int j = 0;
+			double g;
+			while (readFile >> g) {
+				g_tmp[j] = g;
+				j++;
+			}
+			readFile.close();
+		}
+
+		g_val.push_back(g_tmp);
+
 	}
+	
+	return g_val;
 
-	//double sum2 = 0;
+
+
+
+
+	//double sum = 0;
 	//for (double x_elem : x)
 	//{
-	//	sum2 += (sqrt(abs(x_elem)));
+	//	sum += (abs(x_elem));
 	//}
 
-	//double sum3 = 0;
-	//for (double x_elem : x)
-	//{
-	//	sum3 += sqrt(sqrt(abs(x_elem)));
-	//}
-	vector<double> response;
-	response.push_back(sum);
-	//response.push_back(sum2);
-	//response.push_back(sum3);
+	//vector<double> response;
+	//response.push_back(sum);
 
-	return response;
 }

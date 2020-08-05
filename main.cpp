@@ -12,11 +12,11 @@ int main()
 {
 	// (1) Read JSON file 
 	int nmc, nrv, ng, rseed;
-	std::string UQ_method;
+	std::string UQ_method, get_workdir;
 	vector<double> get_corr;	
-	vector<std::string> get_distnames, get_opts;	
+	vector<std::string> get_distnames, get_opts, get_rvnames;	
 	vector<vector<double>> get_pars, get_add;
-	readjson(nmc, nrv, ng, rseed, UQ_method, get_distnames, get_pars, get_opts, get_corr, get_add); 
+	readjson(nmc, nrv, ng, rseed, UQ_method, get_distnames, get_pars, get_opts, get_rvnames, get_corr, get_add, get_workdir);
 
 	// Random sampler: standard gaussian -> Later change into LHS
 	coder::array<double, 2U> u_temp;
@@ -32,7 +32,7 @@ int main()
 	// (2) Nataf transform + FEM simulation <- *********** need to be connected to other FEM softwares
 	vector<double> px;
 	vector<vector<double>> x, g;
-	nataf_transf(nmc, nrv, get_distnames, get_opts, get_pars, get_corr, get_add, u_temp, x, px, g); // NEED ERROR CHECK
+	nataf_transf(nmc, nrv, ng, get_distnames, get_opts, get_pars, get_rvnames, get_corr, get_add, get_workdir, u_temp, x, px, g); // NEED ERROR CHECK
 	
 
 
