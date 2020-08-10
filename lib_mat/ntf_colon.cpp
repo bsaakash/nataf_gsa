@@ -5,7 +5,7 @@
 // File: ntf_colon.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 
 // Include Files
@@ -27,11 +27,17 @@ void ntf_eml_float_colon(double b, coder::array<double, 2U> &y)
   double ndbl;
   double apnd;
   double cdiff;
+  double u1;
   int n;
   ndbl = std::floor((b - 0.5) + 0.5);
   apnd = ndbl + 0.5;
   cdiff = (ndbl + 0.5) - b;
-  if (std::abs(cdiff) < 4.4408920985006262E-16 * std::abs(b)) {
+  u1 = std::abs(b);
+  if ((0.5 > u1) || rtIsNaN(u1)) {
+    u1 = 0.5;
+  }
+
+  if (std::abs(cdiff) < 4.4408920985006262E-16 * u1) {
     ndbl++;
     apnd = b;
   } else if (cdiff > 0.0) {

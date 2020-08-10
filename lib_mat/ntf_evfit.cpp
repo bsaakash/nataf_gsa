@@ -5,7 +5,7 @@
 // File: ntf_evfit.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 
 // Include Files
@@ -196,7 +196,7 @@ void ntf_evfit(const coder::array<double, 1U> &x, double parmhat[2])
 
     lower[0] = sigmahat;
     lower[1] = upper;
-    ntf_e_fzero(lower, x0, wgtmeanUnc, &sigmahat, &tempMin, &y);
+    ntf_c_fzero(lower, x0, wgtmeanUnc, &sigmahat, &tempMin, &y);
     tempMin = std::abs(tempMin);
     if ((!rtIsInf(tempMin)) && (!rtIsNaN(tempMin)) && (!(tempMin <=
           2.2250738585072014E-308))) {

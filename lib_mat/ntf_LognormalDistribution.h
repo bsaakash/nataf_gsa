@@ -5,7 +5,7 @@
 // File: ntf_LognormalDistribution.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 #ifndef NTF_LOGNORMALDISTRIBUTION_H
 #define NTF_LOGNORMALDISTRIBUTION_H

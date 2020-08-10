@@ -5,7 +5,7 @@
 // File: ntf_inataf_data.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 
 // Include Files
@@ -36,9 +36,7 @@ const char ntf_cv4[16] = { 'n', 'e', 'g', 'a', 't', 'i', 'v', 'e', 'b', 'i', 'n'
 const char ntf_cv5[11] = { 'e', 'x', 'p', 'o', 'n', 'e', 'n', 't', 'i', 'a', 'l'
 };
 
-const char ntf_cv6[9] = { 'g', 'u', 'm', 'b', 'e', 'l', 'm', 'i', 'n' };
-
-const char ntf_cv7[9] = { 'l', 'o', 'g', 'n', 'o', 'r', 'm', 'a', 'l' };
+const char ntf_cv6[9] = { 'l', 'o', 'g', 'n', 'o', 'r', 'm', 'a', 'l' };
 
 const double ntf_dv[31] = { 0.0, 0.15342640972002736, 0.081061466795327261,
   0.054814121051917651, 0.0413406959554093, 0.033162873519936291,

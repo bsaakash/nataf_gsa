@@ -5,7 +5,7 @@
 // File: ntf_inataf_types.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 #ifndef NTF_INATAF_TYPES_H
 #define NTF_INATAF_TYPES_H
@@ -35,17 +35,19 @@ class ntf_ERADist
 {
  public:
   void ntf_init(const coder::array<char, 2U> &name, const coder::array<char, 2U>
-                &opt, const coder::array<double, 2U> &val_temp, const coder::
-                array<double, 2U> &add);
+                &opt, coder::array<double, 2U> &val_temp, const coder::array<
+                double, 2U> &add);
+  void ntf_fb_pdf(const double x[1000], double PDF[1000]) const;
   static double ntf___anon_fcn(const coder::array<double, 1U> &val, const double
     b[3]);
-  void ntf_gb_icdf(const double p[1048576], double InverseCDF[1048576]) const;
-  void ntf_gb_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U>
+  void ntf_gb_pdf(const double x[5000], double PDF[5000]) const;
+  void ntf_cb_icdf(const double p[1048576], double InverseCDF[1048576]) const;
+  void ntf_cb_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U>
                    &InverseCDF) const;
-  void ntf_q_cdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
+  void ntf_o_cdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
                  &CDF) const;
-  void ntf_q_pdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
-                 &PDF) const;
+  void ntf_fb_pdf(const coder::array<double, 1U> &x, coder::array<double, 1U>
+                  &PDF) const;
   coder::array<char, 2U> Name;
   double Par[4];
   double mean;
@@ -63,8 +65,8 @@ class ntf_ERANataf
     double j, double rho0);
   void ntf_U2X(const coder::array<double, 2U> &U, coder::array<double, 2U> &X)
     const;
-  void ntf_q_pdf(const coder::array<double, 2U> &X, coder::array<double, 1U>
-                 &jointpdf) const;
+  void ntf_fb_pdf(const coder::array<double, 2U> &X, coder::array<double, 1U>
+                  &jointpdf) const;
  private:
   static void ntf_quad_GL(double x[1024], double w[1024]);
  public:
@@ -77,19 +79,19 @@ class ntf_ERANataf
 class ntf_b_coder_internal_anonymous_
 {
  public:
-  ntf_cell_wrap_16 tunableEnvironment[2];
+  ntf_cell_wrap_16 tunableEnvironment[1];
 };
 
 class ntf_c_coder_internal_anonymous_
 {
  public:
-  ntf_cell_wrap_16 tunableEnvironment[1];
+  ntf_cell_wrap_3 tunableEnvironment[1];
 };
 
 class ntf_coder_internal_anonymous_fu
 {
  public:
-  ntf_cell_wrap_3 tunableEnvironment[1];
+  ntf_cell_wrap_16 tunableEnvironment[2];
 };
 
 struct ntf_cell_23
@@ -162,14 +164,14 @@ class ntf_prob_coder_WeibullDistribut
   double ParameterValues[2];
 };
 
-struct ntf_cell_wrap_1
-{
-  coder::array<double, 2U> f1;
-};
-
 struct ntf_cell_wrap_0
 {
   coder::array<char, 2U> f1;
+};
+
+struct ntf_cell_wrap_1
+{
+  coder::array<double, 2U> f1;
 };
 
 #ifdef _MSC_VER

@@ -5,7 +5,7 @@
 // File: ntf_icdf.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 
 // Include Files
@@ -30,24 +30,21 @@
 //
 // Arguments    : const coder::array<double, 2U> *p
 //                double varargin_1
+//                double varargin_2
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_ab_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
-                 array<double, 2U> &x)
+void ntf_ab_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+                 varargin_2, coder::array<double, 2U> &x)
 {
   int i;
   x.set_size(1, p.size(1));
   i = p.size(1);
   for (int k = 0; k < i; k++) {
-    if ((varargin_1 > 0.0) && (0.0 <= p[k]) && (p[k] <= 1.0)) {
-      if (p[k] == 0.0) {
-        x[k] = 0.0;
-      } else if (p[k] == 1.0) {
-        x[k] = rtInf;
-      } else {
-        x[k] = std::sqrt(-2.0 * (varargin_1 * varargin_1) * std::log(1.0 - p[k]));
-      }
+    if ((varargin_2 > 0.0) && (p[k] >= 0.0) && (p[k] <= 1.0)) {
+      double zk;
+      zk = -1.4142135623730951 * ntf_erfcinv(2.0 * p[k]);
+      x[k] = varargin_2 * zk + varargin_1;
     } else {
       x[k] = rtNaN;
     }
@@ -91,34 +88,21 @@ void ntf_b_icdf(const double p[1048576], double varargin_1, double varargin_2,
 //
 // Arguments    : const coder::array<double, 2U> *p
 //                double varargin_1
+//                double varargin_2
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_bb_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
-                 array<double, 2U> &x)
+void ntf_bb_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+                 varargin_2, coder::array<double, 2U> &x)
 {
   int i;
-  double d;
-  double d1;
   x.set_size(1, p.size(1));
   i = p.size(1);
   for (int k = 0; k < i; k++) {
-    if ((0.0 <= varargin_1) && (!rtIsInf(varargin_1)) && (p[k] >= 0.0) && (p[k] <=
-         1.0)) {
-      if ((p[k] > 0.0) && (p[k] < 1.0) && (varargin_1 > 0.0)) {
-        d = varargin_1;
-        ntf_gammaln(&d);
-        d1 = varargin_1 + 1.0;
-        ntf_gammaln(&d1);
-        x[k] = ntf_eml_gammaincinv(p[k], varargin_1, std::log(varargin_1), d, d1)
-          * 2.0;
-      } else if ((varargin_1 == 0.0) || (p[k] == 0.0)) {
-        x[k] = 0.0;
-      } else if (p[k] == 1.0) {
-        x[k] = rtInf;
-      } else {
-        x[k] = rtNaN;
-      }
+    if ((varargin_2 > 0.0) && (p[k] >= 0.0) && (p[k] <= 1.0)) {
+      double logx0;
+      logx0 = -1.4142135623730951 * ntf_erfcinv(2.0 * p[k]);
+      x[k] = std::exp(varargin_2 * logx0 + varargin_1);
     } else {
       x[k] = rtNaN;
     }
@@ -205,28 +189,6 @@ void ntf_c_icdf(const double p[1048576], double varargin_1, double x[1048576])
 }
 
 //
-// Arguments    : const coder::array<double, 2U> *p
-//                double varargin_1
-//                double varargin_2
-//                coder::array<double, 2U> *x
-// Return Type  : void
-//
-void ntf_cb_icdf(const coder::array<double, 2U> &p, double varargin_1, double
-                 varargin_2, coder::array<double, 2U> &x)
-{
-  int i;
-  x.set_size(1, p.size(1));
-  i = p.size(1);
-  for (int k = 0; k < i; k++) {
-    if ((varargin_1 < varargin_2) && (0.0 <= p[k]) && (p[k] <= 1.0)) {
-      x[k] = varargin_1 + p[k] * (varargin_2 - varargin_1);
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
 // Arguments    : const double p[1048576]
 //                double varargin_1
 //                double x[1048576]
@@ -245,27 +207,6 @@ void ntf_d_icdf(const double p[1048576], double varargin_1, double x[1048576])
       } else {
         x[k] = 0.0;
       }
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const coder::array<double, 2U> *p
-//                coder::array<double, 2U> *x
-// Return Type  : void
-//
-void ntf_db_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U> &x)
-{
-  int i;
-  x.set_size(1, p.size(1));
-  i = p.size(1);
-  for (int k = 0; k < i; k++) {
-    double d;
-    d = p[k];
-    if ((d >= 0.0) && (d <= 1.0)) {
-      x[k] = -1.4142135623730951 * ntf_erfcinv(2.0 * d);
     } else {
       x[k] = rtNaN;
     }
@@ -308,30 +249,6 @@ void ntf_e_icdf(const double p[1048576], double varargin_1, double varargin_2,
 }
 
 //
-// Arguments    : const coder::array<double, 2U> *p
-//                double varargin_1
-//                double varargin_2
-//                coder::array<double, 2U> *x
-// Return Type  : void
-//
-void ntf_eb_icdf(const coder::array<double, 2U> &p, double varargin_1, double
-                 varargin_2, coder::array<double, 2U> &x)
-{
-  int i;
-  x.set_size(1, p.size(1));
-  i = p.size(1);
-  for (int k = 0; k < i; k++) {
-    if ((varargin_2 > 0.0) && (p[k] >= 0.0) && (p[k] <= 1.0)) {
-      double zk;
-      zk = -1.4142135623730951 * ntf_erfcinv(2.0 * p[k]);
-      x[k] = varargin_2 * zk + varargin_1;
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
 // Arguments    : const double p[1048576]
 //                double varargin_1
 //                double varargin_2
@@ -361,61 +278,6 @@ void ntf_f_icdf(const double p[1048576], double varargin_1, double varargin_2,
 }
 
 //
-// Arguments    : const coder::array<double, 2U> *p
-//                double varargin_1
-//                double varargin_2
-//                coder::array<double, 2U> *x
-// Return Type  : void
-//
-void ntf_fb_icdf(const coder::array<double, 2U> &p, double varargin_1, double
-                 varargin_2, coder::array<double, 2U> &x)
-{
-  int i;
-  x.set_size(1, p.size(1));
-  i = p.size(1);
-  for (int k = 0; k < i; k++) {
-    if ((varargin_2 > 0.0) && (p[k] >= 0.0) && (p[k] <= 1.0)) {
-      double logx0;
-      logx0 = -1.4142135623730951 * ntf_erfcinv(2.0 * p[k]);
-      x[k] = std::exp(varargin_2 * logx0 + varargin_1);
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const double p[1048576]
-//                double varargin_1
-//                double varargin_2
-//                double x[1048576]
-// Return Type  : void
-//
-void ntf_g_icdf(const double p[1048576], double varargin_1, double varargin_2,
-                double x[1048576])
-{
-  for (int k = 0; k < 1048576; k++) {
-    if ((varargin_2 > 0.0) && (p[k] >= 0.0) && (p[k] <= 1.0)) {
-      double q;
-      if (p[k] > 0.0) {
-        q = std::log(1.0 - p[k]);
-        if (-q > 0.0) {
-          q = std::log(-q);
-        } else {
-          q = rtInf;
-        }
-      } else {
-        q = rtMinusInf;
-      }
-
-      x[k] = varargin_2 * q + varargin_1;
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
 // Arguments    : const double p[1048576]
 //                double varargin_1
 //                double varargin_2
@@ -423,7 +285,7 @@ void ntf_g_icdf(const double p[1048576], double varargin_1, double varargin_2,
 //                double x[1048576]
 // Return Type  : void
 //
-void ntf_h_icdf(const double p[1048576], double varargin_1, double varargin_2,
+void ntf_g_icdf(const double p[1048576], double varargin_1, double varargin_2,
                 double varargin_3, double x[1048576])
 {
   double d;
@@ -466,7 +328,7 @@ void ntf_h_icdf(const double p[1048576], double varargin_1, double varargin_2,
 //                double x[1048576]
 // Return Type  : void
 //
-void ntf_i_icdf(const double p[1048576], double varargin_1, double varargin_2,
+void ntf_h_icdf(const double p[1048576], double varargin_1, double varargin_2,
                 double x[1048576])
 {
   for (int k = 0; k < 1048576; k++) {
@@ -479,6 +341,29 @@ void ntf_i_icdf(const double p[1048576], double varargin_1, double varargin_2,
       } else {
         x[k] = varargin_1 * ntf_rt_powd_snf(-std::log(1.0 - p[k]), 1.0 /
           varargin_2);
+      }
+    } else {
+      x[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const double p[1048576]
+//                double varargin_1
+//                double x[1048576]
+// Return Type  : void
+//
+void ntf_i_icdf(const double p[1048576], double varargin_1, double x[1048576])
+{
+  for (int k = 0; k < 1048576; k++) {
+    if ((varargin_1 > 0.0) && (0.0 <= p[k]) && (p[k] <= 1.0)) {
+      if (p[k] == 0.0) {
+        x[k] = 0.0;
+      } else if (p[k] == 1.0) {
+        x[k] = rtInf;
+      } else {
+        x[k] = std::sqrt(-2.0 * (varargin_1 * varargin_1) * std::log(1.0 - p[k]));
       }
     } else {
       x[k] = rtNaN;
@@ -530,92 +415,10 @@ void ntf_icdf(const double p[1048576], double varargin_1, double varargin_2,
 // Arguments    : const double p[1048576]
 //                double varargin_1
 //                double varargin_2
-//                double varargin_3
 //                double x[1048576]
 // Return Type  : void
 //
 void ntf_j_icdf(const double p[1048576], double varargin_1, double varargin_2,
-                double varargin_3, double x[1048576])
-{
-  double b_x;
-  for (int j = 0; j < 1048576; j++) {
-    if ((varargin_2 > 0.0) && (0.0 <= p[j]) && (p[j] <= 1.0)) {
-      if (p[j] == 0.0) {
-        x[j] = varargin_3;
-      } else if (p[j] == 1.0) {
-        if (varargin_1 < 0.0) {
-          x[j] = varargin_3 - varargin_2 / varargin_1;
-        } else {
-          x[j] = varargin_3 + rtInf;
-        }
-      } else if (std::abs(varargin_1) < 2.2204460492503131E-16) {
-        double absz;
-        b_x = -p[j];
-        absz = std::abs(-p[j]);
-        if ((absz > 4.503599627370496E+15) || (rtIsInf(-p[j]) || rtIsNaN(-p[j])))
-        {
-          b_x = std::log(-p[j] + 1.0);
-        } else {
-          if (!(absz < 2.2204460492503131E-16)) {
-            b_x = std::log(-p[j] + 1.0) * (-p[j] / ((-p[j] + 1.0) - 1.0));
-          }
-        }
-
-        x[j] = varargin_3 - varargin_2 * b_x;
-      } else {
-        double absz;
-        b_x = -p[j];
-        absz = std::abs(-p[j]);
-        if ((absz > 4.503599627370496E+15) || (rtIsInf(-p[j]) || rtIsNaN(-p[j])))
-        {
-          b_x = std::log(-p[j] + 1.0);
-        } else {
-          if (!(absz < 2.2204460492503131E-16)) {
-            b_x = std::log(-p[j] + 1.0) * (-p[j] / ((-p[j] + 1.0) - 1.0));
-          }
-        }
-
-        b_x *= -varargin_1;
-        ntf_expm1(&b_x);
-        x[j] = varargin_3 + varargin_2 * b_x / varargin_1;
-      }
-    } else {
-      x[j] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const double p[1048576]
-//                double varargin_1
-//                double x[1048576]
-// Return Type  : void
-//
-void ntf_k_icdf(const double p[1048576], double varargin_1, double x[1048576])
-{
-  for (int k = 0; k < 1048576; k++) {
-    if ((varargin_1 > 0.0) && (0.0 <= p[k]) && (p[k] <= 1.0)) {
-      if (p[k] == 0.0) {
-        x[k] = 0.0;
-      } else if (p[k] == 1.0) {
-        x[k] = rtInf;
-      } else {
-        x[k] = std::sqrt(-2.0 * (varargin_1 * varargin_1) * std::log(1.0 - p[k]));
-      }
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const double p[1048576]
-//                double varargin_1
-//                double varargin_2
-//                double x[1048576]
-// Return Type  : void
-//
-void ntf_l_icdf(const double p[1048576], double varargin_1, double varargin_2,
                 double x[1048576])
 {
   for (int k = 0; k < 1048576; k++) {
@@ -636,7 +439,7 @@ void ntf_l_icdf(const double p[1048576], double varargin_1, double varargin_2,
 //                double x[1048576]
 // Return Type  : void
 //
-void ntf_m_icdf(const double p[1048576], double varargin_1, double varargin_2,
+void ntf_k_icdf(const double p[1048576], double varargin_1, double varargin_2,
                 double x[1048576])
 {
   for (int k = 0; k < 1048576; k++) {
@@ -657,7 +460,7 @@ void ntf_m_icdf(const double p[1048576], double varargin_1, double varargin_2,
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_n_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+void ntf_l_icdf(const coder::array<double, 2U> &p, double varargin_1, double
                 varargin_2, coder::array<double, 2U> &x)
 {
   int i;
@@ -703,7 +506,7 @@ void ntf_n_icdf(const coder::array<double, 2U> &p, double varargin_1, double
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_o_icdf(const coder::array<double, 2U> &p, double varargin_2, coder::
+void ntf_m_icdf(const coder::array<double, 2U> &p, double varargin_2, coder::
                 array<double, 2U> &x)
 {
   int i;
@@ -712,32 +515,20 @@ void ntf_o_icdf(const coder::array<double, 2U> &p, double varargin_2, coder::
   i = p.size(1);
   for (int k = 0; k < i; k++) {
     if ((0.0 < varargin_2) && (varargin_2 <= 1.0)) {
-      cumdist = p[k];
-      if ((0.0 <= cumdist) && (cumdist <= 1.0)) {
-        if (cumdist == 1.0) {
+      double count;
+      count = p[k];
+      if ((0.0 <= count) && (count <= 1.0)) {
+        if (count == 1.0) {
           x[k] = rtInf;
-        } else if (cumdist == 0.0) {
+        } else if (count == 0.0) {
           x[k] = 0.0;
         } else {
-          double count;
           x[k] = 0.0;
           count = 0.0;
-          if (varargin_2 < 1.0) {
-            cumdist = -varargin_2;
-            if (!(std::abs(-varargin_2) < 2.2204460492503131E-16)) {
-              cumdist = std::log(-varargin_2 + 1.0) * (-varargin_2 /
-                ((-varargin_2 + 1.0) - 1.0));
-            }
-
-            cumdist = std::exp(std::log(varargin_2) + 0.0 * cumdist);
-          } else {
-            cumdist = 1.0;
-          }
-
-          while (cumdist < p[k]) {
+          for (cumdist = ntf_nbinpdf(1.0, varargin_2); cumdist < p[k]; cumdist +=
+               ntf_b_nbinpdf(count, 1.0, varargin_2)) {
             x[k] = x[k] + 1.0;
             count++;
-            cumdist += ntf_b_nbinpdf(count, 1.0, varargin_2);
           }
         }
       } else {
@@ -756,7 +547,7 @@ void ntf_o_icdf(const coder::array<double, 2U> &p, double varargin_2, coder::
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_p_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+void ntf_n_icdf(const coder::array<double, 2U> &p, double varargin_1, double
                 varargin_2, coder::array<double, 2U> &x)
 {
   int i;
@@ -797,7 +588,7 @@ void ntf_p_icdf(const coder::array<double, 2U> &p, double varargin_1, double
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_q_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
+void ntf_o_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
                 array<double, 2U> &x)
 {
   int i;
@@ -880,7 +671,7 @@ void ntf_q_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_r_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
+void ntf_p_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
                 array<double, 2U> &x)
 {
   int i;
@@ -910,7 +701,7 @@ void ntf_r_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_s_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+void ntf_q_icdf(const coder::array<double, 2U> &p, double varargin_1, double
                 varargin_2, coder::array<double, 2U> &x)
 {
   int i;
@@ -948,7 +739,7 @@ void ntf_s_icdf(const coder::array<double, 2U> &p, double varargin_1, double
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_t_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+void ntf_r_icdf(const coder::array<double, 2U> &p, double varargin_1, double
                 varargin_2, coder::array<double, 2U> &x)
 {
   int i;
@@ -975,46 +766,12 @@ void ntf_t_icdf(const coder::array<double, 2U> &p, double varargin_1, double
 
 //
 // Arguments    : const coder::array<double, 2U> *p
-//                double varargin_1
-//                double varargin_2
-//                coder::array<double, 2U> *x
-// Return Type  : void
-//
-void ntf_u_icdf(const coder::array<double, 2U> &p, double varargin_1, double
-                varargin_2, coder::array<double, 2U> &x)
-{
-  int i;
-  x.set_size(1, p.size(1));
-  i = p.size(1);
-  for (int k = 0; k < i; k++) {
-    if ((varargin_2 > 0.0) && (p[k] >= 0.0) && (p[k] <= 1.0)) {
-      double q;
-      if (p[k] > 0.0) {
-        q = std::log(1.0 - p[k]);
-        if (-q > 0.0) {
-          q = std::log(-q);
-        } else {
-          q = rtInf;
-        }
-      } else {
-        q = rtMinusInf;
-      }
-
-      x[k] = varargin_2 * q + varargin_1;
-    } else {
-      x[k] = rtNaN;
-    }
-  }
-}
-
-//
-// Arguments    : const coder::array<double, 2U> *p
 //                double varargin_2
 //                double varargin_3
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_v_icdf(const coder::array<double, 2U> &p, double varargin_2, double
+void ntf_s_icdf(const coder::array<double, 2U> &p, double varargin_2, double
                 varargin_3, coder::array<double, 2U> &x)
 {
   int i;
@@ -1039,11 +796,41 @@ void ntf_v_icdf(const coder::array<double, 2U> &p, double varargin_2, double
 // Arguments    : const coder::array<double, 2U> *p
 //                double varargin_1
 //                double varargin_2
+//                coder::array<double, 2U> *x
+// Return Type  : void
+//
+void ntf_t_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+                varargin_2, coder::array<double, 2U> &x)
+{
+  int i;
+  x.set_size(1, p.size(1));
+  i = p.size(1);
+  for (int k = 0; k < i; k++) {
+    if ((varargin_1 > 0.0) && (varargin_2 > 0.0) && (0.0 <= p[k]) && (p[k] <=
+         1.0)) {
+      if (p[k] == 0.0) {
+        x[k] = 0.0;
+      } else if (p[k] == 1.0) {
+        x[k] = rtInf;
+      } else {
+        x[k] = varargin_1 * ntf_rt_powd_snf(-std::log(1.0 - p[k]), 1.0 /
+          varargin_2);
+      }
+    } else {
+      x[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const coder::array<double, 2U> *p
+//                double varargin_1
+//                double varargin_2
 //                double varargin_3
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_w_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+void ntf_u_icdf(const coder::array<double, 2U> &p, double varargin_1, double
                 varargin_2, double varargin_3, coder::array<double, 2U> &x)
 {
   int i;
@@ -1085,26 +872,60 @@ void ntf_w_icdf(const coder::array<double, 2U> &p, double varargin_1, double
 //
 // Arguments    : const coder::array<double, 2U> *p
 //                double varargin_1
-//                double varargin_2
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_x_icdf(const coder::array<double, 2U> &p, double varargin_1, double
-                varargin_2, coder::array<double, 2U> &x)
+void ntf_v_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
+                array<double, 2U> &x)
 {
   int i;
   x.set_size(1, p.size(1));
   i = p.size(1);
   for (int k = 0; k < i; k++) {
-    if ((varargin_1 > 0.0) && (varargin_2 > 0.0) && (0.0 <= p[k]) && (p[k] <=
-         1.0)) {
+    if ((varargin_1 > 0.0) && (0.0 <= p[k]) && (p[k] <= 1.0)) {
       if (p[k] == 0.0) {
         x[k] = 0.0;
       } else if (p[k] == 1.0) {
         x[k] = rtInf;
       } else {
-        x[k] = varargin_1 * ntf_rt_powd_snf(-std::log(1.0 - p[k]), 1.0 /
-          varargin_2);
+        x[k] = std::sqrt(-2.0 * (varargin_1 * varargin_1) * std::log(1.0 - p[k]));
+      }
+    } else {
+      x[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const coder::array<double, 2U> *p
+//                double varargin_1
+//                coder::array<double, 2U> *x
+// Return Type  : void
+//
+void ntf_w_icdf(const coder::array<double, 2U> &p, double varargin_1, coder::
+                array<double, 2U> &x)
+{
+  int i;
+  double d;
+  double d1;
+  x.set_size(1, p.size(1));
+  i = p.size(1);
+  for (int k = 0; k < i; k++) {
+    if ((0.0 <= varargin_1) && (!rtIsInf(varargin_1)) && (p[k] >= 0.0) && (p[k] <=
+         1.0)) {
+      if ((p[k] > 0.0) && (p[k] < 1.0) && (varargin_1 > 0.0)) {
+        d = varargin_1;
+        ntf_gammaln(&d);
+        d1 = varargin_1 + 1.0;
+        ntf_gammaln(&d1);
+        x[k] = ntf_eml_gammaincinv(p[k], varargin_1, std::log(varargin_1), d, d1)
+          * 2.0;
+      } else if ((varargin_1 == 0.0) || (p[k] == 0.0)) {
+        x[k] = 0.0;
+      } else if (p[k] == 1.0) {
+        x[k] = rtInf;
+      } else {
+        x[k] = rtNaN;
       }
     } else {
       x[k] = rtNaN;
@@ -1116,60 +937,41 @@ void ntf_x_icdf(const coder::array<double, 2U> &p, double varargin_1, double
 // Arguments    : const coder::array<double, 2U> *p
 //                double varargin_1
 //                double varargin_2
-//                double varargin_3
 //                coder::array<double, 2U> *x
 // Return Type  : void
 //
-void ntf_y_icdf(const coder::array<double, 2U> &p, double varargin_1, double
-                varargin_2, double varargin_3, coder::array<double, 2U> &x)
+void ntf_x_icdf(const coder::array<double, 2U> &p, double varargin_1, double
+                varargin_2, coder::array<double, 2U> &x)
 {
   int i;
-  double b_x;
   x.set_size(1, p.size(1));
   i = p.size(1);
-  for (int j = 0; j < i; j++) {
-    if ((varargin_2 > 0.0) && (0.0 <= p[j]) && (p[j] <= 1.0)) {
-      if (p[j] == 0.0) {
-        x[j] = varargin_3;
-      } else if (p[j] == 1.0) {
-        if (varargin_1 < 0.0) {
-          x[j] = varargin_3 - varargin_2 / varargin_1;
-        } else {
-          x[j] = varargin_3 + rtInf;
-        }
-      } else if (std::abs(varargin_1) < 2.2204460492503131E-16) {
-        double absz;
-        b_x = -p[j];
-        absz = std::abs(-p[j]);
-        if ((absz > 4.503599627370496E+15) || (rtIsInf(-p[j]) || rtIsNaN(-p[j])))
-        {
-          b_x = std::log(-p[j] + 1.0);
-        } else {
-          if (!(absz < 2.2204460492503131E-16)) {
-            b_x = std::log(-p[j] + 1.0) * (-p[j] / ((-p[j] + 1.0) - 1.0));
-          }
-        }
-
-        x[j] = varargin_3 - varargin_2 * b_x;
-      } else {
-        double absz;
-        b_x = -p[j];
-        absz = std::abs(-p[j]);
-        if ((absz > 4.503599627370496E+15) || (rtIsInf(-p[j]) || rtIsNaN(-p[j])))
-        {
-          b_x = std::log(-p[j] + 1.0);
-        } else {
-          if (!(absz < 2.2204460492503131E-16)) {
-            b_x = std::log(-p[j] + 1.0) * (-p[j] / ((-p[j] + 1.0) - 1.0));
-          }
-        }
-
-        b_x *= -varargin_1;
-        ntf_expm1(&b_x);
-        x[j] = varargin_3 + varargin_2 * b_x / varargin_1;
-      }
+  for (int k = 0; k < i; k++) {
+    if ((varargin_1 < varargin_2) && (0.0 <= p[k]) && (p[k] <= 1.0)) {
+      x[k] = varargin_1 + p[k] * (varargin_2 - varargin_1);
     } else {
-      x[j] = rtNaN;
+      x[k] = rtNaN;
+    }
+  }
+}
+
+//
+// Arguments    : const coder::array<double, 2U> *p
+//                coder::array<double, 2U> *x
+// Return Type  : void
+//
+void ntf_y_icdf(const coder::array<double, 2U> &p, coder::array<double, 2U> &x)
+{
+  int i;
+  x.set_size(1, p.size(1));
+  i = p.size(1);
+  for (int k = 0; k < i; k++) {
+    double d;
+    d = p[k];
+    if ((d >= 0.0) && (d <= 1.0)) {
+      x[k] = -1.4142135623730951 * ntf_erfcinv(2.0 * d);
+    } else {
+      x[k] = rtNaN;
     }
   }
 }

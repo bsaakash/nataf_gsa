@@ -1,0 +1,8 @@
+pset a "RV.a"
+pset b "RV.b"
+
+ set listQoI "D "
+
+
+ source test.tcl
+ source postprocess.tcl

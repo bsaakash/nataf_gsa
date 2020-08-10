@@ -1,0 +1,10 @@
+^C:\USERS\YISAN\DESKTOP\VERSIONS\NATAF_GSA_EXPERIMENTAL\SIMCENTER\BUILD\CMAKEFILES\2B557401DE2DDBF690A1083BED220814\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/yisan/Desktop/versions/nataf_gsa_experimental/SimCenter -BC:/Users/yisan/Desktop/versions/nataf_gsa_experimental/SimCenter/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/yisan/Desktop/versions/nataf_gsa_experimental/SimCenter/build/simCenterDprepro.cpp.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

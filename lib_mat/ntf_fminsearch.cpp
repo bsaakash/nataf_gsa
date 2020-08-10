@@ -5,7 +5,7 @@
 // File: ntf_fminsearch.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 
 // Include Files
@@ -23,19 +23,18 @@
 #include <math.h>
 
 // Function Declarations
-static double ntf_b_getCheckFcn(const ntf_c_coder_internal_anonymous_ *fcn,
-  const double x[3]);
-static double ntf_getCheckFcn(const ntf_b_coder_internal_anonymous_ *fcn);
+static double ntf_getCheckFcn(const ntf_b_coder_internal_anonymous_ *fcn, const
+  double x[3]);
 
 // Function Definitions
 
 //
-// Arguments    : const ntf_c_coder_internal_anonymous_ *fcn
+// Arguments    : const ntf_b_coder_internal_anonymous_ *fcn
 //                const double x[3]
 // Return Type  : double
 //
-static double ntf_b_getCheckFcn(const ntf_c_coder_internal_anonymous_ *fcn,
-  const double x[3])
+static double ntf_getCheckFcn(const ntf_b_coder_internal_anonymous_ *fcn, const
+  double x[3])
 {
   double initialVal;
   double sigma;
@@ -198,41 +197,11 @@ static double ntf_b_getCheckFcn(const ntf_c_coder_internal_anonymous_ *fcn,
 }
 
 //
-// Arguments    : const ntf_b_coder_internal_anonymous_ *fcn
-// Return Type  : double
-//
-static double ntf_getCheckFcn(const ntf_b_coder_internal_anonymous_ *fcn)
-{
-  coder::array<double, 1U> x;
-  int i;
-  double b_dv[4];
-  x.set_size(fcn->tunableEnvironment[1].f1.size(0));
-  i = x.size(0);
-  for (int j = 0; j < i; j++) {
-    if ((0.0 <= fcn->tunableEnvironment[1].f1[j]) && (fcn->tunableEnvironment[1]
-         .f1[j] <= 1.0)) {
-      if (fcn->tunableEnvironment[1].f1[j] == 0.0) {
-        x[j] = rtMinusInf;
-      } else if (fcn->tunableEnvironment[1].f1[j] == 1.0) {
-        x[j] = rtInf;
-      } else {
-        x[j] = -std::log(-std::log(fcn->tunableEnvironment[1].f1[j]));
-      }
-    } else {
-      x[j] = rtNaN;
-    }
-  }
-
-  ntf_corrcoef(fcn->tunableEnvironment[0].f1, x, b_dv);
-  return 1.0 - ((b_dv[0] + 0.0 * b_dv[1]) * 0.0 + (b_dv[2] + 0.0 * b_dv[3]));
-}
-
-//
-// Arguments    : const ntf_c_coder_internal_anonymous_ *funfcn
+// Arguments    : const ntf_b_coder_internal_anonymous_ *funfcn
 //                double x[2]
 // Return Type  : void
 //
-void ntf_b_fminsearch(const ntf_c_coder_internal_anonymous_ *funfcn, double x[2])
+void ntf_b_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn, double x[2])
 {
   coder::array<double, 1U> b_x;
   int nx;
@@ -932,11 +901,11 @@ void ntf_c_fminsearch(double x[2])
 }
 
 //
-// Arguments    : const ntf_c_coder_internal_anonymous_ *funfcn
+// Arguments    : const ntf_b_coder_internal_anonymous_ *funfcn
 //                double x[3]
 // Return Type  : void
 //
-void ntf_d_fminsearch(const ntf_c_coder_internal_anonymous_ *funfcn, double x[3])
+void ntf_d_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn, double x[3])
 {
   double fv[4];
   int k;
@@ -958,7 +927,7 @@ void ntf_d_fminsearch(const ntf_c_coder_internal_anonymous_ *funfcn, double x[3]
   double xe[3];
   double fvt[4];
   int idxb[4];
-  fv[0] = ntf_b_getCheckFcn(funfcn, x);
+  fv[0] = ntf_getCheckFcn(funfcn, x);
   for (k = 0; k < 4; k++) {
     v[3 * k] = x[0];
     v[3 * k + 1] = x[1];
@@ -1249,36 +1218,58 @@ void ntf_d_fminsearch(const ntf_c_coder_internal_anonymous_ *funfcn, double x[3]
 }
 
 //
-// Arguments    : const ntf_b_coder_internal_anonymous_ *funfcn
+// Arguments    : const ntf_coder_internal_anonymous_fu *funfcn
 // Return Type  : double
 //
-double ntf_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn)
+double ntf_fminsearch(const ntf_coder_internal_anonymous_fu *funfcn)
 {
   double x;
+  coder::array<double, 1U> b_x;
+  int firstCol;
+  int lastCol;
+  double b[4];
   double fv[2];
   double v[2];
   coder::array<double, 1U> r;
-  double b[4];
   double xr;
   signed char idx_idx_0;
   signed char idx_idx_1;
   int itercount;
   int fun_evals;
-  int lastCol;
-  int firstCol;
   boolean_T exitg1;
   int exponent;
   int b_exponent;
   int c_exponent;
   signed char idxb[2];
-  fv[0] = ntf_getCheckFcn(funfcn);
+  b_x.set_size(funfcn->tunableEnvironment[1].f1.size(0));
+  firstCol = funfcn->tunableEnvironment[1].f1.size(0);
+  for (lastCol = 0; lastCol < firstCol; lastCol++) {
+    if ((0.0 <= funfcn->tunableEnvironment[1].f1[lastCol]) &&
+        (funfcn->tunableEnvironment[1].f1[lastCol] <= 1.0)) {
+      if (funfcn->tunableEnvironment[1].f1[lastCol] == 0.0) {
+        b_x[lastCol] = rtMinusInf;
+      } else if (funfcn->tunableEnvironment[1].f1[lastCol] == 1.0) {
+        b_x[lastCol] = rtInf;
+      } else {
+        b_x[lastCol] = -std::log(-std::log(funfcn->tunableEnvironment[1]
+          .f1[lastCol]));
+      }
+    } else {
+      b_x[lastCol] = rtNaN;
+    }
+  }
+
+  ntf_corrcoef(funfcn->tunableEnvironment[0].f1, b_x, b);
+  fv[0] = 1.0 - ((b[0] + 0.0 * b[1]) * 0.0 + (b[2] + 0.0 * b[3]));
   v[0] = 0.0;
   v[1] = 0.00025;
   ntf_gevinv(funfcn->tunableEnvironment[1].f1, 0.00025, r);
   ntf_corrcoef(funfcn->tunableEnvironment[0].f1, r, b);
   xr = (b[0] + 0.0 * b[1]) * 0.0 + (b[2] + 0.0 * b[3]);
   fv[1] = 1.0 - xr;
-  if ((fv[0] <= 1.0 - xr) || rtIsNaN(1.0 - xr)) {
+  ntf_corrcoef(funfcn->tunableEnvironment[0].f1, b_x, b);
+  if ((1.0 - ((b[0] + 0.0 * b[1]) * 0.0 + (b[2] + 0.0 * b[3])) <= 1.0 - xr) ||
+      rtIsNaN(1.0 - xr)) {
     idx_idx_0 = 1;
     idx_idx_1 = 2;
   } else {
@@ -1444,9 +1435,9 @@ double ntf_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn)
       }
 
       if (guard1 && (fv[b_cfv_tmp_tmp] < fv[cfv_tmp_tmp])) {
-        lastCol = idx_idx_1;
+        firstCol = idx_idx_1;
         idx_idx_1 = idx_idx_0;
-        idx_idx_0 = static_cast<signed char>(lastCol);
+        idx_idx_0 = static_cast<signed char>(firstCol);
       }
 
       itercount++;

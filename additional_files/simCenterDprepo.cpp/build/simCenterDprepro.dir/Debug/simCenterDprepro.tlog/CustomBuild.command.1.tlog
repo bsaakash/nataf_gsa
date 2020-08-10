@@ -1,0 +1,10 @@
+^C:\USERS\YISAN\DESKTOP\VERSIONS\NATAF_GSA_EXPERIMENTAL\SIMCENTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/yisan/Desktop/versions/nataf_gsa_experimental/SimCenter -BC:/Users/yisan/Desktop/versions/nataf_gsa_experimental/SimCenter/build --check-stamp-file C:/Users/yisan/Desktop/versions/nataf_gsa_experimental/SimCenter/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

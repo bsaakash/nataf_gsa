@@ -5,7 +5,7 @@
 // File: ntf_fminsearch.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 #ifndef NTF_FMINSEARCH_H
 #define NTF_FMINSEARCH_H
@@ -17,12 +17,12 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
-extern void ntf_b_fminsearch(const ntf_c_coder_internal_anonymous_ *funfcn,
+extern void ntf_b_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn,
   double x[2]);
 extern void ntf_c_fminsearch(double x[2]);
-extern void ntf_d_fminsearch(const ntf_c_coder_internal_anonymous_ *funfcn,
+extern void ntf_d_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn,
   double x[3]);
-extern double ntf_fminsearch(const ntf_b_coder_internal_anonymous_ *funfcn);
+extern double ntf_fminsearch(const ntf_coder_internal_anonymous_fu *funfcn);
 
 #endif
 

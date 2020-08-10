@@ -5,7 +5,7 @@
 // File: gsa_mixGaussEm.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 01:50:34
+// C/C++ source code generated on  : 10-Aug-2020 21:17:14
 //
 
 // Include Files
@@ -985,7 +985,7 @@ void gsa_mixGaussEm(const coder::array<double, 2U> &X_temp, double init, coder::
     }
 
     gsa_expectation(X, model_mu, model_Sigma, model_w, R, &llh[b_iter]);
-    if (std::abs(llh[b_iter] - llh[b_iter - 1]) < 1.0E-8 * std::abs(llh[b_iter]))
+    if (std::abs(llh[b_iter] - llh[b_iter - 1]) < 1.0E-7 * std::abs(llh[b_iter]))
     {
       exitg1 = true;
     } else {

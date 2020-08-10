@@ -1,0 +1,67 @@
+{
+    "Applications": {
+        "UQ": {
+            "Application": "SimCenterUQ-UQ",
+            "ApplicationData": {
+            }
+        }
+    },
+    "EDP": [
+        {
+            "name": "D"
+        }
+    ],
+    "UQ_Method": {
+        "samplingMethodData": {
+            "method": "LHS",
+            "samples": 500,
+            "seed": 790
+        },
+        "uqEngine": "SimCenterUQ",
+        "uqType": "Sensitivity Analysis"
+    },
+    "correlationMatrix": [
+        1,
+        0.2,
+        0.2,
+        1
+    ],
+    "fem": {
+        "dir": "{Current_Dir}/.",
+        "inputFile": "{Current_Dir}/test.tcl",
+        "mainInput": "test.tcl",
+        "mainPostprocessScript": "postprocess.tcl",
+        "numInputs": 1,
+        "postprocessScript": "{Current_Dir}/postprocess.tcl",
+        "program": "OpenSees"
+    },
+    "localAppDir": "C:/Users/yisan/Desktop/Development/build-quoFEM-Desktop_Qt_5_15_0_MSVC2019_64bit-Debug/debug",
+    "python": "C:/Users/yisan/AppData/Local/Programs/Python/Python37/python.exe",
+    "randomVariables": [
+        {
+            "distribution": "Uniform",
+            "inputType": "Parameters",
+            "lowerbound": 0,
+            "name": "a",
+            "refCount": 1,
+            "upperbound": 1,
+            "value": "RV.a",
+            "variableClass": "Uncertain"
+        },
+        {
+            "distribution": "Uniform",
+            "inputType": "Parameters",
+            "lowerbound": 0,
+            "name": "b",
+            "refCount": 1,
+            "upperbound": 1,
+            "value": "RV.b",
+            "variableClass": "Uncertain"
+        }
+    ],
+    "remoteAppDir": "/home1/00477/tg457427/SimCenterBackendApplications/May-2020",
+    "uqResults": {
+        "resultType": "NONE"
+    },
+    "workingDir": "C:/Users/yisan/Documents/quoFEM/LocalWorkDir"
+}

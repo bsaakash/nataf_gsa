@@ -1,7 +1,6 @@
 
 
 
-#include "lib_mat/gsa_combineVectorElements.h"
 #include "lib_mat/gsa_runGSA.h"
 #include "lib_mat/gsa_runGSA_initialize.h"
 #include "lib_mat/gsa_vvarstd.h"
@@ -41,9 +40,9 @@ void gsa_analysis(int& nmc, int &nrv, int& ng, int& ncombs, vector<vector<double
 		const coder::array<double, 1U> g = g_temp;
 
 		runGSA_initialize();
-		runGSA(x, g, combs, Kos, 'M', Si); // 1st order sobol indecies
-		runGSA_initialize();
 		runGSA(x, g, combs, Kos, 'T', St); // 1st order total sobol indecies
+		runGSA_initialize();
+		runGSA(x, g, combs, Kos, 'M', Si); // 1st order sobol indecies
 
 
 

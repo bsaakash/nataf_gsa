@@ -5,7 +5,7 @@
 // File: ntf_inataf_data.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 #ifndef NTF_INATAF_DATA_H
 #define NTF_INATAF_DATA_H
@@ -31,7 +31,6 @@ extern const char ntf_cv3[9];
 extern const char ntf_cv4[16];
 extern const char ntf_cv5[11];
 extern const char ntf_cv6[9];
-extern const char ntf_cv7[9];
 extern const double ntf_dv[31];
 extern const double ntf_dv1[7];
 

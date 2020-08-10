@@ -5,7 +5,7 @@
 // File: ntf_xzgeqp3.cpp
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 
 // Include Files
@@ -375,7 +375,7 @@ void ntf_qrpf(coder::array<double, 2U> &A, int m, double tau_data[], int jpvt[2]
     ii = iy + i;
     mmi = m - i;
     itemp = 0;
-    if ((2 - i > 1) && (std::abs(vn1[1]) > std::abs(vn1[i]))) {
+    if ((2 - i > 1) && (std::abs(vn1[i + 1]) > std::abs(vn1[i]))) {
       itemp = 1;
     }
 

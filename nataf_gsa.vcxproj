@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="lib_mat\coder_array.h" />
     <ClInclude Include="lib_mat\gsa_bsxfun.h" />
-    <ClInclude Include="lib_mat\gsa_combineVectorElements.h" />
     <ClInclude Include="lib_mat\gsa_eml_rand_mt19937ar_stateful.h" />
     <ClInclude Include="lib_mat\gsa_eml_setop.h" />
     <ClInclude Include="lib_mat\gsa_heapsort.h" />
@@ -54,7 +53,6 @@
     <ClInclude Include="lib_mat\ntf_binopdf.h" />
     <ClInclude Include="lib_mat\ntf_binostat.h" />
     <ClInclude Include="lib_mat\ntf_cdf.h" />
-    <ClInclude Include="lib_mat\ntf_chol.h" />
     <ClInclude Include="lib_mat\ntf_colon.h" />
     <ClInclude Include="lib_mat\ntf_corrcoef.h" />
     <ClInclude Include="lib_mat\ntf_cospiAndSinpi.h" />
@@ -66,6 +64,7 @@
     <ClInclude Include="lib_mat\ntf_expm1.h" />
     <ClInclude Include="lib_mat\ntf_ExponentialDistribution.h" />
     <ClInclude Include="lib_mat\ntf_ExtremeValueDistribution.h" />
+    <ClInclude Include="lib_mat\ntf_find.h" />
     <ClInclude Include="lib_mat\ntf_fminsearch.h" />
     <ClInclude Include="lib_mat\ntf_fzero.h" />
     <ClInclude Include="lib_mat\ntf_gamma.h" />
@@ -75,13 +74,13 @@
     <ClInclude Include="lib_mat\ntf_gampdf.h" />
     <ClInclude Include="lib_mat\ntf_gevinv.h" />
     <ClInclude Include="lib_mat\ntf_gevstat.h" />
-    <ClInclude Include="lib_mat\ntf_gpstat.h" />
     <ClInclude Include="lib_mat\ntf_icdf.h" />
     <ClInclude Include="lib_mat\ntf_inataf.h" />
     <ClInclude Include="lib_mat\ntf_inataf_data.h" />
     <ClInclude Include="lib_mat\ntf_inataf_initialize.h" />
     <ClInclude Include="lib_mat\ntf_inataf_rtwutil.h" />
     <ClInclude Include="lib_mat\ntf_inataf_types.h" />
+    <ClInclude Include="lib_mat\ntf_linspace.h" />
     <ClInclude Include="lib_mat\ntf_LognormalDistribution.h" />
     <ClInclude Include="lib_mat\ntf_lognstat.h" />
     <ClInclude Include="lib_mat\ntf_minOrMax.h" />
@@ -91,7 +90,6 @@
     <ClInclude Include="lib_mat\ntf_mycholcov.h" />
     <ClInclude Include="lib_mat\ntf_nbinpdf.h" />
     <ClInclude Include="lib_mat\ntf_nbinstat.h" />
-    <ClInclude Include="lib_mat\ntf_norm.h" />
     <ClInclude Include="lib_mat\ntf_NormalDistribution.h" />
     <ClInclude Include="lib_mat\ntf_normfit.h" />
     <ClInclude Include="lib_mat\ntf_pdf.h" />
@@ -103,6 +101,8 @@
     <ClInclude Include="lib_mat\ntf_stirlerr.h" />
     <ClInclude Include="lib_mat\ntf_strcmp.h" />
     <ClInclude Include="lib_mat\ntf_svd.h" />
+    <ClInclude Include="lib_mat\ntf_trapz.h" />
+    <ClInclude Include="lib_mat\ntf_unique.h" />
     <ClInclude Include="lib_mat\ntf_var.h" />
     <ClInclude Include="lib_mat\ntf_wblstat.h" />
     <ClInclude Include="lib_mat\ntf_WeibullDistribution.h" />
@@ -119,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="lib_mat\gsa_bsxfun.cpp" />
-    <ClCompile Include="lib_mat\gsa_combineVectorElements.cpp" />
     <ClCompile Include="lib_mat\gsa_eml_rand_mt19937ar_stateful.cpp" />
     <ClCompile Include="lib_mat\gsa_eml_setop.cpp" />
     <ClCompile Include="lib_mat\gsa_heapsort.cpp" />
@@ -151,7 +150,6 @@
     <ClCompile Include="lib_mat\ntf_binopdf.cpp" />
     <ClCompile Include="lib_mat\ntf_binostat.cpp" />
     <ClCompile Include="lib_mat\ntf_cdf.cpp" />
-    <ClCompile Include="lib_mat\ntf_chol.cpp" />
     <ClCompile Include="lib_mat\ntf_colon.cpp" />
     <ClCompile Include="lib_mat\ntf_corrcoef.cpp" />
     <ClCompile Include="lib_mat\ntf_cospiAndSinpi.cpp" />
@@ -163,6 +161,7 @@
     <ClCompile Include="lib_mat\ntf_expm1.cpp" />
     <ClCompile Include="lib_mat\ntf_ExponentialDistribution.cpp" />
     <ClCompile Include="lib_mat\ntf_ExtremeValueDistribution.cpp" />
+    <ClCompile Include="lib_mat\ntf_find.cpp" />
     <ClCompile Include="lib_mat\ntf_fminsearch.cpp" />
     <ClCompile Include="lib_mat\ntf_fzero.cpp" />
     <ClCompile Include="lib_mat\ntf_gamma.cpp" />
@@ -172,12 +171,12 @@
     <ClCompile Include="lib_mat\ntf_gampdf.cpp" />
     <ClCompile Include="lib_mat\ntf_gevinv.cpp" />
     <ClCompile Include="lib_mat\ntf_gevstat.cpp" />
-    <ClCompile Include="lib_mat\ntf_gpstat.cpp" />
     <ClCompile Include="lib_mat\ntf_icdf.cpp" />
     <ClCompile Include="lib_mat\ntf_inataf.cpp" />
     <ClCompile Include="lib_mat\ntf_inataf_data.cpp" />
     <ClCompile Include="lib_mat\ntf_inataf_initialize.cpp" />
     <ClCompile Include="lib_mat\ntf_inataf_rtwutil.cpp" />
+    <ClCompile Include="lib_mat\ntf_linspace.cpp" />
     <ClCompile Include="lib_mat\ntf_LognormalDistribution.cpp" />
     <ClCompile Include="lib_mat\ntf_lognstat.cpp" />
     <ClCompile Include="lib_mat\ntf_minOrMax.cpp" />
@@ -187,7 +186,6 @@
     <ClCompile Include="lib_mat\ntf_mycholcov.cpp" />
     <ClCompile Include="lib_mat\ntf_nbinpdf.cpp" />
     <ClCompile Include="lib_mat\ntf_nbinstat.cpp" />
-    <ClCompile Include="lib_mat\ntf_norm.cpp" />
     <ClCompile Include="lib_mat\ntf_NormalDistribution.cpp" />
     <ClCompile Include="lib_mat\ntf_normfit.cpp" />
     <ClCompile Include="lib_mat\ntf_pdf.cpp" />
@@ -199,6 +197,8 @@
     <ClCompile Include="lib_mat\ntf_stirlerr.cpp" />
     <ClCompile Include="lib_mat\ntf_strcmp.cpp" />
     <ClCompile Include="lib_mat\ntf_svd.cpp" />
+    <ClCompile Include="lib_mat\ntf_trapz.cpp" />
+    <ClCompile Include="lib_mat\ntf_unique.cpp" />
     <ClCompile Include="lib_mat\ntf_var.cpp" />
     <ClCompile Include="lib_mat\ntf_wblstat.cpp" />
     <ClCompile Include="lib_mat\ntf_WeibullDistribution.cpp" />

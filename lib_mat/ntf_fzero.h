@@ -5,7 +5,7 @@
 // File: ntf_fzero.h
 //
 // MATLAB Coder version            : 5.0
-// C/C++ source code generated on  : 23-Jul-2020 00:47:20
+// C/C++ source code generated on  : 10-Aug-2020 16:42:46
 //
 #ifndef NTF_FZERO_H
 #define NTF_FZERO_H
@@ -17,17 +17,13 @@
 #include "ntf_inataf_types.h"
 
 // Function Declarations
-extern void ntf_b_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double *b,
-  double *fval, double *exitflag);
-extern void ntf_c_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x,
+extern void ntf_b_fzero(const ntf_c_coder_internal_anonymous_ FunFcn, double x,
   double *b, double *fval, double *exitflag);
-extern void ntf_d_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double x,
-  double *b, double *fval, double *exitflag);
-extern void ntf_e_fzero(const double x[2], const coder::array<double, 1U>
+extern void ntf_c_fzero(const double x[2], const coder::array<double, 1U>
   &varargin_1, double varargin_3, double *b, double *fval, double *exitflag);
-extern void ntf_f_fzero(const ntf_d_coder_internal_anonymous_ *FunFcn, double x,
+extern void ntf_d_fzero(const ntf_d_coder_internal_anonymous_ *FunFcn, double x,
   double *b, double *fval, double *exitflag);
-extern void ntf_fzero(const ntf_coder_internal_anonymous_fu FunFcn, double *b,
+extern void ntf_fzero(const ntf_c_coder_internal_anonymous_ FunFcn, double *b,
                       double *fval, double *exitflag);
 
 #endif
