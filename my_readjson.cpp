@@ -6,6 +6,8 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <string>
+#include <regex>
 
 using json = nlohmann::json;
 
@@ -13,16 +15,15 @@ using json = nlohmann::json;
 void Getpnames(std::string distname, std::string optname, std::vector<std::string>& par_char);
 
 void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_vals,
-					std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add, std::string& get_workdir)
+				std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add,
+				std::vector<std::vector<double>>& get_groups, std::string& get_workdir)
 {
 	// === Working directory???
 	// === Should this program clean-up the working directory??
 	// === Error format
 
 	get_workdir = "C:/Users/yisan/Documents/quoFEM/LocalWorkDir";
-
-	
-	
+		
 	ng = 1; // Number of outputs
 	//get_corr = { 1.0, 0.2, 0.2, 0.2,   0.2, 1.0, 0.2, 0.2 ,  0.2, 0.2, 1.0, 0.2,   0.2, 0.2, 0.2, 1.0}; 
 	//get_corr = { 1.0, 0.0, 0.0, 0.0,   0.0, 1.0, 0.0, 0.0 ,  0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0 };
@@ -30,9 +31,15 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 
 	// === read json
 	std::ifstream myfile(get_workdir+"/tmp.SimCenter/templatedir/dakota.json");
-	//std::ifstream myfile("dakotaDataExact.json");
-	//std::ifstream myfile("dakotaData.json");
-	//std::ifstream myfile("dakotaDataDiscrete.json");
+	if (!myfile.is_open()) {
+		//ERROR
+		std::ofstream errfile(get_workdir + "/errorLog.txt");
+		errfile << "Unable to open dakota.json" << std::endl;
+		errfile.close();
+		exit(1);
+	}
+
+
 	json UQjson = json::parse(myfile);
 
 	// === get variables
@@ -40,6 +47,7 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQ_method  = UQjson["UQ_Method"]["samplingMethodData"]["method"];
 	//get_workdir = UQjson["workingDir"];
+
 
 	// === Specify parameters in each distributions.
 	nrv = 0;
@@ -66,9 +74,11 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 			std::string directory = elem["datafile"];
 			std::ifstream data_table(directory);
 			if (!data_table.is_open()) {
-				std::cerr << "There was a problem opening the input file!" << directory << "\n";
-				exit(-1);//exit or do additional error checking
-				// PRINT ERROR
+				//ERROR
+				std::ofstream errfile(get_workdir + "/errorLog.txt");
+				errfile << "There was a problem opening the input file at " << directory << std::endl;
+				errfile.close();
+				exit(1);
 			}
 
 			std::vector<double> vals_temp;
@@ -141,6 +151,39 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 			get_corr[i * nrv + i] = 1;
 		}
 	}
+
+	// === group index (if exists)
+	if (UQjson["UQ_Method"].find("sensitivityGroups") != UQjson["UQ_Method"].end()) {
+		std::string groupTxt = UQjson["UQ_Method"]["sensitivityGroups"];
+		std::regex re(R"(\{([^}]+)\})");
+		std::sregex_token_iterator it(groupTxt.begin(), groupTxt.end(), re, 1);
+		std::sregex_token_iterator end;
+
+		while (it != end) {
+			std::stringstream ss(*it++);
+			std::vector<double> aGroup; // use double for GSA from matlab
+			while (ss.good()) {
+				std::string substr;
+				getline(ss, substr, ',');
+
+				std::vector<std::string>::iterator itr = std::find(get_rvnames.begin(), get_rvnames.end(), substr);
+				if (itr != get_rvnames.cend()) {
+					aGroup.push_back(std::distance(get_rvnames.begin(), itr) + 1);
+				}
+				else {
+					std::cout << "Element not found";
+				}
+			}
+			get_groups.push_back(aGroup);
+		}
+	}
+	else {
+		for (int i = 0; i < nrv; i++) {
+			//double num = i + 1;
+			get_groups.push_back({ i + 1.0 });
+		}
+	}
+
 }
 
 

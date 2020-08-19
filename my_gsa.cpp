@@ -11,9 +11,20 @@
 using std::vector;
 
 void gsa_analysis(int& nmc, int &nrv, int& ng, int& ncombs, vector<vector<double>>& x_val, vector<vector<double>>& g_val,
-	coder::array<gsa_cell_wrap_0, 2U>& combs_temp, int & Kos, vector<vector<double>>& Si_val, vector<vector<double>>& St_val)
+	vector<vector<double>>& get_groups, int & Kos, vector<vector<double>>& Si_val, vector<vector<double>>& St_val)
 {
 	
+
+
+	coder::array<gsa_cell_wrap_0, 2U> combs_temp;
+
+	combs_temp.set_size(1, ncombs);
+	for (int i = 0; i < ncombs; i++) {
+		//combs[i].f1 = { (double)i + 1.0 }; // Fixed to be 1st order only. Later we could get this as user input.
+		combs_temp[i].f1 = { get_groups[i] };
+	}
+
+
 	coder::array<double, 2U> x_temp;
 	coder::array<double, 1U> g_temp;
 

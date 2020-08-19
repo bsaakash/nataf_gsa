@@ -15,7 +15,7 @@
 using std::vector;
 
 extern void gsa_analysis(int& nmc, int& nrv, int& ng, int& ncombs, vector<vector<double>>& x_val, vector<vector<double>>& g_val,
-	coder::array<gsa_cell_wrap_0, 2U>& combs_temp, int& Kos, vector<vector<double>>& Si_val, vector<vector<double>>& St_val);
+	vector<vector<double>>& combs_temp, int& Kos, vector<vector<double>>& Si_val, vector<vector<double>>& St_val);
 
 
 extern void nataf_transf(int nmc, int nrv, int ng, vector<std::string>& get_distnames, vector<std::string>& get_opts,
@@ -25,7 +25,8 @@ extern void nataf_transf(int nmc, int nrv, int ng, vector<std::string>& get_dist
 //extern void GetdistID(std::string distname, std::string optname, int& distID, int& optID, int& npar, int& nmom);
 
 extern void readjson(int& nmc, int& nrv, int& ng, int& rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_vals,
-	std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add, std::string& get_workdir);
+	std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add,
+	std::vector<std::vector<double>>& get_groups, std::string& get_workdir);
 
 #endif
 

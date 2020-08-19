@@ -1,6 +1,7 @@
 
 
 #include <iostream>
+#include <fstream>
 #include <random>
 
 // (1) Read json, (2) do (inverse) Nataf, (3) do Global sensitivity analysis
@@ -16,7 +17,9 @@ int main()
 	vector<double> get_corr;	
 	vector<std::string> get_distnames, get_opts, get_rvnames;	
 	vector<vector<double>> get_pars, get_add;
-	readjson(nmc, nrv, ng, rseed, UQ_method, get_distnames, get_pars, get_opts, get_rvnames, get_corr, get_add, get_workdir);
+	vector<vector<double>> get_groups; // use double for GSA from matlab
+	readjson(nmc, nrv, ng, rseed, UQ_method, get_distnames, get_pars, get_opts, get_rvnames, get_corr, get_add, get_groups, get_workdir);
+
 
 	// Random sampler: standard gaussian -> Later change into LHS
 	coder::array<double, 2U> u_temp;
@@ -32,42 +35,54 @@ int main()
 	// (2) Nataf transform + FEM simulation <- *********** need to be connected to other FEM softwares
 	vector<double> px;
 	vector<vector<double>> x, g;
-	nataf_transf(nmc, nrv, ng, get_distnames, get_opts, get_pars, get_rvnames, get_corr, get_add, get_workdir, u_temp, x, px, g); // NEED ERROR CHECK
 	
+	nataf_transf(nmc, nrv, ng, get_distnames, get_opts, get_pars, get_rvnames, get_corr, get_add, get_workdir, u_temp, x, px, g); // NEED ERROR CHECK
+
 
 
 	// WRITE
 	std::cout << "Monte Carlo done.. running Global Sensitivity Analysis..." << std::endl;
-	//std::cout << "Monte Carlo done.. running Global Sensitivity Analysis..." << std::endl;
 	//  (3) GSA
-	coder::array<gsa_cell_wrap_0, 2U> combs;
 	int Kos = 50; // number of GM compontents - fixed
-	int ncomb = nrv;
+	int ncomb = get_groups.size();;
 	vector<vector<double>> Si, St;
-	combs.set_size(1, ncomb);
-	for (int i = 0; i < ncomb; i++) {
-		combs[i].f1 = { (double)i + 1.0 }; // Fixed to be 1st order only. Later we could get this as user input.
-	}
-	gsa_analysis(nmc, nrv, ng, ncomb, x, g, combs, Kos, Si, St); // NEED ERROR CHECK, will be modified for multiple outputs
+	gsa_analysis(nmc, nrv, ng, ncomb, x, g, get_groups, Kos, Si, St); // NEED ERROR CHECK, will be modified for multiple outputs
 
 	// WRITE
+	std::string writingloc = get_workdir + "/gsa.txt";
+	std::ofstream outfile(writingloc);
 
-	std::cout << "     Sm(rv1)   Sm(rv2)   St(rv1)   St(rv2)" << std::endl;
+
+	// header
+	
+	outfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format
+	outfile.precision(4); // for fixed format, two decimal places
+
+	outfile << "#MCS=" << nmc << std::endl;
+	outfile <<"    ";
+	for (int j = 0; j < ncomb; j++) {
+		//outfile << "Sm" << std::to_string(j) << ",      ";
+		outfile << "Sm(" << std::to_string(j) << "),    ";
+	}
+	for (int j = 0; j < ncomb-1; j++) {
+		outfile << "St(" << std::to_string(j) << "),    ";
+	}	
+	outfile << "St(" << std::to_string(ncomb - 1) << "), " << std::endl;
+
+	//rseults
 	for (int i = 0; i < ng; i++) {
-		std::cout << "g" << i << ": ";
+		outfile << "g" << i << ": ";
 
 		for (int j = 0; j< ncomb; j++) {
-			std::cout << Si[i][j] << ",   " ;
+			outfile << Si[i][j] << ",   " ;
 		}
-		std::cout << "||   ";
-
-		for (int j = 0; j < ncomb; j++) {
-			std::cout << St[i][j] << ",   ";
+		for (int j = 0; j < ncomb-1; j++) {
+			outfile << St[i][j] << ",   ";
 		}
-		std::cout << "   " << std::endl;
-
+		outfile << St[i][ncomb - 1] << std::endl;
 	}
-	std::cout << "#MCS=" << nmc << std::endl;
+	
+	outfile.close();
 
 	return 0;
 }

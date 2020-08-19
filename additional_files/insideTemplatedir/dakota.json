@@ -13,17 +13,18 @@
     ],
     "UQ_Method": {
         "samplingMethodData": {
-            "method": "LHS",
-            "samples": 500,
-            "seed": 790
+            "method": "Monte Carlo",
+            "samples": 50,
+            "seed": 36
         },
+        "sensitivityGroups": "{a},{b},{a,b}",
         "uqEngine": "SimCenterUQ",
         "uqType": "Sensitivity Analysis"
     },
     "correlationMatrix": [
         1,
-        0.2,
-        0.2,
+        0.4,
+        0.4,
         1
     ],
     "fem": {
@@ -43,18 +44,18 @@
             "inputType": "Parameters",
             "lowerbound": 0,
             "name": "a",
-            "refCount": 1,
+            "refCount": 0,
             "upperbound": 1,
             "value": "RV.a",
             "variableClass": "Uncertain"
         },
         {
             "distribution": "Uniform",
-            "inputType": "Parameters",
-            "lowerbound": 0,
+            "inputType": "Moments",
+            "mean": 0.5,
             "name": "b",
-            "refCount": 1,
-            "upperbound": 1,
+            "refCount": 0,
+            "standardDev": 0.2,
             "value": "RV.b",
             "variableClass": "Uncertain"
         }
