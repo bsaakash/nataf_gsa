@@ -1,4 +1,5 @@
 
+
 #include "lib_json/json.hpp"
 #include <fstream>
 #include <sstream>
@@ -11,54 +12,60 @@
 
 using json = nlohmann::json;
 
-
+extern std::ofstream theErrorFile;
 void Getpnames(std::string distname, std::string optname, std::vector<std::string>& par_char);
 
-void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_vals,
-				std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add,
-				std::vector<std::vector<double>>& get_groups, std::string& get_workdir)
+void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &rseed, std::string& UQ_method, std::vector<std::string>& get_distnames, std::vector<std::vector<double>>& get_vals, std::vector<double> & get_const,
+				std::vector<std::string>& get_opts, std::vector<std::string>& get_rvnames, std::vector<std::string>& get_qoinames, std::vector<double>& get_corr, std::vector<std::vector<double>>& get_add,
+				std::vector<std::vector<double>>& get_groups)
 {
-	// === Working directory???
-	// === Should this program clean-up the working directory??
-	// === Error format
 
-	get_workdir = "C:/Users/yisan/Documents/quoFEM/LocalWorkDir";
-		
-	ng = 1; // Number of outputs
-	//get_corr = { 1.0, 0.2, 0.2, 0.2,   0.2, 1.0, 0.2, 0.2 ,  0.2, 0.2, 1.0, 0.2,   0.2, 0.2, 0.2, 1.0}; 
-	//get_corr = { 1.0, 0.0, 0.0, 0.0,   0.0, 1.0, 0.0, 0.0 ,  0.0, 0.0, 1.0, 0.0,   0.0, 0.0, 0.0, 1.0 };
-	//get_opts = { "MOM","MOM","MOM","MOM" };
+	//
+	// read json
+	//
 
-	// === read json
-	std::ifstream myfile(get_workdir+"/tmp.SimCenter/templatedir/dakota.json");
+	std::ifstream myfile(workdir+"/tmp.SimCenter/templatedir/dakota.json");
+	//std::ifstream myfile(inpargv[1]);
 	if (!myfile.is_open()) {
-		//ERROR
-		std::ofstream errfile(get_workdir + "/errorLog.txt");
-		errfile << "Unable to open dakota.json" << std::endl;
-		errfile.close();
+		theErrorFile << "Error reading json: Unable to open dakota.json";
+		theErrorFile.close();
 		exit(1);
 	}
 
 
 	json UQjson = json::parse(myfile);
 
-	// === get variables
+	// 
+	// Get variables
+	// 
+
 	nmc = UQjson["UQ_Method"]["samplingMethodData"]["samples"];
 	rseed = UQjson["UQ_Method"]["samplingMethodData"]["seed"];
 	UQ_method  = UQjson["UQ_Method"]["samplingMethodData"]["method"];
-	//get_workdir = UQjson["workingDir"];
 
+	//
+	// Specify parameters in each distributions.
+	//
 
-	// === Specify parameters in each distributions.
+	std::vector<int> constId;
 	nrv = 0;
 	for (auto& elem : UQjson["randomVariables"])
-	{
-		// name of distribution
-		get_distnames.push_back(elem["distribution"]);		
-		// name of random variable
+	{	
+		// *name of distribution
+		std::string distname = elem["distribution"];
+		std::transform(distname.begin(), distname.end(), distname.begin(), ::tolower); // make lower case
+		distname.erase(remove_if(distname.begin(), distname.end(), isspace), distname.end()); // remove space
+
+		if (distname.compare("constant") == 0) {
+			continue;
+		}
+
+		get_distnames.push_back(distname);
+
+		// *name of random variable
 		get_rvnames.push_back(elem["name"]);
 
-		// type of inputs (PAR,MOM,DAT)
+		// *type of inputs ("PAR","MOM","DAT")
 		std::string curType = elem["inputType"];
 		get_opts.push_back(curType.substr(0,3));
 		for (int i = 0; i < 3; i++) {
@@ -68,16 +75,16 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 		std::vector<std::string> pnames;
 		Getpnames(get_distnames[nrv], get_opts[nrv], pnames); // get parameter names from dist name
 		std::vector<double> addDefault{ 0.0, 0.0 };
-		// IF Data
+
+		// IF "DAT"
 		if (get_opts[nrv].compare("DAT") == 0) {
 
-			std::string directory = elem["datafile"];
+			std::string directory = elem["dataDir"];
 			std::ifstream data_table(directory);
 			if (!data_table.is_open()) {
-				//ERROR
-				std::ofstream errfile(get_workdir + "/errorLog.txt");
-				errfile << "There was a problem opening the input file at " << directory << std::endl;
-				errfile.close();
+				//*ERROR*
+				theErrorFile << "Error reading json: cannot open data file at " << directory << std::endl;
+				theErrorFile.close();
 				exit(1);
 			}
 
@@ -87,6 +94,12 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 				vals_temp.push_back(samps);
 			}
 			get_vals.push_back(vals_temp);
+			if (vals_temp.size()==0) {
+				//*ERROR*
+				theErrorFile << "Error reading json: cannot find data at " << directory << std::endl;
+				theErrorFile.close();
+				exit(1);
+			}
 			data_table.close();
 
 			if (get_distnames[nrv].compare("binomial") == 0) {
@@ -94,7 +107,6 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 			}
 			else if (get_distnames[nrv].compare("beta") == 0) {
 				get_add.push_back({ elem["lower"],elem["upper"] });
-
 			} 
 			else
 			{
@@ -103,8 +115,6 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 		}
 		else
 		{ 
-
-			
 			if (get_distnames[nrv].compare("discrete") == 0) {
 				std::vector<double> vals_temp;
 				for (int i=0 ; i< elem[pnames[0]].size();i++)
@@ -113,11 +123,6 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 					vals_temp.push_back(elem[pnames[1]][i]);
 				}
 				get_vals.push_back(vals_temp);
-				//get_vals.push_back(elem[pnames[0]]);
-				//get_vals.push_back(elem[pnames[1]]);
-				//get_vals = elem[pnames[0]];
-				//get_vals.insert(get_vals.end(), elem[pnames[0]].begin(), elem[pnames[0]].end());
-				//get_vals.insert(get_vals.end(), elem[pnames[1]].begin(), elem[pnames[1]].end());
 			}
 			else
 			{
@@ -134,10 +139,40 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 		nrv++;
 	}
 
-	// === get correlation matrix
+	// get constants
+	nco = 0;
+	for (auto& elem : UQjson["randomVariables"])
+	{
+		// *name of distribution
+		std::string distname = elem["distribution"];
+		std::transform(distname.begin(), distname.end(), distname.begin(), ::tolower); // make lower case
+		if (distname.compare("constant") == 0) {
 
-	//get_corr = { 1.0, 0.2, 0.2, 1.0 }; // {{row1}, {row2},...}
+			// *name of random variable
+			get_rvnames.push_back(elem["name"]);
+			get_const.push_back(elem["value"]);
+			nco++;
+		}		
+	}
+
+
+	//
+	// get edp names
+	//
+
+	nqoi = 0;
+	for (auto& elem : UQjson["EDP"]) {
+		// *name of distribution
+		get_qoinames.push_back(elem["name"]);
+		nqoi++;
+	}
+
+	//
+	// get correlation matrix
+	//
+
 	if (UQjson.find("correlationMatrix") != UQjson.end()) {
+		// if key "correlationMatrix" exists
 		for (int i=0; i<nrv*nrv; i++) {
 			get_corr.push_back(UQjson["correlationMatrix"][i]);
 		}
@@ -152,34 +187,47 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 		}
 	}
 
-	// === group index (if exists)
+	//
+	// get group index matrix
+	//
+
 	if (UQjson["UQ_Method"].find("sensitivityGroups") != UQjson["UQ_Method"].end()) {
+		// if key "sensitivityGroups" exists
+
 		std::string groupTxt = UQjson["UQ_Method"]["sensitivityGroups"];
-		std::regex re(R"(\{([^}]+)\})");
+		std::regex re(R"(\{([^}]+)\})"); // will get string inside {}
 		std::sregex_token_iterator it(groupTxt.begin(), groupTxt.end(), re, 1);
 		std::sregex_token_iterator end;
-
 		while (it != end) {
 			std::stringstream ss(*it++);
-			std::vector<double> aGroup; // use double for GSA from matlab
+			std::vector<double> aGroup; // use double for future use (gsa function)
 			while (ss.good()) {
 				std::string substr;
-				getline(ss, substr, ',');
-
+				getline(ss, substr, ',');  // incase we have multiple strings inside {}
 				std::vector<std::string>::iterator itr = std::find(get_rvnames.begin(), get_rvnames.end(), substr);
-				if (itr != get_rvnames.cend()) {
-					aGroup.push_back(std::distance(get_rvnames.begin(), itr) + 1);
+				if (itr != get_rvnames.cend()) { // from names (a,b,{a,b}) to idx's (1,2,{1,2})		
+					int index_rvn = std::distance(get_rvnames.begin(), itr) + 1.0;
+					aGroup.push_back(index_rvn );
+
+					if (index_rvn>nrv) {
+						// If it is constant variable
+						theErrorFile << "Error reading json: RV group (for Sobol) cannot contain constant variable" << std::endl;
+						theErrorFile.close();
+						exit(1);
+					}
 				}
 				else {
-					std::cout << "Element not found";
+					// *ERROR*
+					theErrorFile << "Error reading json: element <"<< substr << "> inside the sensitivity groups not found." << std::endl;
+					theErrorFile.close();
+					exit(1);
 				}
 			}
 			get_groups.push_back(aGroup);
 		}
-	}
+		}
 	else {
 		for (int i = 0; i < nrv; i++) {
-			//double num = i + 1;
 			get_groups.push_back({ i + 1.0 });
 		}
 	}
@@ -189,8 +237,6 @@ void readjson(int &nmc, int& nrv, int& ng, int &rseed, std::string& UQ_method, s
 
 void Getpnames(std::string distname, std::string optname, std::vector<std::string>& par_char)
 {
-	std::transform(distname.begin(), distname.end(), distname.begin(), ::tolower);
-
 	if (optname.compare("PAR") == 0) { // Get parameters
 
 		if (distname.compare("binomial") == 0) {  // Not used
@@ -230,7 +276,7 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("beta") == 0) {
 			par_char.push_back("alphas");
 			par_char.push_back("betas");
-			par_char.push_back("upperBound");
+			par_char.push_back("lowerBound");
 			par_char.push_back("upperBound");
 		}
 		else if (distname.compare("gumbelMin") == 0) {  // Not used
@@ -249,12 +295,12 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("an");
 			par_char.push_back("k");
 		}
-		else if (distname.compare("GEV") == 0) {  
+		else if (distname.compare("gev") == 0) {  
 			par_char.push_back("beta");
 			par_char.push_back("alpha");
 			par_char.push_back("epsilon");
 		}
-		else if (distname.compare("GEVMin") == 0) {  // Not used
+		else if (distname.compare("gevmin") == 0) {  // Not used
 			par_char.push_back("beta");
 			par_char.push_back("alpha");
 			par_char.push_back("epsilon");
@@ -266,7 +312,7 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("rayleigh") == 0) {  // Not used
 			par_char.push_back("alpha");
 		}
-		else if (distname.compare("Chisquared") == 0) {
+		else if (distname.compare("chisquare") == 0) {
 			par_char.push_back("k");
 		}
 		else if (distname.compare("discrete") == 0) {
@@ -278,12 +324,22 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("a");
 			par_char.push_back("b");
 		}
+		else if (distname.compare("constant") == 0) {
+			par_char.push_back("value");
+		}
 		else {
+			theErrorFile << "Error reading json: cannot interpret distribution name: " << distname;
+			theErrorFile.close();
+			exit(1);
 			// NA
 		}
 	} 
 	else if (optname.compare("MOM") == 0) { // Get Moments
-		if (distname.compare("geometric") == 0) {  // Not used
+		if (distname.compare("normal") == 0) {  // Not used
+			par_char.push_back("mean");
+			par_char.push_back("standardDev");
+		}
+		else if (distname.compare("geometric") == 0) {  // Not used
 			par_char.push_back("mean");
 		}
 		else if (distname.compare("poisson") == 0) {
@@ -298,12 +354,12 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("lowerBound");
 			par_char.push_back("upperBound");
 		}
-		else if (distname.compare("GEV") == 0) {
+		else if (distname.compare("gev") == 0) {
 			par_char.push_back("mean");
 			par_char.push_back("standardDev");
 			par_char.push_back("epsilon");
 		}
-		else if (distname.compare("GEVMin") == 0) {  // Not used
+		else if (distname.compare("gevmin") == 0) {  // Not used
 			par_char.push_back("mean");
 			par_char.push_back("standardDev");
 			par_char.push_back("epsilon");
@@ -311,7 +367,7 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("rayleigh") == 0) {  // Not used
 			par_char.push_back("mean");
 		}
-		else if (distname.compare("chisquared") == 0) {
+		else if (distname.compare("chisquare") == 0) {
 			par_char.push_back("mean");
 		}
 		else if (distname.compare("truncatedexponential") == 0) {
@@ -339,6 +395,8 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		}
 	}
 	else {
-		//NA
+		theErrorFile << "Error reading json: input type should be one of PAR/MOM/DAT";
+		theErrorFile.close();
+		exit(1);
 	}
 }
