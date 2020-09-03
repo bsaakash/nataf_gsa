@@ -15,15 +15,34 @@ extern std::ofstream theErrorFile;
 using std::vector;
 using std::string;
 
-vector<vector<double>> runApps(int nmc, int nrv, int nqoi, vector<vector<double>> x, vector<std::string> get_rvnames, std::string workdir);
+vector<vector<double> > runApps(int nmc,
+				int nrv,
+				int nqoi,
+				vector<vector<double> > x,
+				vector<std::string> get_rvnames,
+				std::string workdir);
 
-void nataf_transf(int nmc, int nrv, int nco, int nqoi, vector<string> &get_distnames, vector<string> &get_opts,
-					vector<vector<double>> &get_vals, vector<double>& get_const, vector<string>& get_rvnames, vector<double> &get_corr,
-					vector<vector<double>> &get_add, string & workdir, coder::array<double, 2U> &u_temp,
-					vector<vector<double>> &x_val, vector<double> &px_val, vector<vector<double>> &g_val)
+void nataf_transf(int nmc,
+		  int nrv,
+		  int nco,
+		  int nqoi,
+		  vector<string> &get_distnames,
+		  vector<string> &get_opts,
+		  vector<vector<double> > &
+		  get_vals,
+		  vector<double>& get_const,
+		  vector<string>& get_rvnames,
+		  vector<double> &get_corr,
+		  vector<vector<double> > &get_add,
+		  string & workdir,
+		  coder::array<double, 2U> &u_temp,
+		  vector<vector<double> > &x_val,
+		  vector<double> &px_val,
+		  vector<vector<double> > &g_val)
 {
 
 
+  
 	coder::array<double, 2U> corrs_temp;
 	coder::array<ntf_cell_wrap_0, 2U> distnames_temp;
 	coder::array<ntf_cell_wrap_0, 2U> opts_temp;
@@ -38,14 +57,14 @@ void nataf_transf(int nmc, int nrv, int nco, int nqoi, vector<string> &get_distn
 
 
 	for (int i = 0; i < nrv; i++) {
-		distnames_temp[i] = { get_distnames[i] };
-		opts_temp[i] = { get_opts[i] };
-		vals_temp[i].f1 = get_vals[i];
-		add_temp[i].f1 = get_add[i];
+	  distnames_temp[i] = { get_distnames[i] };
+	  opts_temp[i] = { get_opts[i] };
+	  vals_temp[i].f1 = get_vals[i];
+	  add_temp[i].f1 = get_add[i];
 
-		for (int j = 0; j < nrv; j++) {
-			corrs_temp[i + j * nrv] = get_corr[i + j * nrv];
-		}
+	  for (int j = 0; j < nrv; j++) {
+	    corrs_temp[i + j * nrv] = get_corr[i + j * nrv];
+	  }
 
 	}
 
@@ -79,16 +98,16 @@ void nataf_transf(int nmc, int nrv, int nco, int nqoi, vector<string> &get_distn
 }
 
 
-vector<vector<double>> runApps(int nmc, int nrvs, int nqoi, vector<vector<double>> x, vector<std::string> get_rvnames, std::string workdir)
+vector<vector<double> > runApps(int nmc, int nrvs, int nqoi, vector<vector<double> > x, vector<std::string> get_rvnames, std::string workdir)
 {
-	vector<vector<double>> g_val;
+	vector<vector<double> > g_val;
 	
 
 	for (int i = 0; i < nmc; i++)
 	{
 
 		//
-		// (1) create "workdir.i " folder :need C++17 to use the filesystem namespace 
+		// (1) create "workdir.i " folder :need C++17 to use the files system namespace 
 		//
 		
 		string workDir = workdir + "/tmp.SimCenter/workdir." + std::to_string(i+1);
