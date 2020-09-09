@@ -64,12 +64,13 @@ void nataf_transf(int nmc, int nrv, int nco, int nqoi, vector<string> &get_distn
 		px_val.push_back(px[i]);
 		for (int j = 0; j < nrv; j++)
 		{
-			x_temp.push_back(x[i + j * nmc]);
-			for (int k = 0; k < nco; k++)
-			{
-				x_temp.push_back(get_const[k]);
-			}
+			x_temp.push_back(x[i + j * nmc]);			
 		}
+		for (int k = 0; k < nco; k++)
+		{
+			x_temp.push_back(get_const[k]);
+		}
+		
 		x_val.push_back(x_temp);
 	}
 
@@ -138,7 +139,7 @@ vector<vector<double>> runApps(int nmc, int nrvs, int nqoi, vector<vector<double
 
 		if (!readFile.is_open()) {
 			//*ERROR*
-			theErrorFile << "Error reading FEM results: check your working directory: " << workDir << std::endl;
+			theErrorFile << "Error reading FEM results: check your inputs " << std::endl;
 			theErrorFile.close();
 			exit(1);
 		}
