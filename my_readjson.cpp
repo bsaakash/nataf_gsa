@@ -47,33 +47,49 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 	// Specify parameters in each distributions.
 	//
 
-	std::vector<int> constId;
+	std::vector<int> corrIdx;
+	int corrCount=0;
 	nrv = 0;
 	for (auto& elem : UQjson["randomVariables"])
-	{	
+	{
+		corrCount++;
+
 		// *name of distribution
 		std::string distname = elem["distribution"];
 		std::transform(distname.begin(), distname.end(), distname.begin(), ::tolower); // make lower case
 		distname.erase(remove_if(distname.begin(), distname.end(), isspace), distname.end()); // remove space
 
+		// *type of inputs ("PAR","MOM","DAT")
+		std::string inpType = elem["inputType"];
+		std::string inpTypeSub = inpType.substr(0, 3);
+		for (int i = 0; i < 3; i++) {
+			inpTypeSub[i] = toupper(inpTypeSub[i]);
+		}
+
+		// get parameter names for each dist
+		std::vector<std::string> pnames;
+		Getpnames(distname, inpTypeSub, pnames); 
+
+
 		if (distname.compare("constant") == 0) {
 			continue;
 		}
+		if ((distname.compare("discrete") == 0) && (inpTypeSub.compare("PAR"))==0) {
+			if (elem[pnames[0]].size()==1) {
+				// discrete distribution with only one quantity = constant
+				continue;
+			}
+		}
 
-		get_distnames.push_back(distname);
 
 		// *name of random variable
 		get_rvnames.push_back(elem["name"]);
+		get_distnames.push_back(distname);
+		get_opts.push_back(inpTypeSub);
 
-		// *type of inputs ("PAR","MOM","DAT")
-		std::string curType = elem["inputType"];
-		get_opts.push_back(curType.substr(0,3));
-		for (int i = 0; i < 3; i++) {
-			get_opts[nrv][i] = toupper(get_opts[nrv][i]);
-		}
 
-		std::vector<std::string> pnames;
-		Getpnames(get_distnames[nrv], get_opts[nrv], pnames); // get parameter names from dist name
+		
+
 		std::vector<double> addDefault{ 0.0, 0.0 };
 
 		// IF "DAT"
@@ -94,6 +110,15 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 				vals_temp.push_back(samps);
 			}
 			get_vals.push_back(vals_temp);
+			if (get_vals.size() < 5) {
+				//*ERROR*
+				theErrorFile << "Error reading json: data file of ";
+				theErrorFile << get_rvnames[nrv];
+				theErrorFile << " has less then five samples."  << std::endl;
+				theErrorFile.close();
+				exit(1);
+			}
+
 			if (vals_temp.size()==0) {
 				//*ERROR*
 				theErrorFile << "Error reading json: cannot find data at " << directory << std::endl;
@@ -106,8 +131,11 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 				get_add.push_back({ elem["n"],0.0 });
 			}
 			else if (get_distnames[nrv].compare("beta") == 0) {
-				get_add.push_back({ elem["lower"],elem["upper"] });
-			} 
+				get_add.push_back({ elem["lowerbound"],elem["upperbound"] });
+			}
+			else if (get_distnames[nrv].compare("truncatedexponential") == 0) {
+				get_add.push_back({ elem["a"],elem["b"] });
+			}
 			else
 			{
 				get_add.push_back(addDefault);
@@ -117,7 +145,8 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 		{ 
 			if (get_distnames[nrv].compare("discrete") == 0) {
 				std::vector<double> vals_temp;
-				for (int i=0 ; i< elem[pnames[0]].size();i++)
+				int numdisc = elem[pnames[0]].size();
+				for (int i=0 ; i< numdisc ;i++)
 				{
 					vals_temp.push_back(elem[pnames[0]][i]);
 					vals_temp.push_back(elem[pnames[1]][i]);
@@ -136,23 +165,53 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 				
 			get_add.push_back(addDefault);
 		}
+		corrIdx.push_back(corrCount-1);
 		nrv++;
 	}
 
+	//
 	// get constants
+	//
+
 	nco = 0;
 	for (auto& elem : UQjson["randomVariables"])
 	{
 		// *name of distribution
 		std::string distname = elem["distribution"];
 		std::transform(distname.begin(), distname.end(), distname.begin(), ::tolower); // make lower case
+		
+		// *input type
+		std::string inpType = elem["inputType"];
+		std::string inpTypeSub = inpType.substr(0, 3);
+		std::transform(inpTypeSub.begin(), inpTypeSub.end(), inpTypeSub.begin(), ::toupper); // make upper case
+
+
+		// *parameter name
+		std::vector<std::string> pnames;
+		Getpnames(distname, inpTypeSub, pnames);
+
+		// If constant
 		if (distname.compare("constant") == 0) {
 
 			// *name of random variable
 			get_rvnames.push_back(elem["name"]);
-			get_const.push_back(elem["value"]);
+			get_const.push_back(elem[pnames[0]]);
 			nco++;
-		}		
+		}	
+
+
+		// If constant (discrete)
+		if ((distname.compare("discrete") == 0) && (inpTypeSub.compare("PAR"))==0) {
+			if (elem[pnames[0]].size()==1) {
+				// discrete distribution with only one quantity = constant
+
+				get_rvnames.push_back(elem["name"]);
+				get_const.push_back(elem[pnames[0]][0]);
+				nco++;
+			}
+		}
+
+
 	}
 
 
@@ -173,8 +232,10 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 
 	if (UQjson.find("correlationMatrix") != UQjson.end()) {
 		// if key "correlationMatrix" exists
-		for (int i=0; i<nrv*nrv; i++) {
-			get_corr.push_back(UQjson["correlationMatrix"][i]);
+		for (int i = 0; i < nrv; i++) {
+			for (int j = 0; j < nrv; j++) {
+				get_corr.push_back(UQjson["correlationMatrix"][corrIdx[i]+corrIdx[j]*(nrv+nco)]);
+			}
 		}
 	} 
 	else
@@ -211,7 +272,8 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 
 					if (index_rvn>nrv) {
 						// If it is constant variable
-						theErrorFile << "Error reading json: RV group (for Sobol) cannot contain constant variable" << std::endl;
+						theErrorFile << "Error reading json: RV group (for Sobol) cannot contain constant variable: ";
+						theErrorFile << get_rvnames[index_rvn - 1] << std::endl;
 						theErrorFile.close();
 						exit(1);
 					}
@@ -276,8 +338,8 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("beta") == 0) {
 			par_char.push_back("alphas");
 			par_char.push_back("betas");
-			par_char.push_back("lowerBound");
-			par_char.push_back("upperBound");
+			par_char.push_back("lowerbound");
+			par_char.push_back("upperbound");
 		}
 		else if (distname.compare("gumbelMin") == 0) {  // Not used
 			par_char.push_back("an");
@@ -292,8 +354,8 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("k");
 		}
 		else if (distname.compare("weibull") == 0) {
-			par_char.push_back("an");
-			par_char.push_back("k");
+			par_char.push_back("scaleparam"); //an
+			par_char.push_back("shapeparam"); //k
 		}
 		else if (distname.compare("gev") == 0) {  
 			par_char.push_back("beta");
@@ -337,7 +399,11 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 	else if (optname.compare("MOM") == 0) { // Get Moments
 		if (distname.compare("normal") == 0) {  // Not used
 			par_char.push_back("mean");
-			par_char.push_back("standardDev");
+			par_char.push_back("stdDev");  // 
+		}
+		else if (distname.compare("lognormal") == 0) {  // Not used
+			par_char.push_back("mean");
+			par_char.push_back("stdDev");  // 
 		}
 		else if (distname.compare("geometric") == 0) {  // Not used
 			par_char.push_back("mean");
@@ -351,8 +417,8 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("beta") == 0) {
 			par_char.push_back("mean");
 			par_char.push_back("standardDev");
-			par_char.push_back("lowerBound");
-			par_char.push_back("upperBound");
+			par_char.push_back("lowerbound");
+			par_char.push_back("upperbound");
 		}
 		else if (distname.compare("gev") == 0) {
 			par_char.push_back("mean");
@@ -370,6 +436,9 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 		else if (distname.compare("chisquare") == 0) {
 			par_char.push_back("mean");
 		}
+		else if (distname.compare("constant") == 0) {
+			par_char.push_back("value");
+		}
 		else if (distname.compare("truncatedexponential") == 0) {
 			par_char.push_back("mean");
 			par_char.push_back("a");
@@ -386,12 +455,15 @@ void Getpnames(std::string distname, std::string optname, std::vector<std::strin
 			par_char.push_back("n");
 		}
 		else if (distname.compare("beta") == 0) {
-			par_char.push_back("lowerBound");
-			par_char.push_back("upperBound");
+			par_char.push_back("lowerbound");
+			par_char.push_back("upperbound");
 		}
 		else if (distname.compare("truncatedexponential") == 0) {
 			par_char.push_back("a");
 			par_char.push_back("b");
+		}
+		else if (distname.compare("constant") == 0) {
+			par_char.push_back("value");
 		}
 	}
 	else {

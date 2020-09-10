@@ -43,11 +43,11 @@ void gsa_analysis(int& nmc, int &nrv, int& nqoi, int& ncombs, vector<vector<doub
 	const coder::array<gsa_cell_wrap_0, 2U> combs = combs_temp;
 	
 	for (int j = 0; j < nqoi; j++) {
-		
+
 		coder::array<double, 1U> Si, St;
-		
+
 		for (int i = 0; i < nmc; i++) {
-				g_temp[i] = g_val[i][j];
+			g_temp[i] = g_val[i][j];
 		}
 
 		// check if the variance is zero
@@ -59,20 +59,25 @@ void gsa_analysis(int& nmc, int &nrv, int& nqoi, int& ncombs, vector<vector<doub
 		for (int i = 0; i < nmc; i++)
 			sqDiff += (g_val[i][j] - mean) * (g_val[i][j] - mean);
 		//double var = sqDiff / nmc;
-		if (sqDiff <1.e-10) {
+		if (sqDiff < 1.e-10) {
 			theErrorFile << "Error running FEM: the variance of output is zero. Output value is " << mean;
 			theErrorFile.close();
 			exit(1);
 		};
 
 
-		
+
 		const coder::array<double, 1U> g = g_temp;
 
 
 		runGSA_initialize();
 		//runGSA(x, g, combs, Kos, 'T', St); // 1st order total sobol indecies
-		runGSA(x, g, combs, 3, 'T', St); // 1st order total sobol indecies
+		if (nrv > 2) {
+			runGSA(x, g, combs, 1, 'T', St); // 1st order total sobol indecies
+		} else {
+			runGSA(x, g, combs, 3, 'T', St); // 1st order total sobol indecies
+		}
+		
 		runGSA_initialize();
 		runGSA(x, g, combs, Kos, 'M', Si); // 1st order sobol indecies
 
@@ -88,7 +93,5 @@ void gsa_analysis(int& nmc, int &nrv, int& nqoi, int& ncombs, vector<vector<doub
 		St_val.push_back(St_temp);
 
 	}
-
-
 	
 }
