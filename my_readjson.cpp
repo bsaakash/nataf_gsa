@@ -24,7 +24,7 @@ void readjson(std::string workdir, int &nmc, int& nrv, int&nco, int& nqoi, int &
 	// read json
 	//
 
-	std::ifstream myfile(workdir+"/tmp.SimCenter/templatedir/dakota.json");
+	std::ifstream myfile(workdir+"/templatedir/dakota.json");
 	//std::ifstream myfile(inpargv[1]);
 	if (!myfile.is_open()) {
 		theErrorFile << "Error reading json: Unable to open dakota.json";
