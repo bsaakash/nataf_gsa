@@ -12,9 +12,16 @@ int main(int argc, char **argv)
 //int main()
 {
 	std::string workdir = argv[1];
+	std::string osType = argv[2];
+	std::string runType = argv[3];
+	
+	std::cerr << "WORK " << workdir << "\n";
+	std::cerr << "OS " << osType << "\n";
+	std::cerr << "RUN " << runType << "\n";
+	
 	//theErrorFile.open(workdir + "/tmp.SimCenter/dakota.err");
 	//my_MakeErrorFile theErrorFile = my_MakeErrorFile(workdir);
-	theErrorFile.open(workdir + "/tmp.SimCenter/dakota.err");
+	theErrorFile.open(workdir + "/dakota.err");
 
 	// (1) Read JSON file 
 	int nmc, nrv, nco, nqoi, rseed;
@@ -23,10 +30,22 @@ int main(int argc, char **argv)
 	vector<std::string> get_distnames, get_opts, get_rvnames, get_qoinames;
 	vector<vector<double>> get_pars, get_add;
 	vector<vector<double>> get_groups; // use double for GSA from matlab
-	readjson(workdir, nmc, nrv, nco, nqoi, rseed, UQ_method, get_distnames, get_pars, get_const, get_opts,
-		     get_rvnames, get_qoinames, get_corr, get_add, get_groups);
-	//readjson(nmc, nrv, ng, rseed, UQ_method, get_distnames, get_pars, get_opts,
-	//	     get_rvnames, get_corr, get_add, get_groups, get_workdir);
+	readjson(workdir,
+		 nmc,
+		 nrv,
+		 nco,
+		 nqoi,
+		 rseed,
+		 UQ_method,
+		 get_distnames,
+		 get_pars,
+		 get_const,
+		 get_opts,
+		 get_rvnames,
+		 get_qoinames,
+		 get_corr,
+		 get_add,
+		 get_groups);
 
 	// Random sampler: standard gaussian -> Later change into LHS
 	coder::array<double, 2U> u_temp;
@@ -43,7 +62,7 @@ int main(int argc, char **argv)
 	vector<double> px;
 	vector<vector<double>> x, g;
 	
-	nataf_transf(nmc, nrv, nco, nqoi, get_distnames, get_opts, get_pars, get_const, get_rvnames, get_corr, get_add, workdir, u_temp, x, px, g); // NEED ERROR CHECK
+	nataf_transf(nmc, nrv, nco, nqoi, get_distnames, get_opts, get_pars, get_const, get_rvnames, get_corr, get_add, workdir, osType, runType, u_temp, x, px, g); // NEED ERROR CHECK
 
 	// WRITE
 	std::cout << "Monte Carlo done.. running Global Sensitivity Analysis..." << std::endl;
@@ -55,7 +74,7 @@ int main(int argc, char **argv)
 	gsa_analysis(nmc, nrv, nqoi, ncomb, x, g, get_groups, Kos, Si, St); // NEED ERROR CHECK, will be modified for multiple outputs
 
 	// (4) WRITE /dakota.out
-	std::string writingloc = workdir + "/tmp.SimCenter/dakota.out";
+	std::string writingloc = workdir + "/dakota.out";
 	std::ofstream outfile(writingloc);
 
 	
@@ -108,7 +127,7 @@ int main(int argc, char **argv)
 	outfile.close();
 
 	// (4) WRITE dakotaTab.out
-	std::string writingloc1 = workdir + "/tmp.SimCenter/dakotaTab.out";
+	std::string writingloc1 = workdir + "/dakotaTab.out";
 	std::ofstream Taboutfile(writingloc1);
 
 	Taboutfile.setf(std::ios::fixed, std::ios::floatfield); // set fixed floating format

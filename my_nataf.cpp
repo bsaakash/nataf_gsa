@@ -20,7 +20,9 @@ vector<vector<double> > runApps(int nmc,
 				int nqoi,
 				vector<vector<double> > x,
 				vector<std::string> get_rvnames,
-				std::string workdir);
+				std::string workdir,
+				std::string osType,
+				std::string runType);
 
 void nataf_transf(int nmc,
 		  int nrv,
@@ -35,13 +37,13 @@ void nataf_transf(int nmc,
 		  vector<double> &get_corr,
 		  vector<vector<double> > &get_add,
 		  string & workdir,
+		  string &osType,
+		  string &runType,		  
 		  coder::array<double, 2U> &u_temp,
 		  vector<vector<double> > &x_val,
 		  vector<double> &px_val,
 		  vector<vector<double> > &g_val)
 {
-
-
   
 	coder::array<double, 2U> corrs_temp;
 	coder::array<ntf_cell_wrap_0, 2U> distnames_temp;
@@ -94,16 +96,20 @@ void nataf_transf(int nmc,
 	}
 
 	// Run FEM and other simulations
-	g_val = runApps(nmc, nrv+nco, nqoi, x_val, get_rvnames, workdir );
+	g_val = runApps(nmc, nrv+nco, nqoi, x_val, get_rvnames, workdir, osType, runType);
 	
 }
 
 
-vector<vector<double> > runApps(int nmc, int nrvs, int nqoi, vector<vector<double> > x, vector<std::string> get_rvnames, std::string workdir)
+vector<vector<double> > runApps(int nmc, int nrvs, int nqoi, vector<vector<double> > x, vector<std::string> get_rvnames, std::string workdir, std::string osType, std::string runType)
 {
 	vector<vector<double> > g_val;
 	
+	std::string copyDir = workdir + "/templatedir";
 
+	std::cerr << "workdir:" <<  workdir << "\n";
+	std::cerr << "copyDir:" <<  copyDir << "\n";
+	
 	for (int i = 0; i < nmc; i++)
 	{
 
@@ -111,21 +117,43 @@ vector<vector<double> > runApps(int nmc, int nrvs, int nqoi, vector<vector<doubl
 		// (1) create "workdir.i " folder :need C++17 to use the files system namespace 
 		//
 		
-		string workDir = workdir + "/tmp.SimCenter/workdir." + std::to_string(i+1);
-		//std::filesystem::remove(workDir);
-		std::filesystem::create_directory(workDir);
-		std::filesystem::current_path(workDir);
+		string workDir = workdir + "/workdir." + std::to_string(i+1);
+
+		std::cerr << "workDir:" <<  workDir << "\n";		
+		
+		//		std::filesystem::create_directory(workDir);
+		//		std::filesystem::current_path(workDir);
 
 		//
 		// (2) copy files from templatedir to workdir.i
 		//
 
-		//TEMPORARY:: REPLACE THIS PART
+		const auto copyOptions =
+		  std::filesystem::copy_options::update_existing
+		  | std::filesystem::copy_options::recursive;
+		  
+		  /*
 		const auto copyOptions = std::filesystem::copy_options::overwrite_existing;
+		  */
 
-		//std::filesystem::copy("C:/Users/yisan/Desktop/Development/nataf_gsa/additional_files/insideTemplatedir/workflow_driver.bat",workdir + "/tmp.SimCenter/templateDir/workflow_driver.bat", copyOptions);
-		std::filesystem::copy(workdir + "/tmp.SimCenter/templateDir", workDir, copyOptions);
+		 try
+		   { 
+		     std::filesystem::copy(copyDir, workDir, copyOptions);
+		   }
+		 catch (std::exception& e)
+		   {
+		     std::cout << e.what();
+		   }
 
+		 
+		 std::filesystem::current_path(workDir);
+		 
+		/*
+		if (ok != true) {
+		  std::cerr << "my_nataf - could not copy files to " << workDir << "\n";
+		}
+		*/
+		
 		//
 		// (3) write param.in file
 		//
@@ -145,7 +173,12 @@ vector<vector<double> > runApps(int nmc, int nrvs, int nqoi, vector<vector<doubl
 		// (4) run workflow_driver.bat(e.g. It will make "SimCenterInput.tcl" and run OpenSees)
 		//
 
-		string workflowDriver_string = workDir + "/workflow_driver.bat";
+		std::string workflowDriver = "workflow_driver";
+		if ((osType.compare("Windows") ==0) && (runType.compare("runningLocal") == 0))
+		  workflowDriver = "workflow_driver.bat";
+		
+		string workflowDriver_string = workDir + "/" + workflowDriver;
+		
 		const char* workflowDriver_char = workflowDriver_string.c_str();
 		system(workflowDriver_char);
 
